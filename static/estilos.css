@@ -1,0 +1,288 @@
+@import "node_modules/bulma/css/bulma.min.css";
+
+/* ======= Configurações Globais ======= */
+body {
+    background-color: #f9fafb;
+    color: #4b5563;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======= Cabeçalho ======= */
+header {
+    border-bottom: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ======= Logo ======= */
+.brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4b5563; 
+    text-decoration: none; 
+}
+
+/* ======= Links da Navegação ======= */
+ul {
+    list-style: none;
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-links li {
+    position: relative; 
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #4b5563; 
+    padding: 10px 15px; 
+    display: block;
+    transition: background-color 0.3s; 
+}
+
+.nav-links a:hover {
+    background-color: #f3f4f6; 
+}
+
+/* ======= Ícones de Navegação ======= */
+.nav-icons {
+    display: flex;
+    gap: 20px; 
+}
+
+.nav-icons .icon {
+    color: #4b5563; 
+    font-size: 20px; 
+    text-decoration: none; 
+    transition: color 0.3s;
+}
+
+.nav-icons .icon:hover {
+    color: #fbbf24; 
+}
+
+.dropdown {
+    display: none; 
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    background-color: #ffffff; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: max-content; 
+    padding: 0; 
+}
+
+.dropdown li {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown a {
+    padding: 8px 12px; 
+    display: block;
+    white-space: nowrap; 
+}
+
+.nav-links li:hover .dropdown {
+    display: block; 
+}
+
+.dropdown a {
+    padding: 12px 16px; 
+    color: #4b5563; 
+    display: block;
+}
+
+.dropdown a:hover {
+    background-color: #f3f4f6; 
+}
+
+/* ======= Hero Banner ======= */
+.hero {
+    position: relative;
+    background-size: cover; 
+    background-position: center; 
+    border-radius: 8px;
+    padding: 74px;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 24px;
+}
+
+.btn {
+    background-color: #fbbf24;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #d97706;
+}
+
+/* ======= Carrossel de Logos das Marcas ======= */
+.brands {
+    overflow: hidden; 
+    position: relative; 
+    height: 150px; 
+    background-color: #f9fafb; 
+}
+
+.brand-logos {
+    display: flex;
+    animation: scroll 20s linear infinite; 
+}
+
+.brand-logo {
+    flex: 0 0 auto; 
+    margin: 0 80px; 
+}
+
+.brand-logo img {
+    height: 80px; 
+    opacity: 0.8; 
+    transition: transform 0.3s ease-in-out, opacity 0.3s; 
+}
+
+.brand-logo img:hover {
+    transform: scale(1.2); 
+    opacity: 1; 
+}
+
+/* Animação do carrossel */
+@keyframes scroll {
+    0% {
+        transform: translateX(0); 
+    }
+    100% {
+        transform: translateX(-200%); 
+    }
+}
+
+/* ======= Seção de Produtos ======= */
+.Novidades {
+    text-align: center;
+    margin: 48px auto;
+    padding: 24px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.h1 {
+    padding-right: 10px;
+    font-size: 32px;
+    color: #4b5563;
+    margin-bottom: 24px;
+}
+
+/* Grid dos Produtos */
+.produto-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Cartão de Produto */
+.produto-card {
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.produto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Zoom na Imagem do Produto */
+.produto-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.produto-card:hover img {
+    transform: scale(1.1);
+}
+
+/* Nome do Produto */
+.produto-card h3 {
+    font-size: 1.1rem;
+    margin-top: 15px;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.produto-card h3:hover {
+    color: #e60000; 
+    cursor: pointer; 
+}
+
+/* ======= Rodapé ======= */
+footer {
+    background-color: #1f2937; 
+    color: white; 
+    padding: 32px 0px; 
+    text-align: center; 
+}
+
+.footer-content {
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
+.payment-methods {
+    margin-top: 16px; 
+}
+
+.payment-icons {
+    display: flex; 
+    justify-content: center;
+    gap: 15px;
+}
+
+.payment-icons img {
+    width: 50px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.payment-icons img:hover {
+    opacity: 1;
+}

@@ -1,0 +1,81 @@
+@import "node_modules/bulma/css/bulma.min.css";
+
+/* ======= Configurações Globais ======= */
+body {
+    background-color: #f9fafb;
+    color: #4b5563;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======= Página do Produto ======= */
+.produto-pagina {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.produto-detalhes {
+    display: flex;
+    gap: 40px;
+    width: 100%;
+}
+
+.produto-imagem img {
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.produto-informacoes {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.produto-nome {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.informacoes p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.produto-preco {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.btn {
+    background-color: #1f2937;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    background-color:#1f2937;
+}
+
+/* ======= Rodapé ======= */
+footer {
+    background-color: #1f2937;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 40px;
+}
