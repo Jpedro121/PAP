@@ -1,44 +1,43 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "skateshop");
+    $conn = new mysqli("localhost", "root", "", "skateshop");
 
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
-
-if (isset($_GET['id'])) {
-    $produto_id = $_GET['id'];
-
-    // Consulta SQL para buscar informações do produto e suas especificações
-    $sql = "SELECT p.id, p.nome, p.imagem, p.preco, p.descricao, 
-                   COALESCE(d.tamanho, t.tamanho, r.tamanho) AS tamanho
-            FROM produtos p
-            LEFT JOIN decks d ON p.id = d.produto_id
-            LEFT JOIN trucks t ON p.id = t.produto_id
-            LEFT JOIN rodas r ON p.id = r.produto_id
-            WHERE p.id = ?";
-
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt === false) {
-        die("Erro na consulta SQL: " . $conn->error);
+    if ($conn->connect_error) {
+        die("Erro de conexão: " . $conn->connect_error);
     }
 
-    $stmt->bind_param("i", $produto_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if (isset($_GET['id'])) {
+        $produto_id = $_GET['id'];
 
-    if ($result->num_rows > 0) {
-        $produto = $result->fetch_assoc();
+        $sql = "SELECT p.id, p.nome, p.imagem, p.preco, p.descricao, 
+                    COALESCE(d.tamanho, t.tamanho, r.tamanho) AS tamanho
+                FROM produtos p
+                LEFT JOIN decks d ON p.id = d.produto_id
+                LEFT JOIN trucks t ON p.id = t.produto_id
+                LEFT JOIN rodas r ON p.id = r.produto_id
+                WHERE p.id = ?";
+
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt === false) {
+            die("Erro na consulta SQL: " . $conn->error);
+        }
+
+        $stmt->bind_param("i", $produto_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $produto = $result->fetch_assoc();
+        } else {
+            echo "Produto não encontrado!";
+            exit;
+        }
     } else {
-        echo "Produto não encontrado!";
+        echo "ID do produto não especificado!";
         exit;
     }
-} else {
-    echo "ID do produto não especificado!";
-    exit;
-}
 
-$conn->close();
+    $conn->close();
 ?>
 
 <!DOCTYPE html>

@@ -1,11 +1,10 @@
-<link rel="stylesheet" href="static/estilos.css">
 
 <header>
         <nav>
             <div class="nav-container">
                     <div >SKATESHOP</div>
                     <ul class="nav-links">
-                        <li><a href="home.php">Home</a></li>
+                        <li><a href="../home.php">Home</a></li>
                         <li>
                             <a href="#">Apparel</a>
                             <ul class="dropdown">
@@ -64,9 +63,9 @@
             </div>
                 <div class="nav-icons">
                     <?php if(isset($_SESSION["username"])):?>   
-                        <a href="login.php" class="icon"><i class="fas fa-user"></i></a>
+                        <a href="login/login.php" class="icon"><i class="fas fa-user"></i></a>
                     <?php else:?>
-                        <a href="userprofi.php" class="icon"><i class="fas fa-user"></i></a>
+                        <a href="login/userprofi.php" class="icon"><i class="fas fa-user"></i></a>
                     <?php endif;?>
                     <a href="cart.php" class="icon"><i class="fas fa-shopping-cart"></i></a>
                 </div>    

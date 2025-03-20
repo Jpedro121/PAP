@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION["username"])) {
-    header("Location: login.php"); 
+    header("Location: login/login.php"); 
     exit();
 }
 ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION["username"])) {
 <body>
     <h2>Bem-vindo, <?php echo $_SESSION["username"]; ?>!</h2>
     <p>Esta é a sua página de perfil.</p>
-    <a href="home.php"><button>Voltar para Home</button></a>
-    <a href="logout.php"><button>Sair</button></a>
+    <a href="../home.php"><button>Voltar para Home</button></a>
+    <a href="login/logout.php"><button>Sair</button></a>
 </body>
 </html>

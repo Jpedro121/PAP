@@ -2,7 +2,7 @@
     session_start(); 
 
     if (isset($_SESSION['username'])) {
-        header('Location: home.php');
+        header('Location: ../home.php');
         exit();
     }
 
@@ -13,11 +13,11 @@
 <html lang="pt">
 
 <head>
-    <?php include('head.html'); ?>
+    <?php include('../head.html'); ?>
     <title>Login</title>
 </head>
 <body>
-    <?php include('header.php'); ?>
+    <?php include('../header.php'); ?>
     <main>
         <h2>Login</h2>
 
@@ -29,7 +29,7 @@
             <button type="submit" name="login">Entrar</button>
         </form>
         
-        <p>Ainda não tem uma conta? <a href="register.php">Criar Conta</a></p>
+        <p>Ainda não tem uma conta? <a href="login/register.php">Criar Conta</a></p>
         
     </main>
 </body>

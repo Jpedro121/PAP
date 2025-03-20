@@ -28,14 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             $_SESSION["username"] = $username;
             $_SESSION["role"] = $role;
 
-            header("Location: " . ($role === "admin" ? "admin_users.php" : "home.php"));
+            header("Location: " . ($role === "admin" ? "login/admin_users.php" : "home.php"));
             exit();
         } else {
-            header("Location: login.php?error=Palavra-passe incorreta.");
+            header("Location: login/login.php?error=Palavra-passe incorreta.");
             exit();
         }
     } else {
-        header("Location: login.php?error=Utilizador não encontrado.");
+        header("Location: login/login.php?error=Utilizador não encontrado.");
         exit();
     }
 

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: login/login.php");
     exit();
 }
 
@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['delete'])) {
         $id = $_POST['user_id'];
         $conn->query("DELETE FROM users WHERE id = $id");
-        header("Location: admin_users.php");
+        header("Location: login/admin_users.php");
         exit();
     } elseif (isset($_POST['edit'])) {
         $id = $_POST['user_id'];
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("si", $new_role, $id);
         $stmt->execute();
         $stmt->close();
-        header("Location: admin_users.php");
+        header("Location: login/admin_users.php");
         exit();
     }
 }
@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <td><?php echo $user['role']; ?></td>
                 <td><?php echo $user['created_at']; ?></td>
                 <td>
-                    <form action="admin_users.php" method="POST" style="display:inline;">
+                    <form action="login/admin_users.php" method="POST" style="display:inline;">
                         <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                         <select name="role">
                             <option value="user" <?php if ($user['role'] == 'user') echo 'selected'; ?>>Utilizador</option>
@@ -68,6 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </tr>
         <?php } ?>
     </table>
-    <a href="login.php"><button>Sair</button></a>
+    <a href="login/login.php"><button>Sair</button></a>
 </body>
 </html>
