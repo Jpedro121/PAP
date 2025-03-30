@@ -1,11 +1,11 @@
 <?php
 session_start();
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login/login.php");
+    header("Location: login.php");
     exit();
 }
 
-include('db.php');
+include('../db.php');
 
 $result = $conn->query("SELECT id, username, role, created_at FROM users");
 

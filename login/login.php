@@ -14,6 +14,7 @@
 
 <head>
     <?php include('../head.html'); ?>
+    <link rel="stylesheet" href="static/estilos.css">
     <title>Login</title>
 </head>
 <body>
