@@ -14,7 +14,7 @@
 
 <head>
     <?php include('../head.html'); ?>
-    <link rel="stylesheet" href="static/estilos.css">
+    <link rel="stylesheet" href="../static/estilos.css">
     <title>Login</title>
 </head>
 <body>
@@ -30,7 +30,7 @@
             <button type="submit" name="login">Entrar</button>
         </form>
         
-        <p>Ainda não tem uma conta? <a href="login/register.php">Criar Conta</a></p>
+        <p>Ainda não tem uma conta? <a href="/PAP/login/register.php">Criar Conta</a></p>
         
     </main>
 </body>

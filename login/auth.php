@@ -7,7 +7,7 @@ if ($conn->connect_error) {
 }
 
 if (isset($_SESSION['username'])) {
-    header("Location: home.php"); 
+    header("Location: ../home.php"); 
     exit();
 }
 
@@ -28,14 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             $_SESSION["username"] = $username;
             $_SESSION["role"] = $role;
 
-            header("Location: " . ($role === "admin" ? "login/admin_users.php" : "home.php"));
+            header("Location: " . ($role === "admin" ? "/PAP/login/admin_users.php" : "home.php"));
             exit();
         } else {
-            header("Location: login/login.php?error=Palavra-passe incorreta.");
+            header("Location: /PAP/login/login.php?error=Palavra-passe incorreta.");
             exit();
         }
     } else {
-        header("Location: login/login.php?error=Utilizador não encontrado.");
+        header("Location: /PAP/login/login.php?error=Utilizador não encontrado.");
         exit();
     }
 

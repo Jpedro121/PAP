@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            echo "Este nome de usuário já existe. Escolha outro.";
+            echo "Este nome de utilizador já existe. Escolha outro.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["username"] = $username;
                 $_SESSION["role"] = $role;
 
-                header("Location: home.php");
+                header("Location: ../home.php");
                 exit();
             } else {
                 echo "Erro ao criar a conta.";
@@ -50,17 +50,16 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <title>Registrar - Skateshop</title>
-    <link rel="stylesheet" href="static/estilos.css"> 
+    <?php include('../head.html'); ?>
+    <title>register</title>
 </head>
 <body>
-<?php include('header.php'); ?>
+<?php include('../header.php'); ?>
     <main>
         
         <h2>Criar Conta</h2>
 
-        <form action="register.php" method="post">
+        <form action="/PAP/login/register.php" method="post">
             <label>Nome de Utilizador:</label>
             <input type="text" name="username" required><br><br>
             
@@ -77,9 +76,9 @@ $conn->close();
     
 
         <?php if (isset($_SESSION["username"])): ?>
-            <p>Você já está logado como <?php echo $_SESSION["username"]; ?>. <a href="userprofi.php">Ir para o perfil</a></p>
+            <p>Você já está logado como <?php echo $_SESSION["username"]; ?>. <a href="/PAP/login/userprofi.php">Ir para o perfil</a></p>
         <?php else: ?>
-            <p>Já tem uma conta? <a href="login.php">Fazer Login</a></p>
+            <p>Já tem uma conta? <a href="/PAP/login/login.php">Fazer Login</a></p>
         <?php endif; ?>
     </main>
 </body>
