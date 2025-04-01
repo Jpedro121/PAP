@@ -35,7 +35,7 @@
                             <a href="#">Skateboards</a>
                             <ul class="dropdown">
                                 <li><a href="decks.php">Decks</a></li>
-                                <li><a href="#">Trucks</a></li>
+                                <li><a href="trucks.php">Trucks</a></li>
                                 <li><a href="#">Wheels</a></li>
                                 <li><a href="#">Bearings</a></li>
                             </ul>

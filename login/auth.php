@@ -15,20 +15,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $stmt = $conn->prepare("SELECT password, role FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT id, password, role FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();
-
+    
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($db_password, $role);
+        $stmt->bind_result($user_id, $db_password, $role);
         $stmt->fetch();
-
+    
         if (password_verify($password, $db_password)) {
+            $_SESSION["user_id"] = $user_id; 
             $_SESSION["username"] = $username;
             $_SESSION["role"] = $role;
-
-            header("Location: " . ($role === "admin" ? "/PAP/login/admin_users.php" : "home.php"));
+    
+            header("Location: " . ($role === "admin" ? "/PAP/login/admin_users.php" : "../home.php"));
             exit();
         } else {
             header("Location: /PAP/login/login.php?error=Palavra-passe incorreta.");
@@ -38,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
         header("Location: /PAP/login/login.php?error=Utilizador não encontrado.");
         exit();
     }
+    
 
     $stmt->close();
 }

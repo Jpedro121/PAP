@@ -62,7 +62,12 @@
                     <?php endif; ?>
                     <p class="produto-descricao"><?php echo $produto['descricao']; ?></p>
                     <p class="produto-preco"><strong>Preço:</strong> €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
-                    <button class="btn">Adicionar ao carrinho</button>
+                    <form action="adicionar_cart.php" method="POST">
+                        <input type="hidden" name="produto_id" value="<?php echo $produto['id']; ?>">
+                        <input type="hidden" name="preco" value="<?php echo $produto['preco']; ?>">
+                        <input type="number" name="quantidade" value="1" min="1" required>
+                        <button type="submit" class="btn">Adicionar ao carrinho</button>
+                    </form>
                 </div>
             </div>
         </div>

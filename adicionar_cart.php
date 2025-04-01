@@ -1,31 +1,38 @@
 <?php
 session_start();
-require 'db.php'; 
+$conn = new mysqli("localhost", "root", "", "skateshop");
 
-if (!isset($_SESSION['usuario_id'])) {
-    die("Utilizador não logado.");
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $produto_id = $_POST['produto_id'];
     $quantidade = $_POST['quantidade'];
+    $preco = $_POST['preco'];
+    $user_id = $_SESSION['user_id'];
+    
+    $sql = "SELECT * FROM carrinho WHERE user_id = ? AND produto_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $user_id, $produto_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    $stmt = $pdo->prepare("SELECT preco FROM produtos WHERE id = ?");
-    $stmt->execute([$produto_id]);
-    $produto = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$produto) {
-        die("Produto não encontrado.");
+    if ($result->num_rows > 0) {
+        $sql = "UPDATE carrinho SET quantidade = quantidade + ? WHERE user_id = ? AND produto_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iii", $quantidade, $user_id, $produto_id);
+        $stmt->execute();
+    } else {
+        $sql = "INSERT INTO carrinho (user_id, produto_id, quantidade, preco) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iiid", $user_id, $produto_id, $quantidade, $preco);
+        $stmt->execute();
     }
 
-    $preco = $produto['preco'];
+    $conn->close();
 
-    // Insere o item no 
-    $stmt = $pdo->prepare("INSERT INTO carrinho (user_id, produto_id, quantidade, preco) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$_SESSION['user_id'], $produto_id, $quantidade, $preco]);
-
-    echo "Item adicionado ao carrinho!";
-} else {
-    die("Método de requisição inválido.");
+    header("Location: carrinho.php");
+    exit();
 }
 ?>
