@@ -6,12 +6,19 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
+// Verifica se o usuário está logado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login\login.php"); // redireciona se não estiver logado
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $produto_id = $_POST['produto_id'];
     $quantidade = $_POST['quantidade'];
     $preco = $_POST['preco'];
     $user_id = $_SESSION['user_id'];
     
+    // Verifica se já existe esse produto no carrinho
     $sql = "SELECT * FROM carrinho WHERE user_id = ? AND produto_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $user_id, $produto_id);
@@ -31,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn->close();
-
-    header("Location: carrinho.php");
+    header("Location: cart.php");
     exit();
 }
+
 ?>
