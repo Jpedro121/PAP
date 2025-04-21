@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             $_SESSION["username"] = $username;
             $_SESSION["role"] = $role;
     
-            header("Location: " . ($role === "admin" ? "/PAP/login/admin_users.php" : "../home.php"));
+            header("Location: " . ($role === "admin" ? "../dashboard_admin.php" : "../home.php"));
             exit();
         } else {
             header("Location: /PAP/login/login.php?error=Palavra-passe incorreta.");

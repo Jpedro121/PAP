@@ -23,54 +23,58 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt = $conn->prepare("INSERT INTO produtos (nome, descricao, preco, imagem, categoria_id, tamanho, categoria) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssdssis", $nome, $descricao, $preco, $imagem, $categoria_id, $tamanho, $categoria_nome);
     $stmt->execute();
-    
     $stmt->close();
-$produto_id = $conn->insert_id; // pega o id do produto recém inserido
 
-$categoria_lower = strtolower($categoria_nome);
+    $produto_id = $conn->insert_id;
+    $categoria_lower = strtolower($categoria_nome);
 
-switch ($categoria_lower) {
-    case 'decks':
-        $marca = $_POST['marca'] ?? '';
-        $descricao_deck = $_POST['descricao'] ?? '';
-        $estoque = 10;
+    switch ($categoria_lower) {
+        case 'decks':
+            $marca = $_POST['marca'] ?? '';
+            $descricao_deck = $_POST['descricao'] ?? '';
+            $estoque = 10;
 
-        $stmt_deck = $conn->prepare("INSERT INTO decks (produto_id, tamanho, marca, estoque, descricao) VALUES (?, ?, ?, ?, ?)");
-        $stmt_deck->bind_param("issis", $produto_id, $tamanho, $marca, $estoque, $descricao_deck);
-        $stmt_deck->execute();
-        $stmt_deck->close();
-        break;
+            $stmt_deck = $conn->prepare("INSERT INTO decks (produto_id, tamanho, marca, estoque, descricao) VALUES (?, ?, ?, ?, ?)");
+            $stmt_deck->bind_param("issis", $produto_id, $tamanho, $marca, $estoque, $descricao_deck);
+            $stmt_deck->execute();
+            $stmt_deck->close();
+            break;
 
-    case 'trucks':
-        $marca = $_POST['marca'] ?? '';
-        $estoque = 10;
-        $descricao_truck = $_POST['descricao'] ?? '';
+        case 'trucks':
+            $marca = $_POST['marca'] ?? '';
+            $estoque = 10;
+            $descricao_truck = $_POST['descricao'] ?? '';
 
-        $stmt_truck = $conn->prepare("INSERT INTO trucks (produto_id, tamanho, marca, estoque, descricao) VALUES (?, ?, ?, ?, ?)");
-        $stmt_truck->bind_param("issis", $produto_id, $tamanho, $marca, $estoque, $descricao_truck);
-        $stmt_truck->execute();
-        $stmt_truck->close();
-        break;
+            $stmt_truck = $conn->prepare("INSERT INTO trucks (produto_id, tamanho, marca, estoque, descricao) VALUES (?, ?, ?, ?, ?)");
+            $stmt_truck->bind_param("issis", $produto_id, $tamanho, $marca, $estoque, $descricao_truck);
+            $stmt_truck->execute();
+            $stmt_truck->close();
+            break;
 
-    case 'rodas':
-        $marca = $_POST['marca'] ?? '';
-        $dureza = $_POST['dureza'] ?? '';
-        $estoque = 10;
-        $descricao_rodas = $_POST['descricao'] ?? '';
+        case 'rodas':
+            $marca = $_POST['marca'] ?? '';
+            $dureza = $_POST['dureza'] ?? '';
+            $estoque = 10;
+            $descricao_rodas = $_POST['descricao'] ?? '';
 
-        $stmt_rodas = $conn->prepare("INSERT INTO rodas (produto_id, tamanho, marca, dureza, estoque, descricao) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt_rodas->bind_param("isssis", $produto_id, $tamanho, $marca, $dureza, $estoque, $descricao_rodas);
-        $stmt_rodas->execute();
-        $stmt_rodas->close();
-        break;
+            $stmt_rodas = $conn->prepare("INSERT INTO rodas (produto_id, tamanho, marca, dureza, estoque, descricao) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt_rodas->bind_param("isssis", $produto_id, $tamanho, $marca, $dureza, $estoque, $descricao_rodas);
+            $stmt_rodas->execute();
+            $stmt_rodas->close();
+            break;
 
-    case 'rolamentos':
-        $marca = $_POST['marca'] ?? '';
-        $descricao_rol = $_POST['descricao'] ?? '';
-        $estoque = 10;
+        case 'rolamentos':
+            $marca = $_POST['marca'] ?? '';
+            $descricao_rol = $_POST['descricao'] ?? '';
+            $estoque = 10;
 
-        $stmt_rol = $conn->prepare("INSERT INTO rolamentos (produto_id, tamanho
-
+            $stmt_rol = $conn->prepare("INSERT INTO rolamentos (produto_id, tamanho) VALUES (?, ?)");
+            $stmt_rol->bind_param("is", $produto_id, $tamanho);
+            $stmt_rol->execute();
+            $stmt_rol->close();
+            break;
+    }
+}
 
 $categorias_result = $conn->query("SELECT * FROM categorias");
 $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
@@ -101,13 +105,7 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
                         <label class="form-label">Marca</label>
                         <input type="text" name="marca" class="form-control">
                     </div>`;
-            } else if (categoria === 'decks') {
-                extraFields.innerHTML = `
-                    <div class="mb-3">
-                        <label class="form-label">Marca</label>
-                        <input type="text" name="marca" class="form-control">
-                    </div>`;
-            } else if (categoria === 'trucks') {
+            } else if (categoria === 'decks' || categoria === 'trucks') {
                 extraFields.innerHTML = `
                     <div class="mb-3">
                         <label class="form-label">Marca</label>
@@ -129,10 +127,6 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
 
     <div class="container mt-5">
         <h1 class="mb-4">Painel de Administração</h1>
-
-        <?php if (isset($mensagem)): ?>
-            <div class="alert alert-success"> <?= $mensagem ?> </div>
-        <?php endif; ?>
 
         <form method="post" class="mb-5">
             <div class="mb-3">
