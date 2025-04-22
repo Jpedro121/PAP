@@ -188,84 +188,115 @@ ul {
 }
 
 /* ======= Seção de Produtos ======= */
+/* ======== Container da secção Novidades ======== */
 .Novidades {
     text-align: center;
     margin: 48px auto;
-    padding: 24px;
-    background-color: #f9fafb;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 32px;
+    background: linear-gradient(to bottom, #f9fafb, #f1f5f9);
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-.h1 {
-    padding-right: 10px;
-    font-size: 32px;
-    color: #4b5563;
-    margin-bottom: 24px;
+/* ======== Título da secção ======== */
+.Novidades h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+    color: #1f2937;
+    margin-bottom: 32px;
+    border-bottom: 2px solid #e60000;
+    display: inline-block;
+    padding-bottom: 8px;
 }
 
-/* Grid dos Produtos */
+/* ======== Grid dos Produtos ======== */
 .produto-grid {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 30px;
     flex-wrap: wrap;
 }
 
-/* Cartão de Produto */
+/* ======== Cartão de Produto ======== */
 .produto-card {
-    width: 280px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    border-radius: 8px;
+    width: 260px;
     background-color: #fff;
-    overflow: hidden;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .produto-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Zoom na Imagem do Produto */
+/* Imagem com efeito de zoom */
 .produto-card img {
     width: 100%;
-    height: auto;
+    height: 300px;
+    object-fit: cover;
     border-radius: 8px;
     transition: transform 0.3s ease-in-out;
 }
 
 .produto-card:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 /* Nome do Produto */
 .produto-card h3 {
+    font-family: 'Poppins', sans-serif;
     font-size: 1.1rem;
-    margin-top: 15px;
-    color: #333;
-    transition: color 0.3s;
+    margin: 16px 0 8px;
+    color: #111827;
 }
 
-.produto-card h3:hover {
-    color: #e60000; 
-    cursor: pointer; 
+/* Preço */
+.produto-card p {
+    font-size: 1rem;
+    color: #e60000;
+    font-weight: bold;
+    margin-bottom: 12px;
 }
 
-/* ======= Rodapé ======= */
+/* Link sem sublinhado */
+.produto-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Botão (opcional) */
+.btn-ver-produto {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #e60000;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-ver-produto:hover {
+    background-color: #c40000;
+}
+
+/* ======== Rodapé ======== */
 footer {
-    background-color: #1f2937; 
-    color: white; 
-    padding: 32px 0px; 
-    text-align: center; 
+    background-color: #1f2937;
+    color: white;
+    padding: 32px 0;
+    text-align: center;
 }
 
 .footer-content {
-    max-width: 1200px; 
-    margin: 0 auto; 
+    max-width: 1200px;
+    margin: 0 auto;
 }
+
 /* ====lista dos produtos ====*/
 
 .deck-list {

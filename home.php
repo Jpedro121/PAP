@@ -25,6 +25,8 @@
             <div class="brand-logo"><img src="static/images/polar.png" alt="polar"></div>
             <div class="brand-logo"><img src="static/images/vans.png" alt="Vans"></div>
             <div class="brand-logo"><img src="static/images/Converse.png" alt="Converse"></div>
+            <div class="brand-logo"><img src="static/images/fuckingawesome.png" alt="fuckingawesome"></div>
+
             <!--2x para infinito-->
             <div class="brand-logo"><img src="static/images/butter.png" alt="butter"></div>
             <div class="brand-logo"><img src="static/images/carhart.png" alt="carhartt"></div>
@@ -34,6 +36,9 @@
             <div class="brand-logo"><img src="static/images/polar.png" alt="polar"></div>
             <div class="brand-logo"><img src="static/images/vans.png" alt="Vans"></div>
             <div class="brand-logo"><img src="static/images/Converse.png" alt="Converse"></div>
+            <div class="brand-logo"><img src="static/images/fuckingawesome.png" alt="fuckingawesome"></div>
+
+
         </div>
     </section>
 
@@ -47,7 +52,6 @@
             die("Erro de conexão: " . $conn->connect_error);
         }
 
-        // Consulta SQL para buscar produtos de todas as categorias
         $sql = "SELECT p.id, p.nome, p.imagem, p.preco, p.categoria_id, 
                        COALESCE(d.tamanho, t.tamanho, r.tamanho) AS tamanho
                 FROM produtos p

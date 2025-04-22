@@ -62,12 +62,31 @@
                     <?php endif; ?>
                     <p class="produto-descricao"><?php echo $produto['descricao']; ?></p>
                     <p class="produto-preco"><strong>Preço:</strong> €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
-                    <form action="adicionar_cart.php" method="POST">
-                        <input type="hidden" name="produto_id" value="<?php echo $produto['id']; ?>">
+                    <form id="form-adicionar" onsubmit="adicionarAoCarrinho(event)">
+                        <input type="hidden" name="produto_id" value="1">
+                        <input type="hidden" name="quantidade" value="1">
                         <input type="hidden" name="preco" value="<?php echo $produto['preco']; ?>">
-                        <input type="number" name="quantidade" value="1" min="1" required>
-                        <button type="submit" class="btn">Adicionar ao carrinho</button>
+                        <button type="submit">Adicionar ao Carrinho</button>
                     </form>
+
+                    <script>
+                    function adicionarAoCarrinho(event) {
+                        event.preventDefault();
+                        const formData = new FormData(document.getElementById('form-adicionar'));
+
+                        fetch('adicionar_cart.php', {
+                            method: 'POST',
+                            body: formData
+                        }).then(response => {
+                            if (response.ok) {
+                                alert('Produto adicionado com sucesso!');
+                            } else {
+                                alert('Erro ao adicionar produto.');
+                            }
+                        });
+                    }
+                    </script>
+
                 </div>
             </div>
         </div>

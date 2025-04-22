@@ -20,6 +20,8 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+$total = 0;
 ?>
 
 <!DOCTYPE html>
@@ -124,6 +126,13 @@ $result = $stmt->get_result();
             margin: 40px 0;
             color: #666;
         }
+
+        .total-carrinho {
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #111;
+        }
     </style>
 </head>
 <body>
@@ -135,6 +144,7 @@ $result = $stmt->get_result();
 <div class="carrinho-container">
     <?php if ($result->num_rows > 0): ?>
         <?php while ($row = $result->fetch_assoc()): ?>
+            <?php $total += $row['preco'] * $row['quantidade']; ?>
             <div class="item-carrinho">
                 <img src="static/images/<?php echo $row['imagem']; ?>" alt="<?php echo $row['nome']; ?>">
                 <div class="info">
@@ -145,12 +155,17 @@ $result = $stmt->get_result();
                 </div>
             </div>
         <?php endwhile; ?>
+
+        <!-- Total -->
+        <div class="total-carrinho">
+            <strong>Total: €<?php echo number_format($total, 2, ',', '.'); ?></strong>
+        </div>
     <?php else: ?>
         <p class="vazio">Seu carrinho está vazio.</p>
     <?php endif; ?>
 </div>
 
-<a href="home.php" class="btn-voltar">← Continuar Comprando</a>
+<a href="home.php" class="btn-voltar">← Voltar às compras</a>
 
 </body>
 </html>
