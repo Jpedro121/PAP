@@ -24,21 +24,21 @@ $result = $conn->query($sql);
 
     <h1>Decks</h1>
     <div class="deck-container">
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo '<div class="produto-card">';
-                echo '<a href="produto.php?id=' . $row["id"] . '">';
-                echo '<img src="static/images/' . $row["imagem"] . '" alt="' . $row["nome"] . '">';
-                echo '<h3>' . $row["nome"] . ' - ' . $row["tamanho"] . '</h3>';
-                echo '<p>€' . number_format($row["preco"], 2, ',', '.') . '</p>';
-                echo '</a>';
-                echo '</div>';
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo '<div class="produto-card">';
+                    echo '<a href="produto.php?id=' . $row["id"] . '">';
+                    echo '<img src="static/images/' . $row["imagem"] . '" alt="' . $row["nome"] . '">';
+                    echo '<h3>' . $row["nome"] . ' - ' . $row["tamanho"] . '</h3>';
+                    echo '<p>€' . number_format($row["preco"], 2, ',', '.') . '</p>';
+                    echo '</a>';
+                    echo '</div>';
+                }
+            } else {
+                echo "Nenhum produto encontrado.";
             }
-        } else {
-            echo "Nenhum produto encontrado.";
-        }
-        ?>
+            ?>
     </div>
 </body>
 </html>
