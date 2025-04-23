@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            echo "Este nome de utilizador já existe. Escolha outro.";
+            echo "Este nome de utilizador já existe.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
