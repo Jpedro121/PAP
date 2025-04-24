@@ -32,11 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             header("Location: " . ($role === "admin" ? "../dashboard_admin.php" : "../home.php"));
             exit();
         } else {
-            header("Location: /PAP/login/login.php?error=Palavra-passe incorreta.");
+            header("Location: login.php?error=Palavra-passe incorreta.");
             exit();
         }
     } else {
-        header("Location: /PAP/login/login.php?error=Utilizador não encontrado.");
+        header("Location: login.php?error=Utilizador não encontrado.");
         exit();
     }
     

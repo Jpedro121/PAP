@@ -59,7 +59,7 @@ $conn->close();
         
         <h2>Criar Conta</h2>
 
-        <form action="/PAP/login/register.php" method="post">
+        <form action="" method="post">
             <label>Nome de Utilizador:</label>
             <input type="text" name="username" required><br><br>
             
@@ -76,9 +76,9 @@ $conn->close();
     
 
         <?php if (isset($_SESSION["username"])): ?>
-            <p>Você já está logado como <?php echo $_SESSION["username"]; ?>. <a href="/PAP/login/userprofi.php">Ir para o perfil</a></p>
+            <p>Você já está logado como <?php echo $_SESSION["username"]; ?>. <a href="userprofi.php">Ir para o perfil</a></p>
         <?php else: ?>
-            <p>Já tem uma conta? <a href="/PAP/login/login.php">Fazer Login</a></p>
+            <p>Já tem uma conta? <a href="login.php">Fazer Login</a></p>
         <?php endif; ?>
     </main>
 </body>

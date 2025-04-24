@@ -30,7 +30,7 @@
             <button type="submit" name="login">Entrar</button>
         </form>
         
-        <p>Ainda não tem uma conta? <a href="/PAP/login/register.php">Criar Conta</a></p>
+        <p>Ainda não tem uma conta? <a href="register.php">Criar Conta</a></p>
         
     </main>
 </body>

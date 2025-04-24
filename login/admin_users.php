@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    header("Location:/PAP/login/login.php");
+    header("Location:../login/login.php");
     exit();
 }
 
@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['delete'])) {
         $id = $_POST['user_id'];
         $conn->query("DELETE FROM users WHERE id = $id");
-        header("Location:/PAP/login/admin_users.php");
+        header("Refresh:0");
         exit();
     } elseif (isset($_POST['edit'])) {
         $id = $_POST['user_id'];
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("si", $new_role, $id);
         $stmt->execute();
         $stmt->close();
-        header("Location:/PAP/login/admin_users.php");
+        header("Refresh:0");
         exit();
     }
 }
@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <td><?php echo $user['role']; ?></td>
                 <td><?php echo $user['created_at']; ?></td>
                 <td>
-                    <form action="/PAP/login/admin_users.php" method="POST" style="display:inline;">
+                    <form action="" method="POST" style="display:inline;">
                         <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                         <select name="role">
                             <option value="user" <?php if ($user['role'] == 'user') echo 'selected'; ?>>Utilizador</option>
@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <button type="submit" name="edit">Alterar Função</button>
                     </form>
 
-                    <form action="/PAP/login/admin_users.php" method="POST" style="display:inline;">
+                    <form action="" method="POST" style="display:inline;">
                         <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                         <button type="submit" name="delete" onclick="return confirm('Tem certeza que deseja eliminar este utilizador?')">Eliminar</button>
                     </form>
