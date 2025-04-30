@@ -11,7 +11,6 @@
     <section class="hero" style="background-image: url('static/images/header-desktop.webp')">
         <h1>Discover the World of Skateboarding</h1>
         <p>Gear up with the latest apparel, footwear, and skateboards.</p>
-        <a href="#" class="btn">Buy Now</a>
     </section>
 
     <section class="brands">
@@ -53,12 +52,14 @@
         }
 
         $sql = "SELECT p.id, p.nome, p.imagem, p.preco, p.categoria_id, 
-                       COALESCE(d.tamanho, t.tamanho, r.tamanho) AS tamanho
-                FROM produtos p
-                LEFT JOIN decks d ON p.id = d.produto_id
-                LEFT JOIN trucks t ON p.id = t.produto_id
-                LEFT JOIN rodas r ON p.id = r.produto_id
-                LIMIT 6";
+               COALESCE(d.tamanho, t.tamanho, r.tamanho) AS tamanho
+        FROM produtos p
+        LEFT JOIN decks d ON p.id = d.produto_id
+        LEFT JOIN trucks t ON p.id = t.produto_id
+        LEFT JOIN rodas r ON p.id = r.produto_id
+        ORDER BY p.id DESC
+        LIMIT 4";
+
 
         $result = $conn->query($sql);
 

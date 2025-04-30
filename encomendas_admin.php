@@ -14,6 +14,8 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 </head>
 <body>
 <div class="container mt-5">
+                    <a class="btn btn-outline-light" href="/PAP/home.php"><button>Sair</button></a>
+
     <h1>Lista de Encomendas</h1>
     <p>Consulta aqui todas as encomendas feitas pelos utilizadores.</p>
     <!-- Aqui irá uma tabela com as encomendas -->

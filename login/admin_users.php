@@ -69,5 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php } ?>
     </table>
     <a href="/PAP/login/login.php"><button>Sair</button></a>
+    <a href="../admin_dashboard.php" class="btn btn-secondary">Voltar à Administração</a>
 </body>
 </html>

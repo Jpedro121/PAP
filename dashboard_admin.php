@@ -21,7 +21,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Admin - SkateShop</a>
             <div class="d-flex">
-                <a class="btn btn-outline-light" href="/PAP/login/logout.php"><button>Sair</button></a>
+                <a class="btn btn-outline-light" href="/PAP/home.php"><button>Sair</button></a>
 
             </div>
         </div>

@@ -50,15 +50,6 @@
                                 <li><a href="#">Polar Skate CO.</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#">Sales</a>
-                            <ul class="dropdown">
-                                <li><a href="#">Sales Apparel</a></li>
-                                <li><a href="#">Sales Accessories</a></li>
-                                <li><a href="#">Sales Skateboards</a></li>
-                                <li><a href="#">Sales Footwear</a></li>
-                            </ul>
-                        </li>
                     </ul>
             </div>
                 <div class="nav-icons">
