@@ -54,9 +54,9 @@
             </div>
                 <div class="nav-icons">
                     <?php if(isset($_SESSION["username"])):?>   
-                        <a href="/PAP/login/login.php" class="icon"><i class="fas fa-user"></i></a>
-                    <?php else:?>
                         <a href="/PAP/login/userprofi.php" class="icon"><i class="fas fa-user"></i></a>
+                    <?php else:?>
+                        <a href="/PAP/login/login.php" class="icon"><i class="fas fa-user"></i></a>
                     <?php endif;?>
                     <a href="cart.php" class="icon"><i class="fas fa-shopping-cart"></i></a>
                 </div>    

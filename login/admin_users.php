@@ -9,11 +9,16 @@ include('../db.php');
 
 $result = $conn->query("SELECT id, username, role, created_at FROM users");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['delete'])) {
         $id = $_POST['user_id'];
-        $conn->query("DELETE FROM users WHERE id = $id");
-        header("Refresh:0");
+        if ($_SESSION['user_id'] != $id) { // Impede que o admin se apague
+            $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->close();
+        }
+        header("Location: ".$_SERVER['PHP_SELF']);
         exit();
     } elseif (isset($_POST['edit'])) {
         $id = $_POST['user_id'];
@@ -22,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("si", $new_role, $id);
         $stmt->execute();
         $stmt->close();
-        header("Refresh:0");
+        header("Location: ".$_SERVER['PHP_SELF']);
         exit();
     }
 }
@@ -32,11 +37,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Gerir Utilizadores</title>
+    <title>Admin - Gestão de Utilizadores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        form {
+            display: inline;
+        }
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn-link a {
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 6px;
+        }
+    </style>
 </head>
 <body>
     <h1>Gestão de Utilizadores</h1>
-    <table border="1">
+    <table>
         <tr>
             <th>ID</th>
             <th>Username</th>
@@ -46,29 +105,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </tr>
         <?php while ($user = $result->fetch_assoc()) { ?>
             <tr>
-                <td><?php echo $user['id']; ?></td>
-                <td><?php echo $user['username']; ?></td>
-                <td><?php echo $user['role']; ?></td>
-                <td><?php echo $user['created_at']; ?></td>
+                <td><?= htmlspecialchars($user['id']) ?></td>
+                <td><?= htmlspecialchars($user['username']) ?></td>
+                <td><?= htmlspecialchars($user['role']) ?></td>
+                <td><?= htmlspecialchars($user['created_at']) ?></td>
                 <td>
-                    <form action="" method="POST" style="display:inline;">
-                        <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                    <form method="POST">
+                        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
                         <select name="role">
-                            <option value="user" <?php if ($user['role'] == 'user') echo 'selected'; ?>>Utilizador</option>
-                            <option value="admin" <?php if ($user['role'] == 'admin') echo 'selected'; ?>>Administrador</option>
+                            <option value="user" <?= $user['role'] == 'user' ? 'selected' : '' ?>>Utilizador</option>
+                            <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Administrador</option>
                         </select>
-                        <button type="submit" name="edit">Alterar Função</button>
+                        <button type="submit" name="edit" class="edit-btn">Alterar Função</button>
                     </form>
-
-                    <form action="" method="POST" style="display:inline;">
-                        <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                        <button type="submit" name="delete" onclick="return confirm('Tem certeza que deseja eliminar este utilizador?')">Eliminar</button>
-                    </form>
+                    <?php if ($user['id'] != $_SESSION['user_id']) { ?>
+                        <form method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este utilizador?');">
+                            <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                            <button type="submit" name="delete" class="delete-btn">Eliminar</button>
+                        </form>
+                    <?php } ?>
                 </td>
             </tr>
         <?php } ?>
     </table>
-    <a href="/PAP/login/login.php"><button>Sair</button></a>
-    <a href="../admin_dashboard.php" class="btn btn-secondary">Voltar à Administração</a>
+
+    <div class="btn-link">
+        <a href="/PAP/login/login.php">Sair</a>
+        <a href="../dashboard_admin.php">Voltar à Administração</a>
+    </div>
 </body>
 </html>
