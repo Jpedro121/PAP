@@ -12,9 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_password = trim($_POST["confirm_password"]);
 
     if (empty($username) || empty($password) || empty($confirm_password)) {
-        echo "Erro: Todos os campos são obrigatórios.";
+        $error = "Todos os campos são obrigatórios.";
     } elseif ($password !== $confirm_password) {
-        echo "Erro: As senhas não coincidem.";
+        $error = "As senhas não coincidem.";
     } else {
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
         $stmt->bind_param("s", $username);
@@ -22,10 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            echo "Este nome de utilizador já existe.";
+            $error = "Este nome de utilizador já existe.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
             $role = 'user';
 
             $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
@@ -34,11 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt->execute()) {
                 $_SESSION["username"] = $username;
                 $_SESSION["role"] = $role;
-
                 header("Location: ../home.php");
                 exit();
             } else {
-                echo "Erro ao criar a conta.";
+                $error = "Erro ao criar a conta.";
             }
         }
         $stmt->close(); 
@@ -51,35 +49,122 @@ $conn->close();
 <html lang="pt">
 <head>
     <?php include('../head.html'); ?>
-    <title>register</title>
+    <title>Registrar</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            max-width: 400px;
+            margin: 60px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 6px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .message a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .message a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <?php include('../header.php'); ?>
-    <main>
-        
-        <h2>Criar Conta</h2>
+<main>
+    <h2>Criar Conta</h2>
 
-        <form action="" method="post">
-            <label>Nome de Utilizador:</label>
-            <input type="text" name="username" required><br><br>
-            
-            <label>Palavra-passe:</label>
-            <input type="password" name="password" required><br><br>
+    <?php if (isset($error)): ?>
+        <div class="error"><?= $error ?></div>
+    <?php endif; ?>
 
-            <label>Confirmar Palavra-passe:</label>
-            <input type="password" name="confirm_password" required><br><br>
+    <form action="" method="post">
+        <label for="username">Nome de Utilizador</label>
+        <input type="text" id="username" name="username" required>
 
-            <button type="submit" name="register">Registrar</button>
-        </form>
+        <label for="password">Palavra-passe</label>
+        <input type="password" id="password" name="password" required>
 
-    
-    
+        <label for="confirm_password">Confirmar Palavra-passe</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
 
+        <button type="submit" name="register">Registrar</button>
+    </form>
+
+    <div class="message">
         <?php if (isset($_SESSION["username"])): ?>
-            <p>Você já está logado como <?php echo $_SESSION["username"]; ?>. <a href="userprofi.php">Ir para o perfil</a></p>
+            Você já está logado como <strong><?php echo $_SESSION["username"]; ?></strong>. 
+            <a href="userprofi.php">Ir para o perfil</a>
         <?php else: ?>
-            <p>Já tem uma conta? <a href="login.php">Fazer Login</a></p>
+            Já tem uma conta? <a href="login.php">Fazer Login</a>
         <?php endif; ?>
-    </main>
+    </div>
+</main>
 </body>
 </html>
