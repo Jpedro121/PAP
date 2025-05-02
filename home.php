@@ -20,26 +20,27 @@ session_start();
     <section class="brands">
         <h2>Nossas Marcas</h2>
         <div class="brand-logos">
-            <div class="brand-logo"><img src="static/images/butter.png" alt="butter"></div>
-            <div class="brand-logo"><img src="static/images/carhart.png" alt="carhartt"></div>
-            <div class="brand-logo"><img src="static/images/dime.png" alt="dime"></div>
-            <div class="brand-logo"><img src="static/images/nikesb.png" alt="nikesb"></div>
-            <div class="brand-logo"><img src="static/images/palace.png" alt="palace"></div>
-            <div class="brand-logo"><img src="static/images/polar.png" alt="polar"></div>
-            <div class="brand-logo"><img src="static/images/vans.png" alt="Vans"></div>
-            <div class="brand-logo"><img src="static/images/Converse.png" alt="Converse"></div>
-            <div class="brand-logo"><img src="static/images/fuckingawesome.png" alt="fuckingawesome"></div>
+            <div class="brand-logo"><img src="static/images/marcas/butter.png" alt="butter"></div>
+            <div class="brand-logo"><img src="static/images/marcas/carhart.png" alt="carhartt"></div>
+            <div class="brand-logo"><img src="static/images/marcas/dime.png" alt="dime"></div>
+            <div class="brand-logo"><img src="static/images/marcas/nikesb.png" alt="nikesb"></div>
+            <div class="brand-logo"><img src="static/images/marcas/palace.png" alt="palace"></div>
+            <div class="brand-logo"><img src="static/images/marcas/polar.png" alt="polar"></div>
+            <div class="brand-logo"><img src="static/images/marcas/vans.png" alt="Vans"></div>
+            <div class="brand-logo"><img src="static/images/marcas/fuckingawesome.png" alt="fuckingawesome"></div>
+            <div class="brand-logo"><img src="static/images/marcas/ace.png" alt="ace"></div>
 
             <!--2x para infinito-->
-            <div class="brand-logo"><img src="static/images/butter.png" alt="butter"></div>
-            <div class="brand-logo"><img src="static/images/carhart.png" alt="carhartt"></div>
-            <div class="brand-logo"><img src="static/images/dime.png" alt="dime"></div>
-            <div class="brand-logo"><img src="static/images/nikesb.png" alt="nikesb"></div>
-            <div class="brand-logo"><img src="static/images/palace.png" alt="palace"></div>
-            <div class="brand-logo"><img src="static/images/polar.png" alt="polar"></div>
-            <div class="brand-logo"><img src="static/images/vans.png" alt="Vans"></div>
-            <div class="brand-logo"><img src="static/images/Converse.png" alt="Converse"></div>
-            <div class="brand-logo"><img src="static/images/fuckingawesome.png" alt="fuckingawesome"></div>
+            <div class="brand-logo"><img src="static/images/marcas/butter.png" alt="butter"></div>
+            <div class="brand-logo"><img src="static/images/marcas/carhart.png" alt="carhartt"></div>
+            <div class="brand-logo"><img src="static/images/marcas/dime.png" alt="dime"></div>
+            <div class="brand-logo"><img src="static/images/marcas/nikesb.png" alt="nikesb"></div>
+            <div class="brand-logo"><img src="static/images/marcas/palace.png" alt="palace"></div>
+            <div class="brand-logo"><img src="static/images/marcas/polar.png" alt="polar"></div>
+            <div class="brand-logo"><img src="static/images/marcas/vans.png" alt="Vans"></div>
+            <div class="brand-logo"><img src="static/images/marcas/fuckingawesome.png" alt="fuckingawesome"></div>
+            <div class="brand-logo"><img src="static/images/marcas/ace.png" alt="ace"></div>
+
 
 
         </div>

@@ -1,11 +1,12 @@
 <?php
 session_start();
-if (!isset($_SESSION["username"])) {
+if (!isset($_SESSION["username"]) || !isset($_SESSION["user_id"])) {
     header("Location: ../login.php"); 
     exit();
 }
 require '../db.php';
 $user_id = $_SESSION["user_id"];
+
 
 $sql = "SELECT username, morada FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
