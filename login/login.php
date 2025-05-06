@@ -1,13 +1,45 @@
 <?php
-session_start(); 
+session_start();
+$conn = new mysqli("localhost", "root", "", "skateshop");
 
-if (isset($_SESSION['username'])) {
-    header('Location: ../home.php');
-    exit();
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
 }
 
-$error_message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : ''; 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $identifier = trim($_POST["username_or_email"]); // Pode ser username OU email
+    $password = trim($_POST["password"]);
+
+    if (empty($identifier) || empty($password)) {
+        $error = "Todos os campos são obrigatórios.";
+    } else {
+        // Procurar por username ou email
+        $stmt = $conn->prepare("SELECT id, username, email, password, role FROM users WHERE username = ? OR email = ?");
+        $stmt->bind_param("ss", $identifier, $identifier);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows == 1) {
+            $user = $result->fetch_assoc();
+
+            if (password_verify($password, $user['password'])) {
+                $_SESSION["username"] = $user["username"];
+                $_SESSION["email"] = $user["email"];
+                $_SESSION["role"] = $user["role"];
+                header("Location: ../home.php");
+                exit();
+            } else {
+                $error = "Senha incorreta.";
+            }
+        } else {
+            $error = "Utilizador ou email não encontrado.";
+        }
+    }
+}
+$conn->close();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -74,8 +106,8 @@ $error_message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : '';
             <?php endif; ?>
 
             <form action="auth.php" method="post">
-                <label for="username">Utilizador:</label>
-                <input type="text" name="username" id="username" required>
+                <label for="login">Utilizador ou Email:</label>
+                <input type="text" name="login" id="login" required>
 
                 <label for="password">Palavra-passe:</label>
                 <input type="password" name="password" id="password" required>

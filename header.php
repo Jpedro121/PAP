@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <header>
         <nav>
-            <div class="nav-container">
+             <div class="nav-container">
                     <div >SKATESHOP</div>
                     <ul class="nav-links">
                         <li><a href="/PAP/home.php">Home</a></li>
@@ -46,7 +46,7 @@ if (session_status() === PHP_SESSION_NONE) {
                             </ul>
                         </li>
                         <li>
-                            <a href="#">Brands</a>
+                            <a href="brands.php">Brands</a>
                             <ul class="dropdown">
                                 <li><a href="#">Butter</a></li>
                                 <li><a href="#">Carhartt</a></li>
