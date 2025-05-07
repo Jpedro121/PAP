@@ -1,18 +1,48 @@
 <?php
-session_start(); 
+session_start();
 
-if (isset($_SESSION['username'])) {
-    header('Location: ../home.php');
-    exit();
+$conn = new mysqli("localhost", "root", "", "skateshop");
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
 }
 
-$error_message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : ''; 
+$mensagem = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username_or_email = isset($_POST['username']) ? trim($_POST['username']) : '';
+    $password = isset($_POST['password']) ? trim($_POST['password']) : '';
+
+    if (!empty($username_or_email) && !empty($password)) {
+        $stmt = $conn->prepare("SELECT id, utilizador, email, password, role FROM utilizadores WHERE utilizador = ? OR email = ?");
+        $stmt->bind_param("ss", $username_or_email, $username_or_email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($user = $result->fetch_assoc()) {
+            if (password_verify($password, $user['password'])) {
+                $_SESSION["username"] = $user["utilizador"];
+                $_SESSION["email"] = $user["email"];
+                $_SESSION["role"] = $user["role"];
+                header("Location: ../userprofi.php");
+                exit();
+            } else {
+                $mensagem = "Palavra-passe incorreta.";
+            }
+        } else {
+            $mensagem = "Utilizador ou email não encontrado.";
+        }
+    } else {
+        $mensagem = "Por favor preencha todos os campos.";
+    }
+}
+
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <?php include('../head.html'); ?>
-    <link rel="stylesheet" href="../static/estilos.css">
     <title>Login</title>
     <style>
         .form-container {
@@ -86,6 +116,10 @@ $error_message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : '';
             <div class="signup-link">
                 <p>Ainda não tem uma conta? <a href="register.php">Criar Conta</a></p>
             </div>
+            <div class="signup-link">
+                <p><a href="forgot_password.php">Esqueceu-se da palavra-passe?</a></p>
+            </div>
+
         </div>
     </main>
 </body>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    header("Location:../login/login.php");
+    header("Location: ../login/login.php");
     exit();
 }
 
@@ -11,23 +11,23 @@ $result = $conn->query("SELECT id, username, role, created_at FROM users");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['delete'])) {
-        $id = $_POST['user_id'];
-        if ($_SESSION['user_id'] != $id) { // Impede que o admin se apague
+        $id = (int) $_POST['user_id'];
+        if ($_SESSION['user_id'] != $id) { // Impede que o admin se apague a si próprio
             $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $stmt->close();
         }
-        header("Location: ".$_SERVER['PHP_SELF']);
+        header("Location: " . $_SERVER['PHP_SELF']);
         exit();
     } elseif (isset($_POST['edit'])) {
-        $id = $_POST['user_id'];
+        $id = (int) $_POST['user_id'];
         $new_role = $_POST['role'];
         $stmt = $conn->prepare("UPDATE users SET role = ? WHERE id = ?");
         $stmt->bind_param("si", $new_role, $id);
         $stmt->execute();
         $stmt->close();
-        header("Location: ".$_SERVER['PHP_SELF']);
+        header("Location: " . $_SERVER['PHP_SELF']);
         exit();
     }
 }
@@ -80,7 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             color: white;
         }
         .btn-link {
-            display: block;
             text-align: center;
             margin-top: 20px;
         }
@@ -90,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             background-color: #007bff;
             color: white;
             border-radius: 6px;
+            margin: 0 10px;
         }
     </style>
 </head>

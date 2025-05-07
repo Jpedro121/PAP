@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 29-Abr-2025 às 18:30
+-- Tempo de geração: 07-Maio-2025 às 10:48
 -- Versão do servidor: 10.4.32-MariaDB
 -- versão do PHP: 8.2.12
 
@@ -90,7 +90,8 @@ CREATE TABLE `decks` (
 
 INSERT INTO `decks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES
 (1, 1, '8.5', 'Polar Skate CO,', 10, NULL),
-(2, 4, '8\'', 'Fucking Awesome', 10, 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\nShape #2\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base');
+(2, 4, '8\'', 'Fucking Awesome', 10, 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\nShape #2\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base'),
+(4, 5, '8.0', '', 10, '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>');
 
 -- --------------------------------------------------------
 
@@ -106,17 +107,21 @@ CREATE TABLE `produtos` (
   `imagem` varchar(255) DEFAULT NULL,
   `categoria_id` int(11) DEFAULT NULL,
   `tamanho` varchar(50) NOT NULL,
-  `categoria` varchar(100) NOT NULL
+  `categoria` varchar(100) NOT NULL,
+  `marca` varchar(100) DEFAULT NULL,
+  `logo_marca` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `produtos`
 --
 
-INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`) VALUES
-(1, 'Polar Skate Co. Toba - David Stenstrom Debut Pro Deck', 'Griptape included', 85.00, 'skateboard1.png', 1, '8.5', 'decks'),
-(3, 'Ace AF1 Trucks Polished Pair', 'Par de trucks Ace AF1 com resistência superior.', 74.99, 'truckAF1.jpg', 2, '8.25', ''),
-(4, 'Fucking Awesome-Curren Caples Remember To Forget Deck', 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base', 90.00, 'skateboard3.png', 1, '8', 'Deck');
+INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`, `marca`, `logo_marca`) VALUES
+(1, 'Polar Skate Co. Toba - David Stenstrom Debut Pro Deck', 'Griptape included', 85.00, 'skateboard1.png', 1, '8.5', 'decks', 'Polar Skate CO', 'polar.png'),
+(3, 'Ace AF1 Trucks Polished Pair', 'Par de trucks Ace AF1 com resistência superior.', 74.99, 'truckAF1.jpg', 2, '8.25', 'trucks', 'Ace Trucks MFG', 'ace.png'),
+(4, 'Fucking Awesome-Curren Caples Remember To Forget Deck', 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base', 90.00, 'skateboard3.png', 1, '8', 'decks', 'Fucking Awesome', 'fuckingawesome.png'),
+(5, 'Fucking Awesome Gino Iannucci Daybreak in Phuket Deck', '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>', 90.00, 'skateboard6.jpeg', 1, '8', 'decks', 'Fucking Awesome', 'fuckingawesome.png'),
+(6, 'Ace Trucks MFG AF1 Carhartt WIP Trucks - Carhartt Orange / Polished', '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\r\n\r\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\r\n\r\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\r\n\r\n<p>-Set of 2</p>\r\n\r\n<p>-Polished</p>\r\n\r\n<p>-Branded engraved hanger</p>\r\n\r\n<p>-Exclusive anodized orange baseplate</p>\r\n\r\n<p>-Includes anodized axle orange re-threader die</p>', 75.00, 'Stage5Trucks.webp', 2, '55', 'trucks', 'Ace Trucks MFG', 'ace.png');
 
 -- --------------------------------------------------------
 
@@ -169,7 +174,8 @@ CREATE TABLE `trucks` (
 --
 
 INSERT INTO `trucks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES
-(3, 3, '8.25', 'Ace', 15, 'Trucks Ace AF1 com resistência superior.');
+(3, 3, '8.25', 'Ace Trucks MFG', 15, '<p>Trucks Ace AF1 com resistência superior.</p>'),
+(4, 6, '55', 'Ace Trucks MFG', 10, '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\n\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\n\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\n\n<p>-Set of 2</p>\n\n<p>-Polished</p>\n\n<p>-Branded engraved hanger</p>\n\n<p>-Exclusive anodized orange baseplate</p>\n\n<p>-Includes anodized axle orange re-threader die</p>');
 
 -- --------------------------------------------------------
 
@@ -182,18 +188,24 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('admin','user') NOT NULL DEFAULT 'user',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `email` varchar(100) DEFAULT NULL,
+  `morada` text DEFAULT NULL,
+  `verification_code` varchar(64) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`) VALUES
-(9, 'admin', '$2y$10$ESqzVZhyFqtwn8yz5yCpqOC2OB1yXjIWaT82ISuO1AKN2fRKGFK5m', 'admin', '2025-03-06 16:23:39'),
-(15, 'sigma', '$2y$10$QljtIZVvNGpyCELvhp4M1uLJoDvAKbhg7ZrKzgUQBPHax8T7sWk3y', 'user', '2025-03-31 13:10:09'),
-(16, 'joao', '$2y$10$CBPlFfTpfTzkjFdCyfxKZuwc17m6P62nFdk.2CW0MccHGFBF//NOi', 'user', '2025-04-22 16:38:40'),
-(17, 'lucas', '$2y$10$tkp0zYZPlEbG4/s03JhdE.OPQbodEAD3Ix8XQd1xu.sc3LmA/j5ji', 'user', '2025-04-23 09:13:29');
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`, `morada`, `verification_code`) VALUES
+(9, 'admin', '$2y$10$ESqzVZhyFqtwn8yz5yCpqOC2OB1yXjIWaT82ISuO1AKN2fRKGFK5m', 'admin', '2025-03-06 16:23:39', 'admin@gmail.com', NULL, NULL),
+(15, 'sigma', '$2y$10$QljtIZVvNGpyCELvhp4M1uLJoDvAKbhg7ZrKzgUQBPHax8T7sWk3y', 'admin', '2025-03-31 13:10:09', NULL, NULL, NULL),
+(16, 'Joa1', '$2y$10$y8BN1Tu.9doL.LjHDsUfz.9N9.zG6PjLRd7DLH9BFuJ/BlJ2LdQ7m', 'user', '2025-04-22 16:38:40', NULL, 'Avenida de Portugal n44Ac, Póvoa da Galega', NULL),
+(18, 'duarte', '$2y$10$TzbQeu6OxHH0NXQ.TQey6OhqsuXK3V21a5lpb9IaQeIxIP7TLWaMm', 'user', '2025-05-02 18:08:41', NULL, NULL, NULL),
+(19, 'Vasco', '$2y$10$GvsrONLbK9ZfAAry3A/7L..EU.MMIETWlrZh5LuHp845EIne21xB.', 'user', '2025-05-03 21:56:12', NULL, NULL, NULL),
+(20, 'Antonio', '$2y$10$mhXatVccMxL2EqRQ5kDLu.arXbWIKaQJ49k8P2KeOeZHcnUWS.dMu', 'user', '2025-05-06 20:34:07', 'joaopedroantunesps4@gmail.com', NULL, 'd3d62d945e9823bd39eddfa899aa64fd'),
+(21, 'lopes', '$2y$10$CjAKoO3WMSxn3MI4hBV2.e8FnTeq4IXWF0Hn67a5.wAfJvCWbEoWS', 'user', '2025-05-07 07:44:39', 'miudogamer0@gmail.com', NULL, 'c10e476101a933c18930cc03cc4a6e5f');
 
 --
 -- Índices para tabelas despejadas
@@ -263,7 +275,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de tabela `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de tabela `categorias`
@@ -275,13 +287,13 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de tabela `decks`
 --
 ALTER TABLE `decks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `rodas`
@@ -299,13 +311,13 @@ ALTER TABLE `rolamentos`
 -- AUTO_INCREMENT de tabela `trucks`
 --
 ALTER TABLE `trucks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Restrições para despejos de tabelas

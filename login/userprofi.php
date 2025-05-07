@@ -113,7 +113,11 @@ if ($result->num_rows > 0) {
             <input type="password" name="nova_password" id="nova_password" required>
             <button type="submit" class="btn">Alterar Palavra-passe</button>
         </form>
+        
+        <h3>Email</h3>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($_SESSION['email']); ?></p>
 
+        </form>
         <!-- Morada -->
         <h3>Morada</h3>
         <form action="update_address.php" method="post">
