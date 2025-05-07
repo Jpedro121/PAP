@@ -1,15 +1,10 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-?>
 
 <header>
         <nav>
              <div class="nav-container">
                     <div >SKATESHOP</div>
                     <ul class="nav-links">
-                        <li><a href="/PAP/home.php">Home</a></li>
+                        <li><a href="/PAP/h >Home</a></li>
                         <li>
                             <a href="#">Apparel</a>
                             <ul class="dropdown">
