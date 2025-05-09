@@ -6,10 +6,11 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['username']) && $_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../home.php"); 
     exit();
 }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     $username = $_POST["username"];

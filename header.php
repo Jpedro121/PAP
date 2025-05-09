@@ -4,7 +4,7 @@
              <div class="nav-container">
                     <div >SKATESHOP</div>
                     <ul class="nav-links">
-                        <li><a href="/PAP/h >Home</a></li>
+                        <li><a href="/PAP/home.php">Home</a></li>
                         <li>
                             <a href="#">Apparel</a>
                             <ul class="dropdown">
@@ -34,14 +34,14 @@
                         <li>
                             <a href="#">Skateboards</a>
                             <ul class="dropdown">
-                                <li><a href="decks.php">Decks</a></li>
-                                <li><a href="trucks.php">Trucks</a></li>
+                                <li><a href="/PAP/decks.php">Decks</a></li>
+                                <li><a href="/PAP/trucks.php">Trucks</a></li>
                                 <li><a href="#">Wheels</a></li>
                                 <li><a href="#">Bearings</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="brands.php">Brands</a>
+                            <a href="../brands.php">Brands</a>
                             <ul class="dropdown">
                                 <li><a href="#">Butter</a></li>
                                 <li><a href="#">Carhartt</a></li>
@@ -58,7 +58,7 @@
                     <?php else:?>
                         <a href="/PAP/login/login.php" class="icon"><i class="fas fa-user"></i></a>
                     <?php endif;?>
-                    <a href="cart.php" class="icon"><i class="fas fa-shopping-cart"></i></a>
+                    <a href="/PAP/cart.php" class="icon"><i class="fas fa-shopping-cart"></i></a>
                 </div>    
         </nav>
     </header>

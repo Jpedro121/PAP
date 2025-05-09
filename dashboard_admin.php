@@ -39,6 +39,12 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
             <div class="col-md-4">
                 <a href="encomendas_admin.php" class="btn btn-warning w-100">Ver Encomendas</a>
             </div>
+            <div class="row g-4 mt-3">
+            <div class="col-md-4">
+                <a href="listar_produtos.php" class="btn btn-info w-100">Editar Produtos</a>
+            </div>
+        </div>
+
         </div>
     </div>
 </body>

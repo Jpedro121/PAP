@@ -1,3 +1,105 @@
+/* === Arquivo CSS Unificado === */
+
+/* ======= Importação Bulma ======= */
+@import "node_modules/bulma/css/bulma.min.css";
+
+/* ======= Estilos de estilos.css ======= */
+@import "node_modules/bulma/css/bulma.min.css";
+
+/* ======= Configurações Globais ======= */
+body {
+    background-color: #f9fafb;
+    color: #4b5563;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======= Página do Produto ======= */
+.produto-pagina {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.produto-detalhes {
+    display: flex;
+    gap: 40px;
+    width: 100%;
+}
+
+.produto-imagem img {
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.produto-informacoes {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.produto-nome {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.informacoes p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.produto-preco {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.btn {
+    background-color: #1f2937;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    background-color:#1f2937;
+}
+
+/* ======= Rodapé ======= */
+footer {
+    background-color: #1f2937;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .product-card {
+      width: 100%;
+      margin: 10px 0;
+    }
+  }
+  
+
+/* ======= Estilos de estilos.css (estilos personalizados) ======= */
 @import "node_modules/bulma/css/bulma.min.css";
 
 /* ======= Configurações Globais ======= */
@@ -154,6 +256,7 @@ ul {
     position: relative; 
     height: 150px; 
     background-color: #f9fafb; 
+    padding: 15px;
 }
 
 .brand-logos {
@@ -190,23 +293,13 @@ ul {
 /* ======= Seção de Produtos ======= */
 /* ======== Container da secção Novidades ======== */
 .Novidades {
-    text-align: center;
-    margin: 48px auto;
+    margin: 5px auto;
     padding: 32px;
-    background: linear-gradient(to bottom, #f9fafb, #f1f5f9);
-    border-radius: 16px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* ======== Título da secção ======== */
-.Novidades h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 36px;
-    color: #1f2937;
-    margin-bottom: 32px;
-    border-bottom: 2px solid #e60000;
-    display: inline-block;
-    padding-bottom: 8px;
+.NossasMarcas{
+    margin: 5px auto;
+    padding: 15px;
 }
 
 /* ======== Grid dos Produtos ======== */
@@ -459,3 +552,4 @@ footer {
     margin: 40px 0;
     color: #666;
 }
+

@@ -1,4 +1,15 @@
 <?php
+session_start();
+
+if (isset($_SESSION['username']) && $_SERVER["REQUEST_METHOD"] !== "POST") {
+    if ($_SESSION['role'] === 'admin') {
+        header("Location: /PAP/dashboard_admin.php");
+    } else {
+        header("Location: /PAP/userprofi.php");
+    }
+    exit();
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -29,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($password !== $confirm_password) {
         $mensagem = "Erro: As senhas não coincidem.";
     } else {
+        // Verifica se o nome de utilizador ou o email já existe
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
         $stmt->bind_param("ss", $username, $email);
         $stmt->execute();
@@ -37,8 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->num_rows > 0) {
             $mensagem = "Erro: Nome de utilizador ou email já estão registados.";
         } else {
+            // Inserir dados na base de dados
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $role = 'utilizador';
+            $role = 'utilizador';  // Defina o papel do utilizador como "utilizador"
 
             $stmt = $conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
@@ -67,7 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->Subject = 'Bem-vindo à SK8nation!';
 
                     $logoURL = 'https://i.postimg.cc/VkXV804q/logopap.png';
-                    $codigoVerificacao = "qcbh hpkt uafr ivuj";
 
                     $mail->Body = "
                         <img src='$logoURL' alt='SK8nation' width='275'><br><br>
@@ -76,15 +88,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <p>A tua conta foi criada com sucesso e estás oficialmente dentro da nossa comunidade.</p>
                         <p>Explora as nossas boards, peças e estilos. Prepara-te para elevar o teu nível!</p>
                         <p>Estamos felizes por te ter connosco. Let's roll 🤙</p>
-                        <hr>
-                        <p><strong>Código de verificação:</strong> <code>$codigoVerificacao</code></p>
-                    ";
+                        <hr>";
 
                     $mail->send();
                 } catch (Exception $e) {
                     // Opcional: log de erro
-                    // error_log("Erro ao enviar email: " . $mail->ErrorInfo);
+                    error_log("Erro ao enviar email: " . $mail->ErrorInfo);
                 }
+            } else {
+                $mensagem = "Erro ao criar a conta. Tente novamente mais tarde.";
             }
             $stmt->close();
         }
@@ -93,7 +105,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -190,8 +201,8 @@ $conn->close();
 <main>
     <h2>Criar Conta</h2>
 
-    <?php if (isset($error)): ?>
-        <div class="error"><?= $error ?></div>
+    <?php if (isset($mensagem) && !empty($mensagem)): ?>
+        <div class="error"><?php echo $mensagem; ?></div>
     <?php endif; ?>
 
     <form action="" method="post">

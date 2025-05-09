@@ -7,8 +7,8 @@ if (!isset($_SESSION["username"]) || !isset($_SESSION["user_id"])) {
 require '../db.php';
 $user_id = $_SESSION["user_id"];
 
-
-$sql = "SELECT username, morada FROM users WHERE id = ?";
+// Buscar dados do utilizador, incluindo o email
+$sql = "SELECT username, email, morada FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -17,12 +17,13 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $dados = $result->fetch_assoc();
     $username = $dados['username'];
+    $email = $dados['email'];
     $morada = $dados['morada'];
 } else {
     $username = "Desconhecido";
+    $email = "Não disponível";
     $morada = "";
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +95,7 @@ if ($result->num_rows > 0) {
     <?php include('../header.php'); ?>
     <div class="perfil-container">
         <h2>Olá, <span style="color:#007bff;"><?php echo htmlspecialchars($username); ?></span></h2>
-        <p style="text-align:center;">Aqui podes editar o teu perfil, morada e ver as tuas encomendas.</p>
+        <p style="text-align:center;">Aqui podes editar o teu perfil e morada.</p>
 
         <!-- Editar nome de utilizador -->
         <h3>Editar Nome de Utilizador</h3>
@@ -114,10 +115,10 @@ if ($result->num_rows > 0) {
             <button type="submit" class="btn">Alterar Palavra-passe</button>
         </form>
         
+        <!-- Email -->
         <h3>Email</h3>
-        <p><strong>Email:</strong> <?php echo htmlspecialchars($_SESSION['email']); ?></p>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
 
-        </form>
         <!-- Morada -->
         <h3>Morada</h3>
         <form action="update_address.php" method="post">
