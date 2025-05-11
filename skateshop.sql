@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 09-Maio-2025 às 22:02
+-- Tempo de geração: 11-Maio-2025 às 17:17
 -- Versão do servidor: 10.4.32-MariaDB
 -- versão do PHP: 8.2.12
 
@@ -50,16 +50,17 @@ CREATE TABLE `categorias` (
 -- Extraindo dados da tabela `categorias`
 --
 
-INSERT INTO `categorias` (`id`, `nome`) VALUES(1, 'Deck');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(2, 'Trucks');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(3, 'Rodas');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(4, 'Rolamentos');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(5, 'T-shirts');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(6, 'Sweats');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(7, 'Pants');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(8, 'Shorts');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(9, 'Sapato');
-INSERT INTO `categorias` (`id`, `nome`) VALUES(10, 'Acessórios');
+INSERT INTO `categorias` (`id`, `nome`) VALUES
+(1, 'Deck'),
+(2, 'Trucks'),
+(3, 'Rodas'),
+(4, 'Rolamentos'),
+(5, 'T-shirts'),
+(6, 'Sweats'),
+(7, 'Pants'),
+(8, 'Shorts'),
+(9, 'Sapato'),
+(10, 'Acessórios');
 
 -- --------------------------------------------------------
 
@@ -80,9 +81,22 @@ CREATE TABLE `decks` (
 -- Extraindo dados da tabela `decks`
 --
 
-INSERT INTO `decks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES(1, 1, '8.5', 'Polar Skate CO,', 10, NULL);
-INSERT INTO `decks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES(2, 4, '8\'', 'Fucking Awesome', 10, 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\nShape #2\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base');
-INSERT INTO `decks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES(4, 5, '8.0', '', 10, '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>');
+INSERT INTO `decks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES
+(1, 1, '8.5', 'Polar Skate CO,', 10, NULL),
+(2, 4, '8\'', 'Fucking Awesome', 10, 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\nShape #2\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base'),
+(4, 5, '8.0', '', 10, '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `descricao_categoria`
+--
+
+CREATE TABLE `descricao_categoria` (
+  `produto_id` int(11) NOT NULL,
+  `categoria` varchar(255) NOT NULL,
+  `descricao` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -107,11 +121,12 @@ CREATE TABLE `produtos` (
 -- Extraindo dados da tabela `produtos`
 --
 
-INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`, `marca`, `logo_marca`) VALUES(1, 'Polar Skate Co. Toba - David Stenstrom Debut Pro Deck', 'Griptape included', 85.00, 'skateboard1.png', 1, '8.5', 'decks', 'Polar Skate CO', 'polar.png');
-INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`, `marca`, `logo_marca`) VALUES(3, 'Ace AF1 Trucks Polished Pair', 'Par de trucks Ace AF1 com resistência superior.', 74.99, 'truckAF1.jpg', 2, '8.25', 'trucks', 'Ace Trucks MFG', 'ace.png');
-INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`, `marca`, `logo_marca`) VALUES(4, 'Fucking Awesome-Curren Caples Remember To Forget Deck', 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base', 90.00, 'skateboard3.png', 1, '8', 'decks', 'Fucking Awesome', 'fuckingawesome.png');
-INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`, `marca`, `logo_marca`) VALUES(5, 'Fucking Awesome Gino Iannucci Daybreak in Phuket Deck', '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>', 90.00, 'skateboard6.jpeg', 1, '8', 'decks', 'Fucking Awesome', 'fuckingawesome.png');
-INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`, `marca`, `logo_marca`) VALUES(6, 'Ace Trucks MFG AF1 Carhartt WIP Trucks - Carhartt Orange / Polished', '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\r\n\r\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\r\n\r\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\r\n\r\n<p>-Set of 2</p>\r\n\r\n<p>-Polished</p>\r\n\r\n<p>-Branded engraved hanger</p>\r\n\r\n<p>-Exclusive anodized orange baseplate</p>\r\n\r\n<p>-Includes anodized axle orange re-threader die</p>', 75.00, 'Stage5Trucks.webp', 2, '55', 'trucks', 'Ace Trucks MFG', 'ace.png');
+INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria_id`, `tamanho`, `categoria`, `marca`, `logo_marca`) VALUES
+(1, 'Polar Skate Co. Toba - David Stenstrom Debut Pro Deck', 'Griptape included', 85.00, 'skateboard1.png', 1, '8.5', 'decks', 'Polar Skate CO', 'polar.png'),
+(3, 'Ace AF1 Trucks Polished Pair', 'Par de trucks Ace AF1 com resistência superior.', 74.99, 'truckAF1.jpg', 2, '8.25', 'trucks', 'Ace Trucks MFG', 'ace.png'),
+(4, 'Fucking Awesome-Curren Caples Remember To Forget Deck', 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base', 90.00, 'skateboard3.png', 1, '8', 'decks', 'Fucking Awesome', 'fuckingawesome.png'),
+(5, 'Fucking Awesome Gino Iannucci Daybreak in Phuket Deck', '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>', 90.00, 'skateboard6.jpeg', 1, '8', 'decks', 'Fucking Awesome', 'fuckingawesome.png'),
+(6, 'Ace Trucks MFG AF1 Carhartt WIP Trucks - Carhartt Orange / Polished', '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\r\n\r\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\r\n\r\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\r\n\r\n<p>-Set of 2</p>\r\n\r\n<p>-Polished</p>\r\n\r\n<p>-Branded engraved hanger</p>\r\n\r\n<p>-Exclusive anodized orange baseplate</p>\r\n\r\n<p>-Includes anodized axle orange re-threader die</p>', 75.00, 'Stage5Trucks.webp', 2, '55', 'trucks', 'Ace Trucks MFG', 'ace.png');
 
 -- --------------------------------------------------------
 
@@ -163,8 +178,9 @@ CREATE TABLE `trucks` (
 -- Extraindo dados da tabela `trucks`
 --
 
-INSERT INTO `trucks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES(3, 3, '8.25', 'Ace Trucks MFG', 15, '<p>Trucks Ace AF1 com resistência superior.</p>');
-INSERT INTO `trucks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES(4, 6, '55', 'Ace Trucks MFG', 10, '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\n\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\n\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\n\n<p>-Set of 2</p>\n\n<p>-Polished</p>\n\n<p>-Branded engraved hanger</p>\n\n<p>-Exclusive anodized orange baseplate</p>\n\n<p>-Includes anodized axle orange re-threader die</p>');
+INSERT INTO `trucks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES
+(3, 3, '8.25', 'Ace Trucks MFG', 15, '<p>Trucks Ace AF1 com resistência superior.</p>'),
+(4, 6, '55', 'Ace Trucks MFG', 10, '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\n\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\n\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\n\n<p>-Set of 2</p>\n\n<p>-Polished</p>\n\n<p>-Branded engraved hanger</p>\n\n<p>-Exclusive anodized orange baseplate</p>\n\n<p>-Includes anodized axle orange re-threader die</p>');
 
 -- --------------------------------------------------------
 
@@ -189,8 +205,12 @@ CREATE TABLE `users` (
 -- Extraindo dados da tabela `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`, `morada`, `verification_code`, `reset_token`, `reset_token_expiry`) VALUES(9, 'admin', '$2y$10$ESqzVZhyFqtwn8yz5yCpqOC2OB1yXjIWaT82ISuO1AKN2fRKGFK5m', 'admin', '2025-03-06 16:23:39', 'admin@gmail.com', NULL, NULL, NULL, NULL);
-INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`, `morada`, `verification_code`, `reset_token`, `reset_token_expiry`) VALUES(16, 'Joa1', '$2y$10$y8BN1Tu.9doL.LjHDsUfz.9N9.zG6PjLRd7DLH9BFuJ/BlJ2LdQ7m', 'user', '2025-04-22 16:38:40', 'joaopedroantunes1980@gmail.com', 'Avenida de Portugal n44Ac, Póvoa da Galega', NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`, `morada`, `verification_code`, `reset_token`, `reset_token_expiry`) VALUES
+(9, 'admin', '$2y$10$ESqzVZhyFqtwn8yz5yCpqOC2OB1yXjIWaT82ISuO1AKN2fRKGFK5m', 'admin', '2025-03-06 16:23:39', 'admin@gmail.com', NULL, NULL, NULL, NULL),
+(16, 'Joa1', '$2y$10$y8BN1Tu.9doL.LjHDsUfz.9N9.zG6PjLRd7DLH9BFuJ/BlJ2LdQ7m', 'user', '2025-04-22 16:38:40', 'joaopedroantunes1980@gmail.com', 'Avenida de Portugal n44Ac, Póvoa da Galega', NULL, NULL, NULL),
+(25, 'Paullo', '$2y$10$4QPlnlscUtV2xqJAh/3Kee1CftJvgDa8HLU1hH3o.1F5itQ9IHtWi', '', '2025-05-09 21:01:37', 'joaopedroantunesps4@gmail.com', NULL, NULL, NULL, NULL),
+(26, 'Leidi', '$2y$10$p5BoHnLGLfqz9R5.A8Kd7O35vw38dEWzMXWLMcNz0Qgsg3iYVCUTe', '', '2025-05-09 21:05:26', 'leidantunes@live.com.pt', NULL, NULL, NULL, NULL),
+(27, 'miudo', '$2y$10$qQ9PiY5S40YgSW/SAavWc.w6WnhlLnMmyES7RNRC9WzbasN8ZwFAO', '', '2025-05-09 21:44:14', 'miudogamer0@gmail.com', NULL, NULL, NULL, NULL);
 
 --
 -- Índices para tabelas despejadas
@@ -216,6 +236,12 @@ ALTER TABLE `categorias`
 ALTER TABLE `decks`
   ADD PRIMARY KEY (`id`),
   ADD KEY `produto_id` (`produto_id`);
+
+--
+-- Índices para tabela `descricao_categoria`
+--
+ALTER TABLE `descricao_categoria`
+  ADD PRIMARY KEY (`produto_id`,`categoria`);
 
 --
 -- Índices para tabela `produtos`
@@ -260,7 +286,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de tabela `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de tabela `categorias`
@@ -302,7 +328,7 @@ ALTER TABLE `trucks`
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Restrições para despejos de tabelas
@@ -320,6 +346,12 @@ ALTER TABLE `carrinho`
 --
 ALTER TABLE `decks`
   ADD CONSTRAINT `decks_ibfk_1` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE CASCADE;
+
+--
+-- Limitadores para a tabela `descricao_categoria`
+--
+ALTER TABLE `descricao_categoria`
+  ADD CONSTRAINT `descricao_categoria_ibfk_1` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`);
 
 --
 -- Limitadores para a tabela `produtos`

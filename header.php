@@ -41,7 +41,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="../brands.php">Brands</a>
+                            <a href="brands.php">Brands</a>
                             <ul class="dropdown">
                                 <li><a href="#">Butter</a></li>
                                 <li><a href="#">Carhartt</a></li>
