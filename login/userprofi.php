@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["username"]) || !isset($_SESSION["user_id"])) {
-    header("Location: ../login.php"); 
+    header("Location: login.php"); 
     exit();
 }
 require '../db.php';
@@ -29,13 +29,13 @@ if ($result->num_rows > 0) {
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+    <title>Perfil</title>
     <?php include('../head.html'); ?>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 20px;
         }
         .perfil-container {
             background-color: #fff;

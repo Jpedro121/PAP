@@ -18,7 +18,7 @@ session_start();
     </section>
 
     <section class="brands">
-        <h2 class="NossasMarcas">Nossas Marcas</h2>
+        <h2 class="NossasMarcas"><?= $lang['our_brands'] ?></h2>
         <div class="brand-logos">
             <div class="brand-logo"><img src="static/images/marcas/butter.png" alt="butter"></div>
             <div class="brand-logo"><img src="static/images/marcas/carhart.png" alt="carhartt"></div>
@@ -47,7 +47,7 @@ session_start();
     </section>
 
     <section>
-    <h1 class="Novidades">Novidades</h1>
+    <h1 class="Novidades"><?= $lang['new_arrivals'] ?></h1>
     <div class="produto-grid">
         <?php
         $conn = new mysqli("localhost", "root", "", "skateshop");

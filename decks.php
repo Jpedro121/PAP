@@ -1,8 +1,6 @@
 <?php
 require 'db.php'; // Arquivo com as credenciais do banco de dados
 
-$conn = new mysqli("localhost", "root", "", "skateshop");
-
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
@@ -44,3 +42,5 @@ $result = $conn->query($sql);
 </html>
 
 <?php $conn->close(); ?>
+<p></p>
+<b></b>
