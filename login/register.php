@@ -199,35 +199,30 @@ $conn->close();
 <body>
 <?php include('../header.php'); ?>
 <main>
-    <h2>Criar Conta</h2>
+    <h2><?= $lang['Create_Account'] ?></h2>
 
     <?php if (isset($mensagem) && !empty($mensagem)): ?>
         <div class="error"><?php echo $mensagem; ?></div>
     <?php endif; ?>
 
     <form action="" method="post">
-        <label for="username">Nome de Utilizador</label>
+        <label for="username"><?= $lang['Username'] ?></label>
         <input type="text" id="username" name="username" required>
 
         <label for="email">Email</label>
         <input type="text" id="email" name="email" required>
 
-        <label for="password">Palavra-passe</label>
+        <label for="password"><?= $lang['Password'] ?></label>
         <input type="password" id="password" name="password" required>
 
-        <label for="confirm_password">Confirmar Palavra-passe</label>
+        <label for="confirm_password"><?= $lang['Confirm_Password'] ?></label>
         <input type="password" id="confirm_password" name="confirm_password" required>
 
-        <button type="submit" name="register">Registrar</button>
+        <button type="submit" name="register"><?= $lang['Register'] ?></button>
     </form>
 
     <div class="message">
-        <?php if (isset($_SESSION["username"])): ?>
-            Você já está logado como <strong><?php echo $_SESSION["username"]; ?></strong>. 
-            <a href="userprofi.php">Ir para o perfil</a>
-        <?php else: ?>
-            Já tem uma conta? <a href="login.php">Fazer Login</a>
-        <?php endif; ?>
+            <a><?= $lang['Already_Account'] ?><a href="login.php">Fazer Login</a>
     </div>
 </main>
 </body>

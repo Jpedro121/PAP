@@ -14,16 +14,16 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
 <header>
     <nav>
         <div class="nav-container">
-            <div>SKATESHOP</div>
+            <div>Sk8Nation</div>
             <ul class="nav-links">
                 <li><a href="/PAP/home.php"><?= $lang['home'] ?></a></li>
                 <li>
                     <a href="#"><?= $lang['clothing'] ?></a>
                     <ul class="dropdown">
-                        <li><a href="#">T-Shirts</a></li>
-                        <li><a href="#">Sweats</a></li>
-                        <li><a href="#">Calças</a></li>
-                        <li><a href="#">Calções</a></li>
+                        <li><a href="#"><?= $lang['tshirts'] ?></a></li>
+                        <li><a href="#"><?= $lang['sweats'] ?></a></li>
+                        <li><a href="#"><?= $lang['pants'] ?></a></li>
+                        <li><a href="#"><?= $lang['shorts'] ?></a></li>
                     </ul>
                 </li>
                 <li>
@@ -39,8 +39,8 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
                 <li>
                     <a href="#"><?= $lang['accessories'] ?></a>
                     <ul class="dropdown">
-                        <li><a href="#">Gorros</a></li>
-                        <li><a href="#">Cintos</a></li>
+                        <li><a href="#"><?= $lang['beanie'] ?></a></li>
+                        <li><a href="#"><?= $lang['belts'] ?></a></li>
                     </ul>
                 </li>
                 <li>

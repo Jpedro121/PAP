@@ -8,7 +8,9 @@ require '../db.php';
 $user_id = $_SESSION["user_id"];
 
 // Buscar dados do utilizador, incluindo o email
-$sql = "SELECT username, email, morada FROM users WHERE id = ?";
+$sql = "SELECT username, email, morada 
+        FROM users
+        WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -94,7 +96,7 @@ if ($result->num_rows > 0) {
 <body>
     <?php include('../header.php'); ?>
     <div class="perfil-container">
-        <h2>Olá, <span style="color:#007bff;"><?php echo htmlspecialchars($username); ?></span></h2>
+        <h2>Olá,<?php echo htmlspecialchars($username); ?></span></h2>
         <p style="text-align:center;">Aqui podes editar o teu perfil e morada.</p>
 
         <!-- Editar nome de utilizador -->

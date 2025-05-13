@@ -28,7 +28,7 @@ $total = 0;
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Meu Carrinho</title>
+    <title><?= $lang['My_Cart'] ?></title>
     <?php include('head.html'); ?>
     <style>
         body {
@@ -139,7 +139,7 @@ $total = 0;
 
 <?php include('header.php'); ?>
 
-<h1 class="titulo-carrinho">Meu Carrinho</h1>
+<h1 class="titulo-carrinho"><?= $lang['My_Cart'] ?></h1>
 
 <div class="carrinho-container">
     <?php if ($result->num_rows > 0): ?>
@@ -149,9 +149,9 @@ $total = 0;
                 <img src="static/images/<?php echo $row['imagem']; ?>" alt="<?php echo $row['nome']; ?>">
                 <div class="info">
                     <h2><?php echo $row['nome']; ?></h2>
-                    <p>Quantidade: <strong><?php echo $row['quantidade']; ?></strong></p>
-                    <p>Preço: <strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
-                    <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover">Remover</a>
+                    <p><?= $lang['Quantity'] ?><strong><?php echo $row['quantidade']; ?></strong></p>
+                    <p><?= $lang['Price'] ?><strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
+                    <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover"><?= $lang['Remove'] ?></a>
                 </div>
             </div>
         <?php endwhile; ?>
@@ -161,11 +161,11 @@ $total = 0;
             <strong>Total: €<?php echo number_format($total, 2, ',', '.'); ?></strong>
         </div>
     <?php else: ?>
-        <p class="vazio">Seu carrinho está vazio.</p>
+        <p class="vazio"><?= $lang['empty_cart'] ?></p>
     <?php endif; ?>
 </div>
 
-<a href="home.php" class="btn-voltar">← Voltar às compras</a>
+<a href="home.php" class="btn-voltar">← <?= $lang['Back_to_Shopping'] ?></a>
 
 </body>
 </html>

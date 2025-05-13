@@ -58,15 +58,15 @@
                 <h1 class="produto-nome"><?php echo $produto['nome']; ?></h1>
                 <div class="informacoes">
                     <?php if (!empty($produto['tamanho'])): ?>
-                        <p class="produto-tamanho"><strong>Tamanho:</strong> <?php echo $produto['tamanho']; ?></p>
+                        <p class="produto-tamanho"><strong><?= $lang['size'] ?></strong> <?php echo $produto['tamanho']; ?></p>
                     <?php endif; ?>
-                    <p class="produto-descricao"><?php echo $produto['descricao']; ?></p>
-                    <p class="produto-preco"><strong>Preço:</strong> €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+                    <p class="produto-descricao"><?php echo $produto['descricao']; ?>:</p>
+                    <p class="produto-preco"><strong><?= $lang['Price'] ?></strong> €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
                     <form action="adicionar_cart.php" method="POST">
                         <input type="hidden" name="produto_id" value="<?php echo $produto['id']; ?>">
                         <input type="hidden" name="preco" value="<?php echo $produto['preco']; ?>">
                         <input type="number" name="quantidade" value="1" min="1" required>
-                        <button type="submit" class="btn">Adicionar ao carrinho</button>
+                        <button type="submit" class="btn"><?= $lang['add_to_cart'] ?></button>
                     </form>
                 </div>
             </div>
@@ -74,7 +74,7 @@
     </main>
 
     <footer>
-        <p>2025 Skateshop. Todos os direitos reservados.</p>
+        <p><?= $lang['footer'] ?></p>
     </footer>
 </body>
 </html>

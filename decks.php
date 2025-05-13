@@ -5,7 +5,10 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-$sql = "SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, d.tamanho, d.marca FROM produtos p INNER JOIN decks d ON p.id = d.produto_id WHERE p.categoria_id = 1";
+$sql = "SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, d.tamanho, d.marca 
+        FROM produtos p INNER JOIN decks d ON p.id = d.produto_id 
+        WHERE p.categoria_id = 1";
+        
 $result = $conn->query($sql);
 ?>
 
@@ -15,12 +18,12 @@ $result = $conn->query($sql);
 <?php include('head.html'); ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decks</title>
+    <title><?= $lang['Decks'] ?></title>
 </head>
 <body>
 <?php include('header.php'); ?>
 
-    <h1>Decks</h1>
+    <h1><?= $lang['Decks'] ?></h1>
     <div class="deck-container">
             <?php
             if ($result->num_rows > 0) {

@@ -55,64 +55,65 @@ $conn->close();
     <?php include('../head.html'); ?>
     <title>Login</title>
 <style>
-body {
-font-family: "Segoe UI", sans-serif;
-background-color: #f5f5f5;
-}
+        body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f5f5f5;
+        }
 
-.form-container {
-    max-width: 400px;
-    margin: 60px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+        .form-container {
+            max-width: 460px;
+            margin: 60px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
-h2 {
-    text-align: center;
-    color: #007bff;
-}
+        h2 {
+            text-align: center;
+            color: #007bff;
+        }
 
-.error-message {
-    color: red;
-    margin-bottom: 15px;
-    text-align: center;
-}
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+            text-align: center;
+        }
 
-label {
-    display: block;
-    margin-top: 15px;
-}
+        label {
+            display: block;
+            margin-top: 15px;
+        }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
-button {
-    margin-top: 20px;
-    width: 105%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
+        button {
+            margin-top: 20px;
+            width: 105%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-button:hover {
-    background-color: #0056b3;
-}
+        button:hover {
+            background-color: #0056b3;
+        }
 
-.signup-link {
-    text-align: center;
-    margin-top: 15px;
-}
+        .signup-link {
+            text-align: center;
+            margin-top: 15px;
+            text-decoration: unset;
+        }
 
 </style>
 </head>
@@ -127,20 +128,20 @@ button:hover {
             <?php endif; ?>
 
             <form action="auth.php" method="post">
-                <label for="username">Utilizador:</label>
+                <label for="username"><?= $lang['Username'] ?></label>
                 <input type="text" name="username" id="username" required>
 
-                <label for="password">Palavra-passe:</label>
+                <label for="password"><?= $lang['Password'] ?></label>
                 <input type="password" name="password" id="password" required>
 
-                <button type="submit" name="login">Entrar</button>
+                <button type="submit" name="login"><?= $lang['Login'] ?></button>
             </form>
 
             <div class="signup-link">
-                <p>Ainda não tem uma conta? <a href="register.php">Criar Conta</a></p>
+                <p><?= $lang['No_Account'] ?><a class="signup-link" href="register.php">Criar Conta</a></p>
             </div>
             <div class="signup-link">
-                <p><a href="forgot_password.php">Esqueceu-se da palavra-passe?</a></p>
+                <p><a class="signup-link" href="forgot_password.php"><?= $lang['Forgot_Password'] ?></a></p>
             </div>
 
         </div>

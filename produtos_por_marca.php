@@ -58,12 +58,11 @@ if ($result->num_rows > 0) {
     <?php include('header.php'); ?>
     
     <div class="container">
-        <a href="brands.php" class="back-link">← Voltar a todas as marcas</a>
         <h1><?= htmlspecialchars($marca) ?></h1>
 
         <div class="produto-container">
             <?php if (empty($produtos)): ?>
-                <p>Nenhum produto encontrado para esta marca.</p>
+                <p><?= $lang['No_products_found'] ?>.</p>
             <?php else: ?>
                 <?php foreach ($produtos as $produto): ?>
                     <div class="produto-card">
@@ -73,9 +72,9 @@ if ($result->num_rows > 0) {
                                  class="produto-imagem">
                         <?php endif; ?>
                         <h3><?= htmlspecialchars($produto['nome']) ?></h3>
-                        <p>Preço: €<?= number_format($produto['preco'], 2) ?></p>
+                        <p><?= $lang['prize'] ?> €<?= number_format($produto['preco'], 2) ?></p>
                         <?php if (!empty($produto['tamanho'])): ?>
-                            <p>Tamanho: <?= htmlspecialchars($produto['tamanho']) ?></p>
+                            <p><?= $lang['size'] ?><?= htmlspecialchars($produto['tamanho']) ?></p>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>

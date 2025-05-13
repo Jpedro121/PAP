@@ -6,15 +6,15 @@ session_start();
 <html lang="en">
 <head>
     <?php include('head.html'); ?>
-    <title>Skateshop</title>
+    <title>Sk8Nation</title>
 </head>
 <body>
 <?php include('header.php'); ?>
 
 <main>
     <section class="hero" style="background-image: url('static/images/header-desktop.webp')">
-        <h1>Discover the World of Skateboarding</h1>
-        <p>Gear up with the latest apparel, footwear, and skateboards.</p>
+        <h1><?= $lang['Discover_World'] ?></h1>
+        <p><?= $lang['gear_up'] ?></p>
     </section>
 
     <section class="brands">
@@ -86,7 +86,7 @@ session_start();
         } else {
             echo "Nenhum produto encontrado.";
         }
-
+        
         $conn->close();
         ?>
     </div>
@@ -94,7 +94,7 @@ session_start();
 </main>
 
 <footer>
-    <p>2025 Skateshop. Todos os direitos reservados.</p>
+    <p><?= $lang['footer'] ?></p>
 </footer>
 
 </body>

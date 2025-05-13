@@ -4,8 +4,7 @@ use PHPMailer\PHPMailer\Exception;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$conn = new mysqli("localhost", "root", "", "skateshop");
-
+require '../db.php';
 $mensagem = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -58,22 +57,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 
-<!-- HTML -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Recuperar Palavra-passe</title>
+    <title><?= $lang['Reset_Password'] ?></title>
 </head>
 <body>
-    <h2>Recuperar Palavra-passe</h2>
+    <h2><?= $lang['Reset_Password'] ?></h2>
     <?php if ($mensagem): ?>
         <p><?= $mensagem ?></p>
     <?php endif; ?>
     <form method="post">
         <label>Email:</label>
         <input type="email" name="email" required>
-        <button type="submit">Enviar Email</button>
+        <button type="submit"><?= $lang['Reset_Password_Email'] ?></button>
     </form>
 </body>
 </html>

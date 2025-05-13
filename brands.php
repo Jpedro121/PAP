@@ -9,7 +9,7 @@ $result = $conn->query($sql);
 <html lang="pt-br">
 <head>
     <?php include('head.html'); ?>
-    <title>Nossas Marcas</title>
+    <title><?= $lang['our_brands'] ?></title>
     <style>
         .marca-container {
             display: grid;
@@ -39,7 +39,7 @@ $result = $conn->query($sql);
 <body>
     <?php include('header.php'); ?>
     
-    <h1 style="text-align:center; margin:20px 0;">Nossas Marcas</h1>
+    <h1 style="text-align:center; margin:20px 0;"><?= $lang['our_brands'] ?></h1>
     
     <div class="marca-container">
         <?php while($row = $result->fetch_assoc()): ?>

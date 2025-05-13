@@ -12,12 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?");
         $stmt->bind_param("ss", $hashed, $token);
         if ($stmt->execute()) {
-            $mensagem = "Palavra-passe atualizada com sucesso.";
+            $mensagem = $lang['Password_Updated'] ;
         } else {
-            $mensagem = "Erro ao atualizar palavra-passe.";
+            $mensagem = $lang['Password_Update_error'];
         }
     } else {
-        $mensagem = "As senhas não coincidem.";
+        $mensagem = $lang['Password_Mismatch'];
     }
 }
 ?>
@@ -27,17 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Nova Palavra-passe</title>
+    <title><?= $lang['New_Password'] ?></title>
 </head>
 <body>
-    <h2>Definir nova palavra-passe</h2>
+    <h2><?= $lang['New_Password'] ?></h2>
     <?php if ($mensagem): ?>
         <p><?= $mensagem ?></p>
     <?php endif; ?>
     <form method="post">
         <input type="password" name="password" placeholder="Nova palavra-passe" required>
         <input type="password" name="confirm_password" placeholder="Confirmar" required>
-        <button type="submit">Atualizar</button>
+        <button type="submit"><?= $lang['Update'] ?></button>
     </form>
 </body>
 </html>

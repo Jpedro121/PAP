@@ -10,7 +10,7 @@ $result = $conn->query($sql);
 <html lang="pt-br">
 <head>
     <?php include('head.html'); ?>
-    <title>Nossas Marcas - SkateShop</title>
+    <title><?= $lang['our_brands'] ?>-Sk8Nation</title>
     <style>
         .marca-container {
             display: flex;
@@ -68,7 +68,7 @@ $result = $conn->query($sql);
             <div class="marca-card" onclick="window.location.href='produtos_por_marca.php?marca=<?= urlencode($marca) ?>'">
                 <img src="<?= $logo ?>" alt="<?= htmlspecialchars($marca) ?>" class="marca-logo">
                 <div class="marca-nome"><?= htmlspecialchars($marca) ?></div>
-                <div class="marca-desc">Clique para ver produtos</div>
+                <div class="marca-desc"><?= $lang['Click_here'] ?></div>
             </div>
         <?php endwhile; ?>
     </div>

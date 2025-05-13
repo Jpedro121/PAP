@@ -76,10 +76,10 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard do Administrador</title>
+    <?php include('head.html'); ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
     <script>
     function atualizarEspecificacoes() {
         const categoriaSelect = document.querySelector("select[name='categoria_id']");
@@ -118,8 +118,7 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
             `;
         }
     }
-</script>
-
+</script>       
 </head>
 <body onload="atualizarEspecificacoes()">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
