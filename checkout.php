@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao" value="Cartão" checked>
                                         <label class="form-check-label" for="cartao">
-                                            <img src="/static/images/payment/credit-card.png" alt="Cartão"> Cartão de Crédito/Débito
+                                            <img src="/static/images/payments/credit-card.png" alt="Cartão"> Cartão de Crédito/Débito
                                         </label>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="metodo_pagamento" id="mbway" value="MB WAY">
                                         <label class="form-check-label" for="mbway">
-                                            <img src="/static/images/payment/mbway.png" alt="MB WAY"> MB WAY
+                                            <img src="/PAP/static/images/payments/mbway.png" alt="MB WAY"> MB WAY
                                         </label>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="metodo_pagamento" id="paypal" value="PayPal">
                                         <label class="form-check-label" for="paypal">
-                                            <img src="/static/images/payment/paypal.png" alt="PayPal"> PayPal
+                                            <img src="/static/images/payments/paypal.png" alt="PayPal"> PayPal
                                         </label>
                                     </div>
                                 </div>
