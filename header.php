@@ -64,7 +64,10 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
                 </li>
             </ul>
         </div>
-
+        <div class="language-selector">
+            <a href="?lang=pt">PT</a> | <a href="?lang=en">EN</a>
+        </div>
+        
         <div class="nav-icons">
             <?php if(isset($_SESSION["username"])):?>   
                 <a href="/PAP/login/userprofi.php" class="icon" title="<?= $lang['profile'] ?>"><i class="fas fa-user"></i></a>
@@ -74,8 +77,6 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
             <a href="/PAP/cart.php" class="icon" title="<?= $lang['cart'] ?>"><i class="fas fa-shopping-cart"></i></a>
         </div> 
 
-        <div class="language-selector">
-            <a href="?lang=pt">PT</a> | <a href="?lang=en">EN</a>
-        </div>
+
     </nav>
 </header>

@@ -6,31 +6,54 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$user_id = $_SESSION['user_id'];
-$sql = "SELECT c.id, p.nome, p.imagem, c.quantidade, c.preco 
-        FROM carrinho c 
-        JOIN produtos p ON c.produto_id = p.id 
-        WHERE c.user_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
 
 $total = 0;
+$produtos = [];
+
+if (isset($_SESSION['user_id'])) {
+    // Carrinho guardado na base de dados (logado)
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT c.id, p.nome, p.imagem, c.quantidade, c.preco 
+            FROM carrinho c 
+            JOIN produtos p ON c.produto_id = p.id 
+            WHERE c.user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $produtos[] = $row;
+        $total += $row['preco'] * $row['quantidade'];
+    }
+} else {
+    // Carrinho em sessão (não logado)
+    if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) {
+        foreach ($_SESSION['carrinho'] as $item) {
+            $produto_id = $item['produto_id'];
+            $quantidade = $item['quantidade'];
+            $query = $conn->prepare("SELECT nome, imagem, preco FROM produtos WHERE id = ?");
+            $query->bind_param("i", $produto_id);
+            $query->execute();
+            $res = $query->get_result();
+            if ($res->num_rows > 0) {
+                $produto = $res->fetch_assoc();
+                $produto['quantidade'] = $quantidade;
+                $produto['id'] = $produto_id;
+                $produtos[] = $produto;
+                $total += $produto['preco'] * $quantidade;
+            }
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title><?= $lang['My_Cart'] ?></title>
+    <title><?= $lang['My_Cart'] ?? 'Carrinho' ?></title>
     <?php include('head.html'); ?>
-    <style>
+<style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f2f2f2;
@@ -139,33 +162,46 @@ $total = 0;
 
 <?php include('header.php'); ?>
 
-<h1 class="titulo-carrinho"><?= $lang['My_Cart'] ?></h1>
+<h1 class="titulo-carrinho"><?= $lang['My_Cart'] ?? 'Carrinho' ?></h1>
 
 <div class="carrinho-container">
-    <?php if ($result->num_rows > 0): ?>
-        <?php while ($row = $result->fetch_assoc()): ?>
-            <?php $total += $row['preco'] * $row['quantidade']; ?>
+    <?php if (!empty($produtos)): ?>
+        <?php foreach ($produtos as $row): ?>
             <div class="item-carrinho">
                 <img src="static/images/<?php echo $row['imagem']; ?>" alt="<?php echo $row['nome']; ?>">
                 <div class="info">
                     <h2><?php echo $row['nome']; ?></h2>
-                    <p><?= $lang['Quantity'] ?><strong><?php echo $row['quantidade']; ?></strong></p>
-                    <p><?= $lang['Price'] ?><strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
-                    <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover"><?= $lang['Remove'] ?></a>
+                    <p><?= $lang['Quantity'] ?? 'Quantidade:' ?> <strong><?php echo $row['quantidade']; ?></strong></p>
+                    <p><?= $lang['Price'] ?? 'Preço:' ?> <strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover"><?= $lang['Remove'] ?? 'Remover' ?></a>
+                    <?php else: ?>
+                        <a href="removecart.php?pid=<?php echo $row['id']; ?>" class="remover"><?= $lang['Remove'] ?? 'Remover' ?></a>
+                    <?php endif; ?>
                 </div>
             </div>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
 
-        <!-- Total -->
         <div class="total-carrinho">
             <strong>Total: €<?php echo number_format($total, 2, ',', '.'); ?></strong>
         </div>
+
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <form action="checkout.php" method="POST">
+                <button type="submit" class="button is-success">Finalizar Compra</button>
+            </form>
+        <?php else: ?>
+            <p style="text-align:center; margin-top:20px; color:#555;">
+                <strong>Faça login para finalizar a compra.</strong><br>
+                <a href="login/login.php" class="btn-voltar">Login</a>
+            </p>
+        <?php endif; ?>
     <?php else: ?>
-        <p class="vazio"><?= $lang['empty_cart'] ?></p>
+        <p class="vazio"><?= $lang['empty_cart'] ?? 'O carrinho está vazio.' ?></p>
     <?php endif; ?>
 </div>
 
-<a href="home.php" class="btn-voltar">← <?= $lang['Back_to_Shopping'] ?></a>
+<a href="home.php" class="btn-voltar">← <?= $lang['Back_to_Shopping'] ?? 'Voltar às Compras' ?></a>
 
 </body>
 </html>
