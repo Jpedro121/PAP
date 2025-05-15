@@ -8,14 +8,7 @@
     if (isset($_GET['id'])) {
         $produto_id = $_GET['id'];
 
-        $sql = "SELECT p.id, p.nome, p.imagem, p.preco, p.descricao, 
-                    COALESCE(d.tamanho, t.tamanho, r.tamanho) AS tamanho
-                FROM produtos p
-                LEFT JOIN decks d ON p.id = d.produto_id
-                LEFT JOIN trucks t ON p.id = t.produto_id
-                LEFT JOIN rodas r ON p.id = r.produto_id
-                WHERE p.id = ?";
-
+        $sql = "SELECT * FROM produtos WHERE id = ?";
         $stmt = $conn->prepare($sql);
 
         if ($stmt === false) {
@@ -32,6 +25,41 @@
             echo "Produto não encontrado!";
             exit;
         }
+
+        // Buscar tamanhos disponíveis na tabela tamanhos_produto
+        $sql_tamanhos = "SELECT tamanho FROM tamanhos_produto WHERE produto_id = ? AND disponivel = 1";
+        $stmt_tamanhos = $conn->prepare($sql_tamanhos);
+        $stmt_tamanhos->bind_param("i", $produto_id);
+        $stmt_tamanhos->execute();
+        $result_tamanhos = $stmt_tamanhos->get_result();
+        $tamanhos_disponiveis = [];
+
+        while ($row = $result_tamanhos->fetch_assoc()) {
+            $tamanhos_disponiveis[] = $row['tamanho'];
+        }
+
+        function getTamanhosPorCategoria($categoria) {
+            switch (strtolower($categoria)) {
+                case 'deck':
+                    return ['7\"', '7.25\"', '7.5\"', '7.75\"', '8\"', '8.25\"', '8.5\"', '8.75\"', '9\"', '9.25\"', '9.5\"', '10\"'];
+                case 'truck':
+                    return ['129mm', '139mm', '149mm', '159mm', '169mm'];
+                case 'roda':
+                    $tamanhos = [];
+                    for ($i = 49; $i <= 75; $i++) {
+                        $tamanhos[] = $i . 'mm';
+                    }
+                    return $tamanhos;
+                case 'sapato':
+                    return range(38, 47);
+                case 'roupa':
+                    return ['XS', 'S', 'M', 'L'];
+                default:
+                    return [];
+            }
+        }
+
+        $todos_os_tamanhos = getTamanhosPorCategoria($produto['categoria']);
     } else {
         echo "ID do produto não especificado!";
         exit;
@@ -44,7 +72,25 @@
 <html lang="en">
 <?php include('head.html'); ?>
 <link rel="stylesheet" href="static/styles.css">
-
+<style>
+.tamanho-btn {
+    margin: 4px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.tamanho-btn.disponivel {
+    background-color: #4CAF50;
+    color: white;
+}
+.tamanho-btn.indisponivel {
+    background-color: #eee;
+    color: #aaa;
+    cursor: not-allowed;
+}
+</style>
 <body>
     <?php include('header.php'); ?>
     <title><?php echo $produto['nome']; ?></title>
@@ -57,8 +103,13 @@
             <div class="produto-informacoes">
                 <h1 class="produto-nome"><?php echo $produto['nome']; ?></h1>
                 <div class="informacoes">
-                    <?php if (!empty($produto['tamanho'])): ?>
-                        <p class="produto-tamanho"><strong><?= $lang['size'] ?></strong> <?php echo $produto['tamanho']; ?></p>
+                    <?php if (!empty($todos_os_tamanhos)): ?>
+                        <div class="tamanhos">
+                            <p><strong>Tamanhos disponíveis:</strong></p>
+                            <?php foreach ($todos_os_tamanhos as $tamanho): ?>
+                                <button class="tamanho-btn <?php echo in_array($tamanho, $tamanhos_disponiveis) ? 'disponivel' : 'indisponivel'; ?>" <?php echo in_array($tamanho, $tamanhos_disponiveis) ? '' : 'disabled'; ?>><?php echo $tamanho; ?></button>
+                            <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
                     <p class="produto-descricao"><?php echo $produto['descricao']; ?>:</p>
                     <p class="produto-preco"><strong><?= $lang['Price'] ?></strong> €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>

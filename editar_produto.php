@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
     $nome = $_POST['nome'];
     $preco = $_POST['preco'];
-    $descricao = $_POST['descricao'];
+    $descricao = $_POST['descricao']; // HTML vindo do TinyMCE
 
     // Busca imagem atual
     $sqlSelect = "SELECT imagem FROM produtos WHERE id = ?";
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $produto = $result->fetch_assoc();
     $imagemPath = $produto['imagem'];
 
-    // Upload de imagem nova (opcional)
+    // Upload de nova imagem (opcional)
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'static/images/';
         if (!file_exists($uploadDir)) {
@@ -41,10 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $nomeTemp = $_FILES['imagem']['tmp_name'];
         $nomeImagem = basename($_FILES['imagem']['name']);
-        $nomeFinal = $uploadDir . $nomeImagem;
+        $imagemUnica = uniqid() . '_' . $nomeImagem;
+        $nomeFinal = $uploadDir . $imagemUnica;
 
         if (move_uploaded_file($nomeTemp, $nomeFinal)) {
-            $imagemPath = $nomeImagem;
+            $imagemPath = $imagemUnica;
         } else {
             echo "<script>alert('Erro ao fazer upload da imagem.');</script>";
         }
@@ -92,6 +93,40 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <title>Editar Produto</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://cdn.tiny.cloud/1/2o7tsvbgi9ftrzw41lg5rsoedppf1acxxck0n85yjle7ller/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#descricao',
+            plugins: 'lists',
+            toolbar: 'undo redo | formatselect | bold italic underline | bullist numlist | h2 h3',
+            menubar: false,
+            height: 300,
+            branding: false,
+            setup: function (editor) {
+                editor.ui.registry.addMenuButton('h2', {
+                    text: 'Título',
+                    fetch: function (callback) {
+                        callback([
+                            {
+                                type: 'menuitem',
+                                text: 'Título 2 (H2)',
+                                onAction: function () {
+                                    editor.execCommand('FormatBlock', false, 'h2');
+                                }
+                            },
+                            {
+                                type: 'menuitem',
+                                text: 'Título 3 (H3)',
+                                onAction: function () {
+                                    editor.execCommand('FormatBlock', false, 'h3');
+                                }
+                            }
+                        ]);
+                    }
+                });
+            }
+        });
+    </script>
 </head>
 <body>
 <section class="section">
@@ -118,7 +153,7 @@ if (isset($_GET['id'])) {
             <div class="field">
                 <label class="label">Descrição</label>
                 <div class="control">
-                    <textarea class="textarea" name="descricao" required><?= htmlspecialchars($produto['descricao']) ?></textarea>
+                    <textarea id="descricao" class="textarea" name="descricao"><?= htmlspecialchars($produto['descricao']) ?></textarea>
                 </div>
             </div>
 
@@ -168,5 +203,3 @@ if (isset($_GET['id'])) {
 </script>
 </body>
 </html>
-
-<p></p>
