@@ -21,6 +21,7 @@ $lang = [
     "wheels" => "Rodas",
     "bearings" => "Rolamentos",
     "brands" => "Marcas",
+    "no_products" => "Nenhum produto encontrado.",
 
     //Home
     "our_brands" => "Nossas Marcas",
@@ -71,10 +72,11 @@ $lang = [
     "Remove" => "Remover",
     "empty_cart" => "Seu carrinho está vazio.",
     "Back_to_Shopping" => "Voltar às Compras",
+    "Checkout" => "Finalizar Compra",
+    "Login_to_checkout" => "Faça login para finalizar a compra.",
 
     //Decks
     "Decks" => "Tábuas",
-
 
     //Marcas
     "Click_here" => "Clique para ver os produtos",
@@ -86,9 +88,6 @@ $lang = [
 
     //produtos por marca
     "No_products_found" => "Nenhum produto encontrado para esta marca.",
-
-
-
 
     //footer
     "footer" => "2025 © Sk8Nation. Todos os direitos reservados.",

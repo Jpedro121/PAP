@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
         
         <?php if ($mensagem_sucesso): ?>
             <div class="alert alert-success"><?= $mensagem_sucesso ?></div>
-            <a href="produtos.php" class="btn btn-primary">Voltar às Compras</a>
+            <a href="home.php" class="btn btn-primary">Voltar às Compras</a>
         <?php else: ?>
             <?php if ($mensagem_erro): ?>
                 <div class="alert alert-danger"><?= $mensagem_erro ?></div>
@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao" value="Cartão" checked>
                                         <label class="form-check-label" for="cartao">
-                                            <img src="/static/images/payments/credit-card.png" alt="Cartão"> Cartão de Crédito/Débito
+                                            <img src="/PAP/static/images/payments/credit-card.png" alt="Cartão"> Cartão de Crédito/Débito
                                         </label>
                                     </div>
                                 </div>
@@ -233,8 +233,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="metodo_pagamento" id="paypal" value="PayPal">
                                         <label class="form-check-label" for="paypal">
-                                            <img src="/static/images/payments/paypal.png" alt="PayPal"> PayPal
-                                        </label>
+                                            <img src="/PAP/static/images/payments/paypal.png" alt="PayPal"> PayPal
+                                        </label>              
                                     </div>
                                 </div>
                             </div>

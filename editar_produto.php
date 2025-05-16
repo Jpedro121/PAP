@@ -41,8 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $nomeTemp = $_FILES['imagem']['tmp_name'];
         $nomeImagem = basename($_FILES['imagem']['name']);
-        $imagemUnica = uniqid() . '_' . $nomeImagem;
+        $imagemUnica = $nomeImagem;
         $nomeFinal = $uploadDir . $imagemUnica;
+
 
         if (move_uploaded_file($nomeTemp, $nomeFinal)) {
             $imagemPath = $imagemUnica;

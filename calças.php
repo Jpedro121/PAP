@@ -21,7 +21,7 @@ $result = $conn->query($sql);
 <body>
     <?php include('header.php'); ?>
 
-    <h1>Calças</h1>
+    <h1>><?= $lang['pants'] ?></h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
@@ -34,7 +34,7 @@ $result = $conn->query($sql);
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
-            <p>Nenhum produto encontrado.</p>
+            <p>><?= $lang['no_products'] ?></p>
         <?php endif; ?>
     </div>
 </body>

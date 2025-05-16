@@ -21,6 +21,7 @@ $lang = [
     "wheels" => "Wheels",
     "bearings" => "Bearings",
     "brands" => "Brands",
+    "no_products" => "No products found.",
 
     //Home
     "our_brands" => "Our Brands",
@@ -82,6 +83,8 @@ $lang = [
     "price" => "Price",
     "size" => "Size",
     "add_to_cart" => "Add to Cart",
+    "checkout" => "Finish Checkout",
+    "Login_to_checkout" => "Log in to complete your purchase.",
 
     //Products by brand
     "No_products_found" => "No products found for this brand.",
