@@ -7,10 +7,7 @@ if (!isset($_SESSION["username"]) || !isset($_SESSION["user_id"])) {
 require '../db.php';
 $user_id = $_SESSION["user_id"];
 
-// Buscar dados do utilizador, incluindo o email
-$sql = "SELECT username, email, morada 
-        FROM users
-        WHERE id = ?";
+$sql = "SELECT username, email, morada FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -27,7 +24,6 @@ if ($result->num_rows > 0) {
     $morada = "";
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -41,23 +37,55 @@ if ($result->num_rows > 0) {
         }
         .perfil-container {
             background-color: #fff;
-            max-width: 700px;
+            max-width: 900px;
             margin: 30px auto;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        h2, h3 {
+        h2 {
             text-align: center;
+            margin-bottom: 30px;
         }
-        form {
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ccc;
             margin-bottom: 20px;
         }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-bottom: 3px solid transparent;
+            background-color: transparent;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #007bff;
+            color: #007bff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        form {
+            margin-top: 15px;
+        }
+
         label {
             display: block;
             margin-top: 12px;
             font-weight: bold;
         }
+
         input[type="text"], input[type="password"], textarea {
             width: 100%;
             padding: 8px;
@@ -65,6 +93,7 @@ if ($result->num_rows > 0) {
             border-radius: 6px;
             border: 1px solid #ccc;
         }
+
         .btn {
             margin-top: 15px;
             padding: 10px 20px;
@@ -73,18 +102,17 @@ if ($result->num_rows > 0) {
             background-color: #007bff;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
+
         .btn:hover {
             background-color: #0056b3;
         }
+
         .btn-group {
             text-align: center;
             margin-top: 30px;
         }
-        .orders {
-            margin-top: 30px;
-        }
+
         .order-item {
             background-color: #f9f9f9;
             padding: 10px;
@@ -93,13 +121,41 @@ if ($result->num_rows > 0) {
         }
     </style>
 </head>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleciona todos os elementos
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    // Adiciona evento de clique a cada aba
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove classe 'active' de todas as abas e conteúdos
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Adiciona classe 'active' à aba clicada
+            this.classList.add('active');
+            
+            // Mostra o conteúdo correspondente
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+});
+</script>
 <body>
-    <?php include('../header.php'); ?>
-    <div class="perfil-container">
-        <h2>Olá,<?php echo htmlspecialchars($username); ?></span></h2>
-        <p style="text-align:center;">Aqui podes editar o teu perfil e morada.</p>
+<?php include('../header.php'); ?>
+<div class="perfil-container">
+    <h2>Olá, <?php echo htmlspecialchars($username); ?></h2>
 
-        <!-- Editar nome de utilizador -->
+    <div class="tabs">
+    <button class="tab active" data-tab="info">Informações</button>
+    <button class="tab" data-tab="seguranca">Segurança</button>
+    <button class="tab" data-tab="encomendas">Encomendas</button>
+</div>
+
+    <div id="info" class="tab-content active">
         <h3>Editar Nome de Utilizador</h3>
         <form action="update_profile.php" method="post">
             <label for="novo_username">Novo Nome:</label>
@@ -107,7 +163,18 @@ if ($result->num_rows > 0) {
             <button type="submit" class="btn">Atualizar Nome</button>
         </form>
 
-        <!-- Alterar Palavra-passe -->
+        <h3>Email</h3>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
+
+        <h3>Morada</h3>
+        <form action="update_address.php" method="post">
+            <label for="morada">Morada Atual:</label>
+            <textarea name="morada" id="morada" rows="3" required><?php echo htmlspecialchars($morada); ?></textarea>
+            <button type="submit" class="btn">Atualizar Morada</button>
+        </form>
+    </div>
+
+    <div id="seguranca" class="tab-content">
         <h3>Alterar Palavra-passe</h3>
         <form action="update_password.php" method="post">
             <label for="password_atual">Palavra-passe Atual:</label>
@@ -116,23 +183,59 @@ if ($result->num_rows > 0) {
             <input type="password" name="nova_password" id="nova_password" required>
             <button type="submit" class="btn">Alterar Palavra-passe</button>
         </form>
-        
-        <!-- Email -->
-        <h3>Email</h3>
-        <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-
-        <!-- Morada -->
-        <h3>Morada</h3>
-        <form action="update_address.php" method="post">
-            <label for="morada">Morada Atual:</label>
-            <textarea name="morada" id="morada" rows="3" required><?php echo htmlspecialchars($morada); ?></textarea>
-            <button type="submit" class="btn">Atualizar Morada</button>
-        </form>
-
-        <div class="btn-group">
-            <a href="../home.php" class="btn"><i class="fas fa-home"></i> Home</a>
-            <a href="logout.php" class="btn"><i class="fas fa-sign-out-alt"></i> Sair</a>
-        </div>
     </div>
+
+<div id="encomendas" class="tab-content">
+    <h3>As suas encomendas</h3>
+    <?php
+    try {
+        $query = "SELECT id, data_encomenda, total FROM encomendas WHERE user_id = ? ORDER BY data_encomenda DESC";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if ($res->num_rows > 0) {
+            while ($encomenda = $res->fetch_assoc()) {
+                echo "<div class='order-item'>";
+                echo "<strong>Nº Encomenda:</strong> ENC-" . htmlspecialchars($encomenda['id']) . "<br>";
+                echo "<strong>Data:</strong> " . htmlspecialchars($encomenda['data_encomenda']) . "<br>";
+                echo "<strong>Total:</strong> " . htmlspecialchars($encomenda['total']) . "€";
+                echo "</div>";
+            }
+        } else {
+            echo "<p>Não tens encomendas ainda.</p>";
+        }
+    } catch (mysqli_sql_exception $e) {
+        echo "<p>Erro ao carregar encomendas: " . $e->getMessage() . "</p>";
+    }
+    ?>
+</div>
+
+    <div class="btn-group">
+        <a href="../home.php" class="btn">Home</a>
+        <a href="logout.php" class="btn">Sair</a>
+    </div>
+</div>
+
+<script>
+    function openTab(evt, tabId) {
+        // Esconde todos os conteúdos das tabs
+        const tabContents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].classList.remove("active");
+        }
+
+        // Remove a classe active de todas as tabs
+        const tabs = document.getElementsByClassName("tab");
+        for (let i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove("active");
+        }
+
+        // Mostra a tab atual e adiciona a classe active ao botão
+        document.getElementById(tabId).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+</script>
 </body>
 </html>

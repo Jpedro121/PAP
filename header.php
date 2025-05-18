@@ -94,7 +94,10 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
 <header>
   <nav>
     <div class="nav-container">
-      <div><strong>Sk8Nation</strong></div>
+      <div>
+        <a href="/PAP/home.php">
+          <img src="/PAP/static/images/marcas/Sk8Nationlogo.png" alt="Sk8Nation Logo" style="height: 80px;"></a>
+      </div>
       <ul class="nav-links">
         <li><a href="/PAP/home.php"><?= $lang['home'] ?></a></li>
 

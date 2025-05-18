@@ -5,12 +5,17 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-// Supondo que tens uma tabela gorros ligada ao produtos
-$sql = "SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, g.cor, g.tamanho 
-        FROM produtos p 
-        INNER JOIN gorros g ON p.id = g.produto_id";
+// Query corrigida para usar a estrutura real do seu banco de dados
+$query = "SELECT p.id, p.nome, p.preco, p.imagem, g.tamanho, g.cor
+          FROM produtos p
+          JOIN gorros g ON p.id = g.produto_id
+          WHERE p.categoria = 'gorros'";
 
-$result = $conn->query($sql);
+$result = $conn->query($query);
+
+if ($result === false) {
+    die("Erro na consulta: " . $conn->error);
+}
 ?>
 
 <!DOCTYPE html>
@@ -29,8 +34,13 @@ $result = $conn->query($sql);
                 <div class="produto-card">
                     <a href="produto.php?id=<?= $row['id'] ?>">
                         <img src="static/images/<?= $row['imagem'] ?>" alt="<?= htmlspecialchars($row['nome']) ?>">
-                        <h3><?= htmlspecialchars($row['nome']) ?> - Cor: <?= htmlspecialchars($row['cor']) ?></h3>
-                        <p>Tamanho: <?= htmlspecialchars($row['tamanho']) ?></p>
+                        <h3><?= htmlspecialchars($row['nome']) ?></h3>
+                        <?php if(isset($row['tamanho'])): ?>
+                            <p>Tamanho: <?= htmlspecialchars($row['tamanho']) ?></p>
+                        <?php endif; ?>
+                        <?php if(isset($row['cor'])): ?>
+                            <p>Cor: <?= htmlspecialchars($row['cor']) ?></p>
+                        <?php endif; ?>
                         <p>€<?= number_format($row['preco'], 2, ',', '.') ?></p>
                     </a>
                 </div>

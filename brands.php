@@ -9,7 +9,7 @@ $result = $conn->query($sql);
 <html lang="pt-br">
 <head>
     <?php include('head.html'); ?>
-    <title><?= $lang['our_brands'] ?></title>
+    <title>Brands</title>
     <style>
         .marca-container {
             display: grid;
