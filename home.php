@@ -17,34 +17,37 @@ session_start();
         <p><?= $lang['gear_up'] ?></p>
     </section>
 
-    <section class="brands">
-        <h2 class="NossasMarcas"><?= $lang['our_brands'] ?></h2>
-        <div class="brand-logos">
-            <div class="brand-logo"><img src="static/images/marcas/butter.png" alt="butter"></div>
-            <div class="brand-logo"><img src="static/images/marcas/carhart.png" alt="carhartt"></div>
-            <div class="brand-logo"><img src="static/images/marcas/dime.png" alt="dime"></div>
-            <div class="brand-logo"><img src="static/images/marcas/nikesb.png" alt="nikesb"></div>
-            <div class="brand-logo"><img src="static/images/marcas/palace.png" alt="palace"></div>
-            <div class="brand-logo"><img src="static/images/marcas/polar.png" alt="polar"></div>
-            <div class="brand-logo"><img src="static/images/marcas/vans.png" alt="Vans"></div>
-            <div class="brand-logo"><img src="static/images/marcas/fuckingawesome.png" alt="fuckingawesome"></div>
-            <div class="brand-logo"><img src="static/images/marcas/ace.png" alt="ace"></div>
+  <section class="brands">
+    <h2 class="NossasMarcas"><?= $lang['our_brands'] ?></h2>
+    <div class="brand-logos">
+        <?php
+        $brands = [
+            "Butter" => "butter.png",
+            "Carhartt" => "carhart.png",
+            "Dime" => "dime.png",
+            "NikeSB" => "nikesb.png",
+            "Palace" => "palace.png",
+            "Polar Skate Co." => "polar.png",
+            "Vans" => "vans.png",
+            "Fucking Awesome" => "fuckingawesome.png",
+            "Ace Trucks MFG" => "ace.png",
+        ];
 
-            <!--2x para infinito-->
-            <div class="brand-logo"><img src="static/images/marcas/butter.png" alt="butter"></div>
-            <div class="brand-logo"><img src="static/images/marcas/carhart.png" alt="carhartt"></div>
-            <div class="brand-logo"><img src="static/images/marcas/dime.png" alt="dime"></div>
-            <div class="brand-logo"><img src="static/images/marcas/nikesb.png" alt="nikesb"></div>
-            <div class="brand-logo"><img src="static/images/marcas/palace.png" alt="palace"></div>
-            <div class="brand-logo"><img src="static/images/marcas/polar.png" alt="polar"></div>
-            <div class="brand-logo"><img src="static/images/marcas/vans.png" alt="Vans"></div>
-            <div class="brand-logo"><img src="static/images/marcas/fuckingawesome.png" alt="fuckingawesome"></div>
-            <div class="brand-logo"><img src="static/images/marcas/ace.png" alt="ace"></div>
+        // Para duplicar (efeito de rolagem infinita, por exemplo)
+        for ($i = 0; $i < 2; $i++) {
+            foreach ($brands as $brandName => $imageFile) {
+                $encodedBrand = urlencode($brandName);
+                echo '<div class="brand-logo">';
+                echo "<a href=\"/PAP/produtos_por_marca.php?marca=$encodedBrand\">";
+                echo "<img src=\"static/images/marcas/$imageFile\" alt=\"$brandName\">";
+                echo '</a>';
+                echo '</div>';
+            }
+        }
+        ?>
+    </div>
+</section>
 
-
-
-        </div>
-    </section>
 
     <section>
     <h1 class="Novidades"><?= $lang['new_arrivals'] ?></h1>

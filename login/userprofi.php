@@ -119,6 +119,57 @@ if ($result->num_rows > 0) {
             margin-bottom: 8px;
             border-radius: 6px;
         }
+                .encomenda {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 15px;
+        }
+
+        .info-principal {
+            width: 200px;
+            margin-right: 20px;
+            background: #eee;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .detalhes {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            flex: 1;
+            display: none;
+        }
+
+        .produto {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .produto img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .btn-ver {
+            margin-top: 10px;
+            padding: 6px 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-ver:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <script>
@@ -197,11 +248,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if ($res->num_rows > 0) {
             while ($encomenda = $res->fetch_assoc()) {
-                echo "<div class='order-item'>";
-                echo "<strong>Nº Encomenda:</strong> ENC-" . htmlspecialchars($encomenda['id']) . "<br>";
-                echo "<strong>Data:</strong> " . htmlspecialchars($encomenda['data_encomenda']) . "<br>";
-                echo "<strong>Total:</strong> " . htmlspecialchars($encomenda['total']) . "€";
+                $id = $encomenda['id'];
+                echo "<div class='encomenda'>";
+                echo "<div class='info-principal'>";
+                echo "<strong>ENC-{$id}</strong><br>";
+                echo "Data: " . htmlspecialchars($encomenda['data_encomenda']) . "<br>";
+                echo "Total: " . htmlspecialchars($encomenda['total']) . "€<br>";
+                echo "<button class='btn-ver' onclick='mostrarDetalhes($id)'>Ver detalhes</button>";
                 echo "</div>";
+
+                // detalhes escondidos inicialmente
+                echo "<div class='detalhes' id='detalhes_$id'>";
+
+                $query_produtos = "SELECT p.nome, p.imagem, ep.quantidade 
+                                   FROM encomenda_produtos ep 
+                                   JOIN produtos p ON ep.produto_id = p.id 
+                                   WHERE ep.encomenda_id = ?";
+                $stmtProdutos = $conn->prepare($query_produtos);
+                $stmtProdutos->bind_param("i", $id);
+                $stmtProdutos->execute();
+                $produtos = $stmtProdutos->get_result();
+
+                if ($produtos->num_rows > 0) {
+                    while ($produto = $produtos->fetch_assoc()) {
+                        echo "<div class='produto'>";
+                        echo "<img src='/PAP/static/images/" . htmlspecialchars($produto['imagem']) . "' alt='Produto'>";
+                        echo "<div><strong>" . htmlspecialchars($produto['nome']) . "</strong><br>Quantidade: " . htmlspecialchars($produto['quantidade']) . "</div>";
+                        echo "</div>";
+                    }
+                } else {
+                    echo "<p>Sem produtos nesta encomenda.</p>";
+                }
+
+                echo "</div>"; // .detalhes
+                echo "</div>"; // .encomenda
             }
         } else {
             echo "<p>Não tens encomendas ainda.</p>";
@@ -210,6 +290,17 @@ document.addEventListener('DOMContentLoaded', function() {
         echo "<p>Erro ao carregar encomendas: " . $e->getMessage() . "</p>";
     }
     ?>
+
+    <script>
+        function mostrarDetalhes(id) {
+            const painel = document.getElementById("detalhes_" + id);
+            if (painel.style.display === "none" || painel.style.display === "") {
+                painel.style.display = "block";
+            } else {
+                painel.style.display = "none";
+            }
+        }
+    </script>
 </div>
 
     <div class="btn-group">

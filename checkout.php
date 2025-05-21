@@ -59,6 +59,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
             throw new Exception("Escolha um método de pagamento.");
         }
 
+        // Validação adicional para pagamento com cartão
+        if ($metodo_pagamento === 'Cartão') {
+            $numero_cartao = str_replace(' ', '', $_POST['numero_cartao'] ?? '');
+            $validade = $_POST['validade'] ?? '';
+            $cvv = $_POST['cvv'] ?? '';
+            $nome_cartao = trim($_POST['nome_cartao'] ?? '');
+
+            if (strlen($numero_cartao) !== 16 || !ctype_digit($numero_cartao)) {
+                throw new Exception("Número do cartão inválido. Deve conter 16 dígitos.");
+            }
+
+            if (!preg_match('/^(0[1-9]|1[0-2])\/\d{2}$/', $validade)) {
+                throw new Exception("Data de validade inválida. Use o formato MM/AA.");
+            }
+
+            if (!preg_match('/^\d{3,4}$/', $cvv)) {
+                throw new Exception("CVV inválido. Deve conter 3 ou 4 dígitos.");
+            }
+
+            if (empty($nome_cartao)) {
+                throw new Exception("Por favor, insira o nome no cartão.");
+            }
+        }
+
         buscarProdutosCarrinho($conn, $user_id, $produtos, $total);
 
         if (empty($produtos)) {
@@ -103,7 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -124,6 +147,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
         #delivery-fields {
             display: block;
         }
+        .card-icons {
+            height: 25px;
+            margin-left: 10px;
+        }
+        .was-validated .form-control:invalid, .form-control.is-invalid {
+            border-color: #dc3545;
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
     </style>
 </head>
 <body>
@@ -141,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
 
         <div class="row">
             <div class="col-md-8">
-                <form method="POST" action="checkout.php" novalidate>
+                <form method="POST" action="checkout.php" novalidate class="needs-validation">
                     <div class="card mb-4">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Informações de Entrega</h5>
@@ -162,15 +197,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                 <div class="mb-3">
                                     <label for="morada" class="form-label">Morada</label>
                                     <input type="text" class="form-control" id="morada" name="morada" value="<?= htmlspecialchars($user_info['morada'] ?? '') ?>" required />
+                                    <div class="invalid-feedback">Por favor, insira sua morada.</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="codigo_postal" class="form-label">Código Postal</label>
                                         <input type="text" class="form-control" id="codigo_postal" name="codigo_postal" required />
+                                        <div class="invalid-feedback">Por favor, insira o código postal.</div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="cidade" class="form-label">Cidade</label>
                                         <input type="text" class="form-control" id="cidade" name="cidade" required />
+                                        <div class="invalid-feedback">Por favor, insira sua cidade.</div>
                                     </div>
                                 </div>
                             </div>
@@ -185,29 +223,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                             <div class="payment-method mb-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao" value="Cartão" checked>
-                                    <label class="form-check-label" for="cartao">
+                                    <label class="form-check-label d-flex align-items-center" for="cartao">
                                         <img src="/PAP/static/images/payments/credit-card.png" alt="Cartão" /> Cartão de Crédito/Débito
+                                        <img src="/PAP/static/images/payments/visa.png" class="card-icons" alt="Visa">
+                                        <img src="/PAP/static/images/payments/mastercard.png" class="card-icons" alt="Mastercard">
                                     </label>
                                 </div>
                             </div>
                             <div id="cartao-fields">
                                 <div class="mb-3">
                                     <label for="numero_cartao" class="form-label">Número do Cartão</label>
-                                    <input type="text" class="form-control" id="numero_cartao" name="numero_cartao" placeholder="0000 0000 0000 0000" />
+                                    <input type="text" class="form-control" id="numero_cartao" name="numero_cartao" 
+                                           placeholder="0000 0000 0000 0000" maxlength="19"
+                                           pattern="\d{4}\s\d{4}\s\d{4}\s\d{4}" 
+                                           title="Digite os 16 dígitos do cartão" required />
+                                    <div class="invalid-feedback">Por favor, insira um número de cartão válido (16 dígitos).</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="validade" class="form-label">Validade (MM/AA)</label>
-                                        <input type="text" class="form-control" id="validade" name="validade" placeholder="MM/AA" />
+                                        <input type="text" class="form-control" id="validade" name="validade" 
+                                               placeholder="MM/AA" maxlength="5"
+                                               pattern="(0[1-9]|1[0-2])\/\d{2}" 
+                                               title="Digite no formato MM/AA" required />
+                                        <div class="invalid-feedback">Por favor, insira uma data válida (MM/AA).</div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="cvv" class="form-label">CVV</label>
-                                        <input type="text" class="form-control" id="cvv" name="cvv" placeholder="000" />
+                                        <input type="text" class="form-control" id="cvv" name="cvv" 
+                                               placeholder="000" maxlength="4"
+                                               pattern="\d{3,4}" 
+                                               title="Digite os 3 ou 4 dígitos do CVV" required />
+                                        <div class="invalid-feedback">Por favor, insira um CVV válido (3 ou 4 dígitos).</div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="nome_cartao" class="form-label">Nome no Cartão</label>
-                                    <input type="text" class="form-control" id="nome_cartao" name="nome_cartao" />
+                                    <input type="text" class="form-control" id="nome_cartao" name="nome_cartao" required />
+                                    <div class="invalid-feedback">Por favor, insira o nome como aparece no cartão.</div>
                                 </div>
                             </div>
 
@@ -246,14 +299,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                            <ul class="list-unstyled mb-4">
                                 <?php foreach ($produtos as $produto): ?>
                                     <li class="d-flex mb-3">
-                                        <img src="/<?= htmlspecialchars($produto['imagem']) ?>" class="product-img me-3" alt="<?= htmlspecialchars($produto['nome']) ?>" />
-                                    <div>
+                                        <img src="/PAP/static/images/<?= htmlspecialchars($produto['imagem']) ?>" class="product-img me-3" alt="<?= htmlspecialchars($produto['nome']) ?>" />
+                                        <div>
                                             <h6 class="mb-1"><?= htmlspecialchars($produto['nome']) ?></h6>
                                             <small class="text-muted"><?= $produto['quantidade'] ?> × €<?= number_format($produto['preco'], 2, ',', '.') ?></small>
                                         </div>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
+
 
                             <table class="table">
                                 <tr>
@@ -284,6 +338,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Formatar número do cartão (grupos de 4 dígitos)
+    document.getElementById('numero_cartao').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '').substring(0,16);
+        let formatted = '';
+        for(let i=0; i<value.length; i+=4) {
+            formatted += value.substring(i, i+4) + ' ';
+        }
+        e.target.value = formatted.trim();
+    });
+
+    // Formatar data de validade (MM/AA)
+    document.getElementById('validade').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '').substring(0,4);
+        if (value.length > 2) {
+            e.target.value = value.substring(0,2) + '/' + value.substring(2,4);
+        } else {
+            e.target.value = value;
+        }
+        
+        // Validar mês
+        if (value.length >= 2) {
+            const month = parseInt(value.substring(0,2));
+            if (month < 1 || month > 12) {
+                e.target.setCustomValidity('Mês inválido');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        }
+    });
+
+    // Validar CVV (3 ou 4 dígitos)
+    document.getElementById('cvv').addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0,4);
+    });
+
     // Mostrar/ocultar campos de entrega
     document.querySelectorAll('input[name="tipo_entrega"]').forEach(radio => {
         radio.addEventListener('change', function() {
@@ -299,28 +388,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
         });
     });
 
-    // Formatar número do cartão
-    const numeroCartaoInput = document.getElementById('numero_cartao');
-    if(numeroCartaoInput) {
-        numeroCartaoInput.addEventListener('input', e => {
-        let value = e.target.value.replace(/\D/g, '').substring(0,16);
-        let formatted = '';
-        for(let i=0; i<value.length; i+=4){
-        formatted += value.substring(i,i+4) + ' ';
-        }
-        e.target.value = formatted.trim();
-        });
+    // Atualizar preços com base no tipo de entrega
+    function atualizarTotais() {
+        const tipoEntrega = document.querySelector('input[name="tipo_entrega"]:checked').value;
+        const subtotal = <?= $total ?>;
+        const portes = tipoEntrega === 'delivery' ? 5 : 0;
+        document.getElementById('portes').textContent = '€' + portes.toFixed(2).replace('.', ',');
+        document.getElementById('total').textContent = '€' + (subtotal + portes).toFixed(2).replace('.', ',');
     }
-// Atualizar preços com base no tipo de entrega
-function atualizarTotais(){
-    const tipoEntrega = document.querySelector('input[name="tipo_entrega"]:checked').value;
-    const subtotal = <?= $total ?>;
-    const portes = tipoEntrega === 'delivery' ? 5 : 0;
-    document.getElementById('portes').textContent = '€' + portes.toFixed(2).replace('.', ',');
-    document.getElementById('total').textContent = '€' + (subtotal + portes).toFixed(2).replace('.', ',');
-}
 
-atualizarTotais();
+    // Habilitar validação do Bootstrap quando o formulário for enviado
+    (function() {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+
+    atualizarTotais();
 </script>
 </body>
 </html>

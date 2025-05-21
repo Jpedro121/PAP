@@ -3,7 +3,7 @@ session_start();
 include("db.php");
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
+    header("Location: /PAP/login/login.php");
     exit();
 }
 
@@ -61,6 +61,58 @@ foreach ($produtos as $item) {
 $stmt = $conn->prepare("DELETE FROM carrinho WHERE user_id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
+
+
+// Buscar email do utilizador
+$stmt = $conn->prepare("SELECT email, nome FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+$email = $user['email'];
+$nome = $user['nome'];
+
+// Preparar conteúdo do email
+$mensagem = "Olá $nome,\n\nObrigado pela sua compra na SK8Nation!\n\n";
+$mensagem .= "Resumo da sua encomenda (Código: $codigo):\n";
+
+foreach ($produtos as $item) {
+    $mensagem .= "- Produto ID: {$item['produto_id']} | Quantidade: {$item['quantidade']} | Preço unitário: €" . number_format($item['preco'], 2) . "\n";
+}
+
+$mensagem .= "\nTotal: €" . number_format($total, 2) . "\n";
+$mensagem .= "Morada de entrega: $morada\n\n";
+$mensagem .= "Esperamos vê-lo novamente em breve!\nSk8Nation";
+
+// Enviar email com PHPMailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'login/phpmailer/Exception.php';
+require 'login/phpmailer/PHPMailer.php';
+require 'login/phpmailer/SMTP.php';
+
+$mail = new PHPMailer(true);
+try {
+    $mail->isSMTP();
+    $mail->Host       = 'smtp.gmail.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = 'joaopedroantunes1980@gmail.com'; // Substitui pelo teu email
+    $mail->Password   = 'qcbh hpkt uafr ivuj';           // Substitui pela tua senha de app
+    $mail->SMTPSecure = 'tls';
+    $mail->Port       = 587;
+
+    $mail->setFrom('joaopedrantunes1980@gmail.com', 'Sk8Nation');
+    $mail->addAddress($email, $nome);
+
+    $mail->Subject = 'Confirmação da sua encomenda - Sk8Nation';
+    $mail->Body    = $mensagem;
+
+    $mail->send();
+} catch (Exception $e) {
+    error_log("Erro ao enviar email: {$mail->ErrorInfo}");
+}
 
 echo '<div class="notification is-success">Compra realizada com sucesso! Código da encomenda: ' . $codigo . '</div>';
 echo '<a class="button" href="home.php">Voltar à loja</a>';

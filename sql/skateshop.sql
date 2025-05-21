@@ -1,31 +1,4 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Tempo de geração: 18-Maio-2025 às 00:04
--- Versão do servidor: 10.4.32-MariaDB
--- versão do PHP: 8.2.12
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Banco de dados: `skateshop`
---
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `acessorios`
---
 
 CREATE TABLE `acessorios` (
   `id` int(11) NOT NULL,
@@ -34,20 +7,11 @@ CREATE TABLE `acessorios` (
   `estoque` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `acessorios`
---
-
 INSERT INTO `acessorios` (`id`, `produto_id`, `marca`, `estoque`) VALUES
 (1, 28, 'Único', 8),
 (2, 28, 'Único', 8),
 (3, 29, 'Único', 5);
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `calcoes`
---
 
 CREATE TABLE `calcoes` (
   `id` int(11) NOT NULL,
@@ -55,11 +19,6 @@ CREATE TABLE `calcoes` (
   `tamanho` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `carrinho`
---
 
 CREATE TABLE `carrinho` (
   `id` int(11) NOT NULL,
@@ -69,27 +28,17 @@ CREATE TABLE `carrinho` (
   `preco` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `carrinho`
---
+
 
 INSERT INTO `carrinho` (`id`, `user_id`, `produto_id`, `quantidade`, `preco`) VALUES
 (43, 28, 15, 1, 90.00);
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `categorias`
---
 
 CREATE TABLE `categorias` (
   `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Extraindo dados da tabela `categorias`
---
 
 INSERT INTO `categorias` (`id`, `nome`) VALUES
 (1, 'Deck'),
@@ -262,7 +211,7 @@ INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria
 (3, 'Ace AF1 Trucks Polished Pair', 'Par de trucks Ace AF1 com resistência superior.', 74.99, 'truckAF1.jpg', 2, '8.25', 'trucks', 'Ace Trucks MFG', 'ace.png'),
 (4, 'Fucking Awesome-Curren Caples Remember To Forget Deck', 'Free Griptape Included\r\n\r\nRandom Wood Veneer Selected.\r\n\r\n8.25\" x 31.79\"\r\n14.12\" Wheel Base', 90.00, 'skateboard3.png', 1, '8', 'decks', 'Fucking Awesome', 'fuckingawesome.png'),
 (5, 'Fucking Awesome Gino Iannucci Daybreak in Phuket Deck', '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>', 90.00, 'skateboard6.jpeg', 1, '8´0', 'decks', 'Fucking Awesome', 'fuckingawesome.png'),
-(6, 'Ace Trucks MFG AF1 Carhartt WIP Trucks - Carhartt Orange / Polished', '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\r\n\r\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\r\n\r\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\r\n\r\n<p>-Set of 2</p>\r\n\r\n<p>-Polished</p>\r\n\r\n<p>-Branded engraved hanger</p>\r\n\r\n<p>-Exclusive anodized orange baseplate</p>\r\n\r\n<p>-Includes anodized axle orange re-threader die</p>', 75.00, 'Stage5Trucks.webp', 2, '8\'55', 'trucks', 'Ace Trucks MFG', 'ace.png'),
+(6, 'Fucking Awesome Gino Iannucci Daybreak in Phuket Deck', '<p>Free Griptape Included</p>\r\n\r\n<p>Random Wood Veneer Selected.</p>\r\n\r\n<p>Shape #1</p>\r\n\r\n<p>8.0\" x 31.66\"</p>\r\n<p>14\" Wheel Base.</p>\r\n\r\n<p>8.25\" x 31.79\"\r\n<p>14.12\" Wheel Base</p>', 90.00, 'skateboard5.png', 1, '8´0', 'decks', 'Fucking Awesome', 'fuckingawesome.png'),
 (7, 'Thaynan Costa Pro Deck', '<p>O deck profissional de Thaynan Costa pela Yardsale apresenta um design exclusivo que reflete o estilo único do skater brasileiro. Construído com materiais de alta qualidade, oferece durabilidade e performance para todos os níveis de skate.</p>', 80.00, 'thayboard.jpg', 1, '', 'decks', 'Yardsale', 'yardsale.png'),
 (8, 'Trust Deck - Oskar Rozenberg', '<p>Oskar Rozenberg Signature Model<br>Artwork by Jacob Ovgren<br>Griptape included</p>\r\n<p>8.25\" X 32\"<br>Nose: 6.9\"<br>Wheel Base: 14.25\"<br>Tail: 6.55\"</p>\r\n<p>8.5&rdquo; X 31.9&rdquo; - Short<br>Nose: 7.0&rdquo;<br>Wheel Base: 14.125&rdquo;<br>Tail: 6.5&rdquo;</p>\r\n<p>&nbsp;</p>\r\n<p>Manufactured by BBS<br>Made in Mexico</p>', 85.00, '6825a3161f9c1_PolarTrustDeck2.png', 1, '', 'decks', 'Polar Skate Co.', 'polar.png'),
 (9, 'Voices Deck - Nick Boserio', '<p>Nick Boserio Pro Model</p>\n<p>Artwork by Sirus F Gahan</p>\n<p>8.50\" Width x 32.125\" Length</p>\n<p>Wheelbase: 14.50\"</p>\n<p>Traditional Maple Construction</p>', 85.00, '5056336688608-2.webp', 1, '', 'decks', 'Polar Skate Co.', 'polar.png'),
@@ -284,11 +233,7 @@ INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `imagem`, `categoria
 (50, 'Calção Dickies Work Short', '<p>Loose fit</p>\r\n<p>65% recycled polyester, 35% cotton</p>\r\n<p>High-waist</p>\r\n<p>Five-pocket design</p>\r\n<p>Woven logo</p>', 54.90, '6826f3927aa40_6826efe56d963_dk0a4xozdnx1321-removebg-preview.png', 8, '', 'Shorts', 'Dickies', 'dickies.png'),
 (53, 'Sk8Nation T-shirts', '', 85.00, 'img_68273d0e1a981.png', 5, '0', 'T-shirts', 'Sk8Nation', 'Sk8Nationlogo.png');
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `rodas`
---
 
 CREATE TABLE `rodas` (
   `id` int(11) NOT NULL,
@@ -300,19 +245,11 @@ CREATE TABLE `rodas` (
   `descricao` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `rodas`
---
 
 INSERT INTO `rodas` (`id`, `produto_id`, `tamanho`, `dureza`, `marca`, `estoque`, `descricao`) VALUES
 (1, 19, '56mm', '99A', 'Spitfire', 10, '<ul>\r\n<li>Spitfire Formula Four Wheels</li>\r\n<li>99DU</li>\r\n<li>Radial&nbsp;shape</li>\r\n<li>Natural Urethane</li>\r\n<li>Set of Four</li>\r\n<li>100% True performance urethane</li>\r\n<li>Unmatched flatspot resistance</li>\r\n</ul>\r\n<p>The size in the wheel picture may be only figurative, please choose the size you wish in the available sizes section</p>'),
 (2, 26, '53mm', '', 'OJ Wheels', 13, NULL);
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `rolamentos`
---
 
 CREATE TABLE `rolamentos` (
   `id` int(11) NOT NULL,
@@ -323,11 +260,7 @@ CREATE TABLE `rolamentos` (
   `descricao` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `sapatos`
---
 
 CREATE TABLE `sapatos` (
   `id` int(11) NOT NULL,
@@ -337,18 +270,11 @@ CREATE TABLE `sapatos` (
   `estoque` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `sapatos`
---
+
 
 INSERT INTO `sapatos` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`) VALUES
 (1, 23, 'L', 'Nike SB', 6);
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `shorts`
---
 
 CREATE TABLE `shorts` (
   `id` int(11) NOT NULL,
@@ -358,19 +284,12 @@ CREATE TABLE `shorts` (
   `estoque` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `shorts`
---
+
 
 INSERT INTO `shorts` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`) VALUES
 (1, 23, '', 'Polar Skate Co.', 10),
 (3, 50, '', 'Dickies', 10);
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `sweats`
---
 
 CREATE TABLE `sweats` (
   `id` int(11) NOT NULL,
@@ -380,20 +299,13 @@ CREATE TABLE `sweats` (
   `estoque` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `sweats`
---
+
 
 INSERT INTO `sweats` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`) VALUES
 (1, 21, 'L', 'Polar SKate Co.', 7),
 (2, 21, 'L', 'Polar SKate Co.', 7),
 (3, 21, 'L', 'Polar SKate Co.', 7);
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `tamanhos_produto`
---
 
 CREATE TABLE `tamanhos_produto` (
   `id` int(11) NOT NULL,
@@ -403,204 +315,8 @@ CREATE TABLE `tamanhos_produto` (
   `disponivel` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `tamanhos_produto`
---
 
-INSERT INTO `tamanhos_produto` (`id`, `produto_id`, `tamanho`, `stock`, `disponivel`) VALUES
-(1, 1, '7.0\"', 0, 1),
-(2, 1, '7.25\"', 0, 1),
-(3, 1, '7.5\"', 0, 1),
-(4, 1, '7.75\"', 0, 1),
-(5, 1, '8.0\"', 0, 0),
-(6, 1, '8.25\"', 0, 0),
-(7, 1, '8.5\"', 0, 1),
-(8, 1, '8.75\"', 0, 1),
-(9, 1, '9.0\"', 0, 0),
-(10, 1, '9.25\"', 0, 0),
-(11, 1, '9.5\"', 0, 1),
-(12, 1, '9.75\"', 0, 0),
-(13, 1, '10.0\"', 0, 0),
-(14, 4, '7.0\"', 0, 0),
-(15, 4, '7.25\"', 0, 0),
-(16, 4, '7.5\"', 0, 1),
-(17, 4, '7.75\"', 0, 1),
-(18, 4, '8.0\"', 0, 1),
-(19, 4, '8.25\"', 0, 1),
-(20, 4, '8.5\"', 0, 1),
-(21, 4, '8.75\"', 0, 0),
-(22, 4, '9.0\"', 0, 0),
-(23, 4, '9.25\"', 0, 0),
-(24, 4, '9.5\"', 0, 0),
-(25, 4, '9.75\"', 0, 1),
-(26, 4, '10.0\"', 0, 1),
-(27, 5, '7.0\"', 0, 1),
-(28, 5, '7.25\"', 0, 0),
-(29, 5, '7.5\"', 0, 0),
-(30, 5, '7.75\"', 0, 0),
-(31, 5, '8.0\"', 0, 1),
-(32, 5, '8.25\"', 0, 0),
-(33, 5, '8.5\"', 0, 0),
-(34, 5, '8.75\"', 0, 1),
-(35, 5, '9.0\"', 0, 1),
-(36, 5, '9.25\"', 0, 0),
-(37, 5, '9.5\"', 0, 1),
-(38, 5, '9.75\"', 0, 1),
-(39, 5, '10.0\"', 0, 0),
-(40, 7, '7.0\"', 0, 1),
-(41, 7, '7.25\"', 0, 1),
-(42, 7, '7.5\"', 0, 1),
-(43, 7, '7.75\"', 0, 0),
-(44, 7, '8.0\"', 0, 0),
-(45, 7, '8.25\"', 0, 0),
-(46, 7, '8.5\"', 0, 0),
-(47, 7, '8.75\"', 0, 0),
-(48, 7, '9.0\"', 0, 1),
-(49, 7, '9.25\"', 0, 0),
-(50, 7, '9.5\"', 0, 0),
-(51, 7, '9.75\"', 0, 0),
-(52, 7, '10.0\"', 0, 0),
-(53, 8, '7.0\"', 0, 0),
-(54, 8, '7.25\"', 0, 0),
-(55, 8, '7.5\"', 0, 0),
-(56, 8, '7.75\"', 0, 1),
-(57, 8, '8.0\"', 0, 1),
-(58, 8, '8.25\"', 0, 1),
-(59, 8, '8.5\"', 0, 0),
-(60, 8, '8.75\"', 0, 1),
-(61, 8, '9.0\"', 0, 1),
-(62, 8, '9.25\"', 0, 1),
-(63, 8, '9.5\"', 0, 0),
-(64, 8, '9.75\"', 0, 0),
-(65, 8, '10.0\"', 0, 0),
-(66, 9, '7.0\"', 0, 1),
-(67, 9, '7.25\"', 0, 1),
-(68, 9, '7.5\"', 0, 1),
-(69, 9, '7.75\"', 0, 1),
-(70, 9, '8.0\"', 0, 1),
-(71, 9, '8.25\"', 0, 1),
-(72, 9, '8.5\"', 0, 0),
-(73, 9, '8.75\"', 0, 0),
-(74, 9, '9.0\"', 0, 1),
-(75, 9, '9.25\"', 0, 1),
-(76, 9, '9.5\"', 0, 0),
-(77, 9, '9.75\"', 0, 0),
-(78, 9, '10.0\"', 0, 0),
-(79, 10, '7.0\"', 0, 0),
-(80, 10, '7.25\"', 0, 1),
-(81, 10, '7.5\"', 0, 1),
-(82, 10, '7.75\"', 0, 1),
-(83, 10, '8.0\"', 0, 0),
-(84, 10, '8.25\"', 0, 0),
-(85, 10, '8.5\"', 0, 0),
-(86, 10, '8.75\"', 0, 0),
-(87, 10, '9.0\"', 0, 0),
-(88, 10, '9.25\"', 0, 1),
-(89, 10, '9.5\"', 0, 1),
-(90, 10, '9.75\"', 0, 1),
-(91, 10, '10.0\"', 0, 1),
-(92, 11, '7.0\"', 0, 1),
-(93, 11, '7.25\"', 0, 1),
-(94, 11, '7.5\"', 0, 1),
-(95, 11, '7.75\"', 0, 0),
-(96, 11, '8.0\"', 0, 1),
-(97, 11, '8.25\"', 0, 1),
-(98, 11, '8.5\"', 0, 1),
-(99, 11, '8.75\"', 0, 1),
-(100, 11, '9.0\"', 0, 0),
-(101, 11, '9.25\"', 0, 1),
-(102, 11, '9.5\"', 0, 0),
-(103, 11, '9.75\"', 0, 0),
-(104, 11, '10.0\"', 0, 1),
-(105, 3, '129mm', 0, 1),
-(106, 3, '139mm', 0, 1),
-(107, 3, '149mm', 0, 0),
-(108, 3, '159mm', 0, 0),
-(109, 3, '169mm', 0, 0),
-(110, 6, '129mm', 0, 1),
-(111, 6, '139mm', 0, 0),
-(112, 6, '149mm', 0, 1),
-(113, 6, '159mm', 0, 1),
-(114, 6, '169mm', 0, 1),
-(115, 25, '129mm', 0, 1),
-(116, 25, '139mm', 0, 0),
-(117, 25, '149mm', 0, 0),
-(118, 25, '159mm', 0, 0),
-(119, 25, '169mm', 0, 0),
-(120, 19, '49mm', 0, 1),
-(121, 19, '50mm', 0, 0),
-(122, 19, '51mm', 0, 0),
-(123, 19, '52mm', 0, 1),
-(124, 19, '53mm', 0, 1),
-(125, 19, '54mm', 0, 0),
-(126, 19, '55mm', 0, 0),
-(127, 19, '56mm', 0, 0),
-(128, 19, '57mm', 0, 0),
-(129, 19, '58mm', 0, 0),
-(130, 19, '59mm', 0, 0),
-(131, 19, '60mm', 0, 0),
-(132, 19, '61mm', 0, 0),
-(133, 19, '62mm', 0, 0),
-(134, 19, '63mm', 0, 1),
-(135, 19, '64mm', 0, 1),
-(136, 19, '65mm', 0, 1),
-(137, 19, '66mm', 0, 1),
-(138, 19, '67mm', 0, 1),
-(139, 19, '68mm', 0, 0),
-(140, 19, '69mm', 0, 0),
-(141, 19, '70mm', 0, 1),
-(142, 19, '71mm', 0, 0),
-(143, 19, '72mm', 0, 1),
-(144, 19, '73mm', 0, 1),
-(145, 19, '74mm', 0, 1),
-(146, 19, '75mm', 0, 0),
-(147, 26, '49mm', 0, 1),
-(148, 26, '50mm', 0, 0),
-(149, 26, '51mm', 0, 1),
-(150, 26, '52mm', 0, 1),
-(151, 26, '53mm', 0, 1),
-(152, 26, '54mm', 0, 1),
-(153, 26, '55mm', 0, 0),
-(154, 26, '56mm', 0, 1),
-(155, 26, '57mm', 0, 1),
-(156, 26, '58mm', 0, 0),
-(157, 26, '59mm', 0, 0),
-(158, 26, '60mm', 0, 1),
-(159, 26, '61mm', 0, 1),
-(160, 26, '62mm', 0, 0),
-(161, 26, '63mm', 0, 1),
-(162, 26, '64mm', 0, 0),
-(163, 26, '65mm', 0, 0),
-(164, 26, '66mm', 0, 1),
-(165, 26, '67mm', 0, 1),
-(166, 26, '68mm', 0, 1),
-(167, 26, '69mm', 0, 0),
-(168, 26, '70mm', 0, 1),
-(169, 26, '71mm', 0, 0),
-(170, 26, '72mm', 0, 0),
-(171, 26, '73mm', 0, 0),
-(172, 26, '74mm', 0, 0),
-(173, 26, '75mm', 0, 1),
-(174, 27, 'XS', 0, 1),
-(175, 27, 'S', 0, 1),
-(176, 27, 'M', 0, 0),
-(177, 27, 'L', 0, 0),
-(178, 24, '38', 0, 1),
-(179, 24, '39', 0, 0),
-(180, 24, '40', 0, 1),
-(181, 24, '41', 0, 0),
-(182, 24, '42', 0, 0),
-(183, 24, '43', 0, 0),
-(184, 24, '44', 0, 0),
-(185, 24, '45', 0, 0),
-(186, 24, '46', 0, 1),
-(187, 24, '47', 0, 0);
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `trucks`
---
 
 CREATE TABLE `trucks` (
   `id` int(11) NOT NULL,
@@ -611,20 +327,12 @@ CREATE TABLE `trucks` (
   `descricao` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `trucks`
---
 
 INSERT INTO `trucks` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`, `descricao`) VALUES
 (3, 3, '8.25', 'Ace Trucks MFG', 15, '<p>Trucks Ace AF1 com resistência superior.</p>'),
 (4, 6, '55', 'Ace Trucks MFG', 10, '<p>The Ace AF1 Carhartt WIP Trucks are made in collaboration with California brand Ace, and are constructed from a combination of aluminum alloy, steel and polyurethane. The trucks are detailed with a safety baseplate in Carhartt WIP orange, and feature an engraved hanger.</p>\n\n<p>-44 (8.25’’) / 55 (8.5’’)</p>\n\n<p>-67% Aluminum alloy, 29% steel, 4% polyurethane</p>\n\n<p>-Set of 2</p>\n\n<p>-Polished</p>\n\n<p>-Branded engraved hanger</p>\n\n<p>-Exclusive anodized orange baseplate</p>\n\n<p>-Includes anodized axle orange re-threader die</p>'),
 (6, 25, '147', 'Thunder', 11, NULL);
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `tshirts`
---
 
 CREATE TABLE `tshirts` (
   `id` int(11) NOT NULL,
@@ -634,19 +342,13 @@ CREATE TABLE `tshirts` (
   `estoque` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `tshirts`
---
+
 
 INSERT INTO `tshirts` (`id`, `produto_id`, `tamanho`, `marca`, `estoque`) VALUES
 (2, 12, 'M', 'Butter', 20),
 (8, 53, 'M', 'Sk8Nation', 10);
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `users`
---
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -661,9 +363,7 @@ CREATE TABLE `users` (
   `reset_token_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `users`
---
+
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`, `morada`, `verification_code`, `reset_token`, `reset_token_expiry`) VALUES
 (9, 'admin', '$2y$10$ESqzVZhyFqtwn8yz5yCpqOC2OB1yXjIWaT82ISuO1AKN2fRKGFK5m', 'admin', '2025-03-06 16:23:39', 'admin@gmail.com', NULL, NULL, NULL, NULL),
@@ -674,12 +374,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`
 (28, 'bizarro', '$2y$10$E3jEx5gSsfjIfe.p7jaJwulpRlHfBThw8nANOLbGBNxVUu2rBq/U2', 'user', '2025-05-12 10:04:10', 'dpzibarro@gmail.com', NULL, NULL, NULL, NULL);
 
 --
--- Índices para tabelas despejadas
---
 
---
--- Índices para tabela `acessorios`
---
 ALTER TABLE `acessorios`
   ADD PRIMARY KEY (`id`),
   ADD KEY `produto_id` (`produto_id`);
