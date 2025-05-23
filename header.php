@@ -2,11 +2,20 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
 ?>
 
+
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+
   .nav-links {
     list-style: none;
     display: flex;
@@ -27,7 +36,7 @@ if (session_status() === PHP_SESSION_NONE) {
   .dropdown {
     display: none;
     position: absolute;
-    background: white;
+    background: #fff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     z-index: 99;
     min-width: 150px;
@@ -58,13 +67,6 @@ if (session_status() === PHP_SESSION_NONE) {
     transform: rotate(180deg);
   }
 
-  .nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-   }
-
   .nav-icons {
     padding: 0 2rem;
   }
@@ -83,18 +85,19 @@ if (session_status() === PHP_SESSION_NONE) {
 <header>
   <nav>
     <div class="nav-container">
+      <!-- Logo -->
       <div>
         <a href="/PAP/home.php">
-          <img src="/PAP/static/images/marcas/Sk8Nationlogo.png" alt="Sk8Nation Logo" style="height: 80px;"></a>
+          <img src="/PAP/static/images/marcas/Sk8Nationlogo.png" alt="Sk8Nation Logo" style="height: 80px;">
+        </a>
       </div>
+
+      <!-- Navegação principal -->
       <ul class="nav-links">
-        <li><a href="/PAP/home.php">home</a></li>
+        <li><a href="/PAP/home.php">Home</a></li>
 
         <li>
-          <a href="#">
-            Clothing
-            <i class="fas fa-angle-down icon-caret"></i>
-          </a>
+          <a href="#">Clothing <i class="fas fa-angle-down icon-caret"></i></a>
           <ul class="dropdown">
             <li><a href="/PAP/tshirts.php">T-shirts</a></li>
             <li><a href="/PAP/sweats.php">Sweats</a></li>
@@ -104,10 +107,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </li>
 
         <li>
-          <a href="#">
-            Shoes
-          <i class="fas fa-angle-down icon-caret"></i>
-          </a>
+          <a href="#">Shoes <i class="fas fa-angle-down icon-caret"></i></a>
           <ul class="dropdown">
             <li><a href="/PAP/NikeSB.php">NikeSB</a></li>
             <li><a href="/PAP/converse.php">Converse</a></li>
@@ -117,10 +117,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </li>
 
         <li>
-          <a href="gorros.php">
-            Acessories
-            <i class="fas fa-angle-down icon-caret"></i>
-          </a>
+          <a href="#">Accessories <i class="fas fa-angle-down icon-caret"></i></a>
           <ul class="dropdown">
             <li><a href="/PAP/gorros.php">Beanie</a></li>
             <li><a href="/PAP/cintos.php">Belts</a></li>
@@ -128,42 +125,36 @@ if (session_status() === PHP_SESSION_NONE) {
         </li>
 
         <li>
-          <a href="#">
-            Skateboards
-            <i class="fas fa-angle-down icon-caret"></i>
-          </a>
+          <a href="#">Skateboards <i class="fas fa-angle-down icon-caret"></i></a>
           <ul class="dropdown">
             <li><a href="/PAP/decks.php">Decks</a></li>
             <li><a href="/PAP/trucks.php">Trucks</a></li>
             <li><a href="/PAP/wheels.php">Wheels</a></li>
-            <li><a href="/PAP/rolamentos.php">Bearings</li>
+            <li><a href="/PAP/rolamentos.php">Bearings</a></li>
           </ul>
         </li>
 
         <li>
-          <a href="brands.php">
-           Brands
-            <i class="fas fa-angle-down icon-caret"></i>
-          </a>
-          <ul class="dropdown">
-            <li><a href="#">Butter</a></li>
-            <li><a href="#">Carhartt</a></li>
-            <li><a href="#">Converse</a></li>
-            <li><a href="#">NikeSB</a></li>
-            <li><a href="#">Polar Skate CO.</a></li>
-          </ul>
-        </li>
-      </ul>
+  <a href="/PAP/brands.php">Brands <i class="fas fa-angle-down icon-caret"></i></a>
+  <ul class="dropdown">
+    <li><a href="/PAP/produtos_por_marca.php?marca=Butter">Butter</a></li>
+    <li><a href="/PAP/produtos_por_marca.php?marca=Carhartt">Carhartt</a></li>
+    <li><a href="/PAP/produtos_por_marca.php?marca=Converse">Converse</a></li>
+    <li><a href="/PAP/produtos_por_marca.php?marca=NikeSB">NikeSB</a></li>
+    <li><a href="/PAP/produtos_por_marca.php?marca=Polar%20Skate%20CO.">Polar Skate CO.</a></li>
+  </ul>
+</li>
 
+
+      <!-- Ícones -->
       <div class="nav-icons">
-        <?php if(isset($_SESSION["username"])):?>   
+        <?php if (isset($_SESSION["username"])): ?>   
           <a href="/PAP/login/userprofi.php" class="icon" title="Perfil"><i class="fas fa-user"></i></a>
-        <?php else:?>
+          <?php else: ?>
           <a href="/PAP/login/login.php" class="icon" title="Login"><i class="fas fa-user"></i></a>
-        <?php endif;?>
+        <?php endif; ?>
         <a href="/PAP/cart.php" class="icon" title="Cart"><i class="fas fa-shopping-cart"></i></a>
       </div>
     </div>
-
   </nav>
 </header>

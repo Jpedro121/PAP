@@ -5,7 +5,7 @@ if (isset($_SESSION['username'])) {
     if ($_SESSION['role'] === 'admin') {
         header("Location: /PAP/dashboard_admin.php");
     } else {
-        header("Location: /PAP/userprofi.php");
+        header("Location: /PAP/login/userprofi.php");
     }
     exit();
 }
@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($user = $result->fetch_assoc()) {
             if (password_verify($password, $user['password'])) {
+                $_SESSION["user_id"] = $user["id"];
                 $_SESSION["username"] = $user["username"];
                 $_SESSION["email"] = $user["email"];
                 $_SESSION["role"] = $user["role"];
@@ -138,7 +139,7 @@ $conn->close();
             </form>
 
             <div class="signup-link">
-                <p>Sem Conta<a class="signup-link" href="register.php">Criar Conta</a></p>
+                <p>No Account? <a class="signup-link" href="register.php">Make an account</a></p>
             </div>
             <div class="signup-link">
                 <p><a class="signup-link" href="forgot_password.php">Forgot Password ?</a></p>

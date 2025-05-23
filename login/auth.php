@@ -6,10 +6,15 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-if (isset($_SESSION['username']) && $_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: ../home.php"); 
+if (isset($_SESSION['username'])) {
+    if ($_SESSION['role'] === 'admin') {
+        header("Location: ../dashboard_admin.php");
+    } else {
+        header("Location: userprofi.php");
+    }
     exit();
 }
+
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {

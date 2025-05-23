@@ -97,7 +97,7 @@ session_start();
 </main>
 
 <footer>
-    <p>2025 © Sk8Nation. Todos os direitos reservados.</p>
+    <p>2025 © Sk8Nation. All rights reserved .</p>
 </footer>
 
 </body>

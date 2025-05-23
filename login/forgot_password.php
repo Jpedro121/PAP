@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validação adicional
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $mensagem = "Por favor, insira um email válido.";
+        $mensagem = "Please enter a valid email address.";
         $mensagem_tipo = "error";
     } else {
         $stmt = $conn->prepare("SELECT id, username FROM users WHERE email = ?");
@@ -53,42 +53,42 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     
                     // Conteúdo
                     $mail->isHTML(true);
-                    $mail->Subject = 'Recuperação de Palavra-passe - SK8nation';
+                    $mail->Subject = 'Recover Password- SK8nation';
                     
                     // Template de email melhorado
                     $mail->Body = "
                         <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
                             <h2 style='color: #3498db;'>Olá, {$user['username']}!</h2>
-                            <p>Recebemos um pedido de recuperação da sua palavra-passe.</p>
+                            <pWe received a request to Recover Password.</p>
                             <p style='margin: 20px 0;'>
                                 <a href='$resetLink' style='background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>
                                     Redefinir Palavra-passe
                                 </a>
                             </p>
-                            <p>Se você não solicitou esta alteração, por favor ignore este email.</p>
+                            <p>If you didn't make a request ,please ignore this email.</p>
                             <p style='font-size: 12px; color: #7f8c8d;'>Este link expira em 1 hora.</p>
                             <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;'>
                             <p style='font-size: 12px; color: #7f8c8d;'>Equipe SK8nation</p>
                         </div>
                     ";
                     
-                    $mail->AltBody = "Para redefinir sua senha, acesse: $resetLink";
+                    $mail->AltBody = "To redefine your password, Click this Link: $resetLink";
 
                     $mail->send();
-                    $mensagem = "Um email com instruções de recuperação foi enviado para $email";
+                    $mensagem = "An email with instructions was send to this mail: $email";
                     $mensagem_tipo = "success";
                 } catch (Exception $e) {
-                    $mensagem = "Ocorreu um erro ao enviar o email. Por favor, tente novamente mais tarde.";
+                    $mensagem = "There was an error sending the email. Please try again later..";
                     $mensagem_tipo = "error";
                     // Log do erro (em produção, usar um sistema de logs)
                     error_log("Erro ao enviar email: " . $mail->ErrorInfo);
                 }
             } else {
-                $mensagem = "Ocorreu um erro ao processar sua solicitação.";
+                $mensagem = "Error to update your account. Try again later.";
                 $mensagem_tipo = "error";
             }
         } else {
-            $mensagem = "Email não encontrado em nosso sistema.";
+            $mensagem = "Email not found in our system.";
             $mensagem_tipo = "error";
         }
     }
@@ -100,12 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperação de Senha - SK8nation</title>
+    <title>Recover of Password - SK8nation</title>
     <link rel="stylesheet" href="/PAP/static/auth.css">
 </head>
 <body>
     <div class="auth-container">
-        <h1 class="auth-title">Recuperação de Senha</h1>
+        <h1 class="auth-title">Recover of Password</h1>
         
         <?php if ($mensagem): ?>
             <div class="alert alert-<?= $mensagem_tipo ?>">
@@ -115,15 +115,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <form class="auth-form" method="post">
             <div class="form-group">
-                <label for="email">Email cadastrado</label>
+                <label for="email">Registered email</label>
                 <input type="email" id="email" name="email" class="form-control" required>
             </div>
             
-            <button type="submit" class="btn">Enviar Link de Recuperação</button>
+            <button type="submit" class="btn">Send a recover Link</button>
         </form>
         
         <div class="auth-footer">
-            <p>Lembrou sua senha? <a href="login.php">Faça login</a></p>
+            <p>Remember the password <a href="login.php">Login</a></p>
         </div>
     </div>
 </body>

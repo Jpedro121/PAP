@@ -18,10 +18,13 @@ if ($result->num_rows > 0) {
     $username = $dados['username'];
     $email = $dados['email'];
     $morada = $dados['morada'];
+
 } else {
     $username = "Desconhecido";
     $email = "Não disponível";
     $morada = "";
+    $is_admin = 0;
+
 }
 ?>
 <!DOCTYPE html>
@@ -174,21 +177,16 @@ if ($result->num_rows > 0) {
 </head>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Seleciona todos os elementos
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
     
-    // Adiciona evento de clique a cada aba
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
-            // Remove classe 'active' de todas as abas e conteúdos
             tabs.forEach(t => t.classList.remove('active'));
             tabContents.forEach(c => c.classList.remove('active'));
             
-            // Adiciona classe 'active' à aba clicada
             this.classList.add('active');
             
-            // Mostra o conteúdo correspondente
             const tabId = this.getAttribute('data-tab');
             document.getElementById(tabId).classList.add('active');
         });
@@ -302,11 +300,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     </script>
 </div>
-
     <div class="btn-group">
         <a href="../home.php" class="btn">Home</a>
         <a href="logout.php" class="btn">Sair</a>
     </div>
+    
 </div>
 
 <script>

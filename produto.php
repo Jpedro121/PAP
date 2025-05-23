@@ -54,7 +54,7 @@ $conn->close();
                 <form action="adicionar_cart.php" method="POST">
                     <input type="hidden" name="produto_id" value="<?php echo $produto['id']; ?>">
                     <input type="hidden" name="preco" value="<?php echo $produto['preco']; ?>">
-                    <input type="number" name="quantidade" value="1" min="1" required>
+                    <input type="number" name="quantidade" value="1" min="1" max="10" required>
                     <button type="submit" class="btn">Add to cart</button>
                 </form>
             </div>
@@ -63,7 +63,7 @@ $conn->close();
 </main>
 
 <footer>
-    <p>2025 © Sk8Nation. Todos os direitos reservados.</p>
+    <p>2025 © Sk8Nation. All rights reserved</p>
 </footer>
 </body>
 </html>

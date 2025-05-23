@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($mensagem)) {
 
     // Validação da senha
     if (strlen($nova_password) < 8) {
-        $mensagem = $lang['Password_Too_Short'] ?? "A senha deve ter pelo menos 8 caracteres.";
+        $mensagem = $lang['Password_Too_Short'] ?? "The password must be at least 8 characters long.";
         $mensagem_tipo = "error";
     } elseif ($nova_password !== $confirma_password) {
-        $mensagem = $lang['Password_Mismatch'] ?? "As senhas não coincidem.";
+        $mensagem = $lang['Password_Mismatch'] ?? "The passwords do not match.";
         $mensagem_tipo = "error";
     } else {
         $hashed = password_hash($nova_password, PASSWORD_DEFAULT);
@@ -34,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($mensagem)) {
         $stmt->bind_param("ss", $hashed, $token);
         
         if ($stmt->execute()) {
-            $mensagem = $lang['Password_Updated'] ?? "Senha atualizada com sucesso!";
+            $mensagem = $lang['Password_Updated'] ?? "Password updated successfully.";
             $mensagem_tipo = "success";
             
             // Redirecionar após 3 segundos
             header("Refresh: 3; url=login.php");
         } else {
-            $mensagem = $lang['Password_Update_Error'] ?? "Erro ao atualizar a senha. Por favor, tente novamente.";
+            $mensagem = $lang['Password_Update_Error'] ?? "Error updating password.";
             $mensagem_tipo = "error";
         }
     }
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($mensagem)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Senha - SK8nation</title>
+    <title>New Password - SK8nation</title>
     <link rel="stylesheet" href="/PAP/static/auth.css">
     <script>
         function checkPasswordStrength() {
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($mensagem)) {
 </head>
 <body>
     <div class="auth-container">
-        <h1 class="auth-title">Definir Nova Senha</h1>
+        <h1 class="auth-title">Reset New Password</h1>
         
         <?php if ($mensagem): ?>
             <div class="alert alert-<?= $mensagem_tipo ?>">
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($mensagem)) {
         <?php if ($result->num_rows > 0 || $_SERVER['REQUEST_METHOD'] === 'POST'): ?>
             <form class="auth-form" method="post">
                 <div class="form-group">
-                    <label for="password">Nova Senha</label>
+                    <label for="password">New Password</label>
                     <input type="password" id="password" name="password" class="form-control" 
                            required minlength="8" oninput="checkPasswordStrength(); validatePasswords();">
                     <div class="password-strength">
@@ -118,22 +118,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($mensagem)) {
                 </div>
                 
                 <div class="form-group">
-                    <label for="confirm_password">Confirmar Nova Senha</label>
+                    <label for="confirm_password">Confirm New Password</label>
                     <input type="password" id="confirm_password" name="confirm_password" class="form-control" 
                            required minlength="8" oninput="validatePasswords();">
                 </div>
                 
-                <button type="submit" id="submit-btn" class="btn" disabled>Atualizar Senha</button>
+                <button type="submit" id="submit-btn" class="btn" disabled>Update Password</button>
             </form>
         <?php else: ?>
             <div class="auth-footer">
-                <p>Token inválido ou expirado. Por favor, solicite um novo link de recuperação.</p>
-                <a href="forgot_password.php" class="btn">Solicitar Novo Link</a>
+                <p>Invalid or expired Token. Please for a new request.</p>
+                <a href="forgot_password.php" class="btn">Request a new Link</a>
             </div>
         <?php endif; ?>
         
         <div class="auth-footer">
-            <p><a href="login.php">Voltar para o login</a></p>
+            <p><a href="login.php">Back to login</a></p>
         </div>
     </div>
 </body>

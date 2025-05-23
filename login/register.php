@@ -34,11 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_password = trim($_POST["confirm_password"]);
 
     if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-        $mensagem = "Erro: Todos os campos são obrigatórios.";
+        $mensagem = "Error: All camps are required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $mensagem = "Erro: O email inserido não é válido.";
+        $mensagem = "Error: The email address is not valid.";
     } elseif ($password !== $confirm_password) {
-        $mensagem = "Erro: As senhas não coincidem.";
+        $mensagem = "Error: The passwords do not match.";
     } else {
         // Verifica se o nome de utilizador ou o email já existe
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $mensagem = "Erro: Nome de utilizador ou email já estão registados.";
+            $mensagem = "Error: The username or email already exists.";
         } else {
             // Inserir dados na base de dados
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -55,12 +55,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt = $conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
-            if ($stmt->execute()) {
-                $_SESSION["username"] = $username;
-                $_SESSION["email"] = $email;
-                $_SESSION["role"] = $role;
-                $mensagem = "Conta criada com sucesso!";
-                $success = true;
+           if ($stmt->execute()) {
+            $new_user_id = $stmt->insert_id; // Obtem o ID do novo utilizador inserido
+
+            $_SESSION["user_id"] = $new_user_id; // <-- esta linha é essencial!
+            $_SESSION["username"] = $username;
+            $_SESSION["email"] = $email;
+            $_SESSION["role"] = $role;
+            $mensagem = "Sucess Login!";
+            $success = true;
+
 
                 // Envio do email
                 $mail = new PHPMailer(true);
@@ -93,10 +97,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->send();
                 } catch (Exception $e) {
                     // Opcional: log de erro
-                    error_log("Erro ao enviar email: " . $mail->ErrorInfo);
+                    error_log("Error to send email " . $mail->ErrorInfo);
                 }
             } else {
-                $mensagem = "Erro ao criar a conta. Tente novamente mais tarde.";
+                $mensagem = "Error to register your account. Try again Later.";
             }
             $stmt->close();
         }
@@ -110,7 +114,7 @@ $conn->close();
 <html lang="pt">
 <head>
     <?php include('../head.html'); ?>
-    <title>Registrar</title>
+    <title>Register</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -199,7 +203,7 @@ $conn->close();
 <body>
 <?php include('../header.php'); ?>
 <main>
-    <h2>Criar Conta</h2>
+    <h2>Create Account</h2>
 
     <?php if (isset($mensagem) && !empty($mensagem)): ?>
         <div class="error"><?php echo $mensagem; ?></div>
@@ -218,12 +222,13 @@ $conn->close();
         <label for="confirm_password">Confirm Password</label>
         <input type="password" id="confirm_password" name="confirm_password" required>
 
-        <button type="submit" name="register">Criar Conta</button>
+        <button type="submit" name="register">Register</button>
     </form>
 
     <div class="message">
-            <a>Já tem Conta?<a href="login.php">Fazer Login</a>
+            <a>Have an account ? <a href="login.php">Login</a>
     </div>
 </main>
 </body>
 </html>
+

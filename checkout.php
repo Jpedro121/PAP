@@ -225,8 +225,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                     <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao" value="Cartão" checked>
                                     <label class="form-check-label d-flex align-items-center" for="cartao">
                                         <img src="/PAP/static/images/payments/credit-card.png" alt="Cartão" /> Cartão de Crédito/Débito
-                                        <img src="/PAP/static/images/payments/visa.png" class="card-icons" alt="Visa">
-                                        <img src="/PAP/static/images/payments/mastercard.png" class="card-icons" alt="Mastercard">
                                     </label>
                                 </div>
                             </div>

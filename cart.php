@@ -45,6 +45,42 @@ if (isset($_SESSION['user_id'])) {
         }
     }
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_quantidades'])) {
+    $quantidades = $_POST['quantidades'] ?? [];
+    $produtos_ids = $_POST['produtos_ids'] ?? [];
+
+    // Atualiza carrinho para utilizadores logados (na BD)
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+        foreach ($produtos_ids as $key => $produto_id) {
+            $quantidade = (int)$quantidades[$key];
+            if ($quantidade < 1) $quantidade = 1;
+            if ($quantidade > 10) $quantidade = 10;
+
+            $sql = "UPDATE carrinho SET quantidade = ? WHERE user_id = ? AND produto_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iii", $quantidade, $user_id, $produto_id);
+            $stmt->execute();
+        }
+    } else {
+        // Atualiza carrinho na sessão para utilizadores não logados
+        foreach ($_SESSION['carrinho'] as $key => $item) {
+            foreach ($produtos_ids as $index => $produto_id) {
+                if ($item['produto_id'] == $produto_id) {
+                    $quantidade = (int)$quantidades[$index];
+                    if ($quantidade < 1) $quantidade = 1;
+                    if ($quantidade > 10) $quantidade = 10;
+                    $_SESSION['carrinho'][$key]['quantidade'] = $quantidade;
+                }
+            }
+        }
+    }
+
+    // Depois de atualizar, recarrega a página para refletir as alterações
+    header("Location: cart.php");
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
