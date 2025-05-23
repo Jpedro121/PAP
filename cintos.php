@@ -17,12 +17,12 @@ $result = $conn->query($sql);
 <html lang="pt">
 <head>
     <?php include('head.html'); ?>
-    <title>Cintos</title>
+    <title>Belts</title>
 </head>
 <body>
     <?php include('header.php'); ?>
 
-    <h1>Cintos</h1>
+    <h1>Belts</h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>

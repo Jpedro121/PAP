@@ -50,12 +50,12 @@ $conn->close();
             <h1 class="produto-nome"><?php echo $produto['nome']; ?></h1>
             <div class="informacoes">
                 <p class="produto-descricao"><?php echo $produto['descricao']; ?>:</p>
-                <p class="produto-preco"><strong><?= $lang['Price'] ?></strong> €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+                <p class="produto-preco"><strong>Price</strong> €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
                 <form action="adicionar_cart.php" method="POST">
                     <input type="hidden" name="produto_id" value="<?php echo $produto['id']; ?>">
                     <input type="hidden" name="preco" value="<?php echo $produto['preco']; ?>">
                     <input type="number" name="quantidade" value="1" min="1" required>
-                    <button type="submit" class="btn"><?= $lang['add_to_cart'] ?></button>
+                    <button type="submit" class="btn">Add to cart</button>
                 </form>
             </div>
         </div>
@@ -63,7 +63,7 @@ $conn->close();
 </main>
 
 <footer>
-    <p><?= $lang['footer'] ?></p>
+    <p>2025 © Sk8Nation. Todos os direitos reservados.</p>
 </footer>
 </body>
 </html>

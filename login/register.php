@@ -5,7 +5,7 @@ if (isset($_SESSION['username']) && $_SERVER["REQUEST_METHOD"] !== "POST") {
     if ($_SESSION['role'] === 'admin') {
         header("Location: /PAP/dashboard_admin.php");
     } else {
-        header("Location: /PAP/userprofi.php");
+        header("Location: /PAP/login/userprofi.php");
     }
     exit();
 }
@@ -199,30 +199,30 @@ $conn->close();
 <body>
 <?php include('../header.php'); ?>
 <main>
-    <h2><?= $lang['Create_Account'] ?></h2>
+    <h2>Criar Conta</h2>
 
     <?php if (isset($mensagem) && !empty($mensagem)): ?>
         <div class="error"><?php echo $mensagem; ?></div>
     <?php endif; ?>
 
     <form action="" method="post">
-        <label for="username"><?= $lang['Username'] ?></label>
+        <label for="username">Username</label>
         <input type="text" id="username" name="username" required>
 
         <label for="email">Email</label>
         <input type="text" id="email" name="email" required>
 
-        <label for="password"><?= $lang['Password'] ?></label>
+        <label for="password">Password</label>
         <input type="password" id="password" name="password" required>
 
-        <label for="confirm_password"><?= $lang['Confirm_Password'] ?></label>
+        <label for="confirm_password">Confirm Password</label>
         <input type="password" id="confirm_password" name="confirm_password" required>
 
-        <button type="submit" name="register"><?= $lang['Register'] ?></button>
+        <button type="submit" name="register">Criar Conta</button>
     </form>
 
     <div class="message">
-            <a><?= $lang['Already_Account'] ?><a href="login.php">Fazer Login</a>
+            <a>Já tem Conta?<a href="login.php">Fazer Login</a>
     </div>
 </main>
 </body>

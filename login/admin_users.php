@@ -12,11 +12,24 @@ $result = $conn->query("SELECT id, username, role, created_at FROM users");
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['delete'])) {
         $id = (int) $_POST['user_id'];
+
         if ($_SESSION['user_id'] != $id) { // Impede que o admin se apague a si próprio
-            $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $stmt->close();
+            // Verifica se o utilizador tem encomendas associadas
+            $check = $conn->prepare("SELECT COUNT(*) FROM encomendas WHERE user_id = ?");
+            $check->bind_param("i", $id);
+            $check->execute();
+            $check->bind_result($count);
+            $check->fetch();
+            $check->close();
+
+            if ($count > 0) {
+                $_SESSION['error'] = "Não é possível eliminar utilizadores com encomendas associadas.";
+            } else {
+                $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $stmt->close();
+            }
         }
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
@@ -46,6 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         h1 {
             text-align: center;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
         }
         table {
             width: 90%;
@@ -95,6 +113,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
     <h1>Gestão de Utilizadores</h1>
+
+    <?php if (isset($_SESSION['error'])): ?>
+        <p class="error"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+    <?php endif; ?>
+
     <table>
         <tr>
             <th>ID</th>

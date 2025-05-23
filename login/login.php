@@ -128,20 +128,20 @@ $conn->close();
             <?php endif; ?>
 
             <form action="auth.php" method="post">
-                <label for="username"><?= $lang['Username'] ?></label>
+                <label for="username">Username</label>
                 <input type="text" name="username" id="username" required>
 
-                <label for="password"><?= $lang['Password'] ?></label>
+                <label for="password">Password</label>
                 <input type="password" name="password" id="password" required>
 
-                <button type="submit" name="login"><?= $lang['Login'] ?></button>
+                <button type="submit" name="login">Login</button>
             </form>
 
             <div class="signup-link">
-                <p><?= $lang['No_Account'] ?><a class="signup-link" href="register.php">Criar Conta</a></p>
+                <p>Sem Conta<a class="signup-link" href="register.php">Criar Conta</a></p>
             </div>
             <div class="signup-link">
-                <p><a class="signup-link" href="forgot_password.php"><?= $lang['Forgot_Password'] ?></a></p>
+                <p><a class="signup-link" href="forgot_password.php">Forgot Password ?</a></p>
             </div>
 
         </div>

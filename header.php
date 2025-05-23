@@ -3,12 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (isset($_GET['lang'])) {
-    $_SESSION['lang'] = $_GET['lang'];
-}
-
-$lang_code = $_SESSION['lang'] ?? 'pt'; // padrão: português
-require_once __DIR__ . "/lang/{$lang_code}.php";
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -71,11 +65,6 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
     padding: 1rem 2rem;
    }
 
-  .language-selector {
-    text-align: right;
-    padding: 0 2rem;
-  }
-
   .nav-icons {
     padding: 0 2rem;
   }
@@ -99,25 +88,25 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
           <img src="/PAP/static/images/marcas/Sk8Nationlogo.png" alt="Sk8Nation Logo" style="height: 80px;"></a>
       </div>
       <ul class="nav-links">
-        <li><a href="/PAP/home.php"><?= $lang['home'] ?></a></li>
+        <li><a href="/PAP/home.php">home</a></li>
 
         <li>
           <a href="#">
-            <?= $lang['clothing'] ?>
+            Clothing
             <i class="fas fa-angle-down icon-caret"></i>
           </a>
           <ul class="dropdown">
-            <li><a href="/PAP/tshirts.php"><?= $lang['tshirts'] ?></a></li>
-            <li><a href="/PAP/sweats.php"><?= $lang['sweats'] ?></a></li>
-            <li><a href="/PAP/calças.php"><?= $lang['pants'] ?></a></li>
-            <li><a href="/PAP/calcoes.php"><?= $lang['shorts'] ?></a></li>
+            <li><a href="/PAP/tshirts.php">T-shirts</a></li>
+            <li><a href="/PAP/sweats.php">Sweats</a></li>
+            <li><a href="/PAP/calças.php">Pants</a></li>
+            <li><a href="/PAP/calcoes.php">Shorts</a></li>
           </ul>
         </li>
 
         <li>
           <a href="#">
-            <?= $lang['shoes'] ?>
-            <i class="fas fa-angle-down icon-caret"></i>
+            Shoes
+          <i class="fas fa-angle-down icon-caret"></i>
           </a>
           <ul class="dropdown">
             <li><a href="/PAP/NikeSB.php">NikeSB</a></li>
@@ -129,31 +118,31 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
 
         <li>
           <a href="gorros.php">
-            <?= $lang['accessories'] ?>
+            Acessories
             <i class="fas fa-angle-down icon-caret"></i>
           </a>
           <ul class="dropdown">
-            <li><a href="/PAP/gorros.php"><?= $lang['beanie'] ?></a></li>
-            <li><a href="/PAP/cintos.php"><?= $lang['belts'] ?></a></li>
+            <li><a href="/PAP/gorros.php">Beanie</a></li>
+            <li><a href="/PAP/cintos.php">Belts</a></li>
           </ul>
         </li>
 
         <li>
           <a href="#">
-            <?= $lang['skateboards'] ?>
+            Skateboards
             <i class="fas fa-angle-down icon-caret"></i>
           </a>
           <ul class="dropdown">
-            <li><a href="/PAP/decks.php"><?= $lang['decks'] ?></a></li>
-            <li><a href="/PAP/trucks.php"><?= $lang['trucks'] ?></a></li>
-            <li><a href="/PAP/wheels.php"><?= $lang['wheels'] ?></a></li>
-            <li><a href="/PAP/rolamentos.php"><?= $lang['bearings'] ?></a></li>
+            <li><a href="/PAP/decks.php">Decks</a></li>
+            <li><a href="/PAP/trucks.php">Trucks</a></li>
+            <li><a href="/PAP/wheels.php">Wheels</a></li>
+            <li><a href="/PAP/rolamentos.php">Bearings</li>
           </ul>
         </li>
 
         <li>
           <a href="brands.php">
-            <?= $lang['brands'] ?>
+           Brands
             <i class="fas fa-angle-down icon-caret"></i>
           </a>
           <ul class="dropdown">
@@ -168,16 +157,13 @@ require_once __DIR__ . "/lang/{$lang_code}.php";
 
       <div class="nav-icons">
         <?php if(isset($_SESSION["username"])):?>   
-          <a href="/PAP/login/userprofi.php" class="icon" title="<?= $lang['profile'] ?>"><i class="fas fa-user"></i></a>
+          <a href="/PAP/login/userprofi.php" class="icon" title="Perfil"><i class="fas fa-user"></i></a>
         <?php else:?>
-          <a href="/PAP/login/login.php" class="icon" title="<?= $lang['login'] ?>"><i class="fas fa-user"></i></a>
+          <a href="/PAP/login/login.php" class="icon" title="Login"><i class="fas fa-user"></i></a>
         <?php endif;?>
-        <a href="/PAP/cart.php" class="icon" title="<?= $lang['cart'] ?>"><i class="fas fa-shopping-cart"></i></a>
+        <a href="/PAP/cart.php" class="icon" title="Cart"><i class="fas fa-shopping-cart"></i></a>
       </div>
     </div>
 
-    <div class="language-selector">
-      <a href="?lang=pt">PT</a> | <a href="?lang=en">EN</a>
-    </div>
   </nav>
 </header>

@@ -62,7 +62,7 @@ if ($result->num_rows > 0) {
 
         <div class="produto-container">
             <?php if (empty($produtos)): ?>
-                <p><?= $lang['No_products_found'] ?>.</p>
+                <p>No products Found</p>
             <?php else: ?>
                 <?php foreach ($produtos as $produto): ?>
                     <div class="produto-card">
@@ -72,9 +72,9 @@ if ($result->num_rows > 0) {
                                  class="produto-imagem">
                         <?php endif; ?>
                         <h3><?= htmlspecialchars($produto['nome']) ?></h3>
-                        <p><?= $lang['price'] ?> €<?= number_format($produto['preco'], 2) ?></p>
+                        <p>Price €<?= number_format($produto['preco'], 2) ?></p>
                         <?php if (!empty($produto['tamanho'])): ?>
-                            <p><?= $lang['size'] ?><?= htmlspecialchars($produto['tamanho']) ?></p>
+                            <p>Size><?= htmlspecialchars($produto['tamanho']) ?></p>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>

@@ -13,12 +13,12 @@ session_start();
 
 <main>
     <section class="hero" style="background-image: url('static/images/header-desktop.webp')">
-        <h1><?= $lang['Discover_World'] ?></h1>
-        <p><?= $lang['gear_up'] ?></p>
+        <h1>Discover the World of Skateboarding</h1>
+        <p>Gear up with the latest in clothing, shoes, and skateboards.</p>
     </section>
 
   <section class="brands">
-    <h2 class="NossasMarcas"><?= $lang['our_brands'] ?></h2>
+    <h2 class="NossasMarcas">Our Brands</h2>
     <div class="brand-logos">
         <?php
         $brands = [
@@ -50,7 +50,7 @@ session_start();
 
 
     <section>
-    <h1 class="Novidades"><?= $lang['new_arrivals'] ?></h1>
+    <h1 class="Novidades">Novidades</h1>
     <div class="produto-grid">
         <?php
         $conn = new mysqli("localhost", "root", "", "skateshop");
@@ -97,7 +97,7 @@ session_start();
 </main>
 
 <footer>
-    <p><?= $lang['footer'] ?></p>
+    <p>2025 © Sk8Nation. Todos os direitos reservados.</p>
 </footer>
 
 </body>

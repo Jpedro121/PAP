@@ -24,7 +24,7 @@ $result = $conn->query($sql);
 <body>
 <?php include('header.php'); ?>
 
-    <h1><?= $lang['rodas'] ?? 'Rodas' ?></h1>
+    <h1>Wheels</h1>
     <div class="deck-container">
         <?php
         if ($result && $result->num_rows > 0) {

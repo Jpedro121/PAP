@@ -39,7 +39,7 @@ $result = $conn->query($sql);
 <body>
     <?php include('header.php'); ?>
     
-    <h1 style="text-align:center; margin:20px 0;"><?= $lang['our_brands'] ?></h1>
+    <h1 style="text-align:center; margin:20px 0;">Our Brands</h1>
     
     <div class="marca-container">
         <?php while($row = $result->fetch_assoc()): ?>

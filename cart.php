@@ -51,7 +51,7 @@ if (isset($_SESSION['user_id'])) {
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title><?= $lang['My_Cart'] ?? 'Carrinho' ?></title>
+    <title>My Cart</title>
     <?php include('head.html'); ?>
 <style>
         body {
@@ -162,7 +162,7 @@ if (isset($_SESSION['user_id'])) {
 
 <?php include('header.php'); ?>
 
-<h1 class="titulo-carrinho"><?= $lang['My_Cart'] ?? 'Carrinho' ?></h1>
+<h1 class="titulo-carrinho">My Cart</h1>
 
 <div class="carrinho-container">
     <?php if (!empty($produtos)): ?>
@@ -171,12 +171,12 @@ if (isset($_SESSION['user_id'])) {
                 <img src="static/images/<?php echo $row['imagem']; ?>" alt="<?php echo $row['nome']; ?>">
                 <div class="info">
                     <h2><?php echo $row['nome']; ?></h2>
-                    <p><?= $lang['Quantity'] ?? 'Quantidade:' ?> <strong><?php echo $row['quantidade']; ?></strong></p>
-                    <p><?= $lang['Price'] ?? 'Preço:' ?> <strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
+                    <p>Quantity<strong><?php echo $row['quantidade']; ?></strong></p>
+                    <p>Price<strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover"><?= $lang['Remove'] ?? 'Remover' ?></a>
+                        <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover">Remove</a>
                     <?php else: ?>
-                        <a href="removecart.php?pid=<?php echo $row['id']; ?>" class="remover"><?= $lang['Remove'] ?? 'Remover' ?></a>
+                        <a href="removecart.php?pid=<?php echo $row['id']; ?>" class="remover">Remove</a>
                     <?php endif; ?>
                 </div>
             </div>

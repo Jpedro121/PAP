@@ -10,7 +10,7 @@ $result = $conn->query($sql);
 <html lang="pt-br">
 <head>
     <?php include('head.html'); ?>
-    <title><?= $lang['our_brands'] ?>-Sk8Nation</title>
+    <title>Our Brands-Sk8Nation</title>
     <style>
         .marca-container {
             display: flex;
@@ -68,7 +68,7 @@ $result = $conn->query($sql);
             <div class="marca-card" onclick="window.location.href='produtos_por_marca.php?marca=<?= urlencode($marca) ?>'">
                 <img src="<?= $logo ?>" alt="<?= htmlspecialchars($marca) ?>" class="marca-logo">
                 <div class="marca-nome"><?= htmlspecialchars($marca) ?></div>
-                <div class="marca-desc"><?= $lang['Click_here'] ?></div>
+                <div class="marca-desc">Click Here</div>
             </div>
         <?php endwhile; ?>
     </div>
