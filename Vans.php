@@ -5,8 +5,8 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM produtos WHERE categoria = 'Vans'";
-
+// Buscar produtos da marca Vans apenas da categoria 9 (sapatos)
+$sql = "SELECT * FROM produtos WHERE marca = 'Vans' AND categoria_id = 9";
 $result = $conn->query($sql);
 ?>
 
@@ -14,12 +14,12 @@ $result = $conn->query($sql);
 <html lang="pt">
 <head>
     <?php include('head.html'); ?>
-    <title>Vans</title>
+    <title>Vans - Shoes</title>
 </head>
 <body>
     <?php include('header.php'); ?>
 
-    <h1>Vans</h1>
+    <h1>Vans - Shoes</h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
@@ -32,7 +32,7 @@ $result = $conn->query($sql);
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
-            <p>Nenhum produto encontrado.</p>
+            <p>No products found</p>
         <?php endif; ?>
     </div>
 </body>

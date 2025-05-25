@@ -6,14 +6,12 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-
 $total = 0;
 $produtos = [];
 
 if (isset($_SESSION['user_id'])) {
-    // Carrinho guardado na base de dados (logado)
     $user_id = $_SESSION['user_id'];
-    $sql = "SELECT c.id, p.nome, p.imagem, c.quantidade, c.preco 
+    $sql = "SELECT c.id, p.nome, p.imagem, c.quantidade, c.preco, c.tamanho
             FROM carrinho c 
             JOIN produtos p ON c.produto_id = p.id 
             WHERE c.user_id = ?";
@@ -26,11 +24,11 @@ if (isset($_SESSION['user_id'])) {
         $total += $row['preco'] * $row['quantidade'];
     }
 } else {
-    // Carrinho em sessão (não logado)
     if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) {
         foreach ($_SESSION['carrinho'] as $item) {
             $produto_id = $item['produto_id'];
             $quantidade = $item['quantidade'];
+            $tamanho = $item['tamanho'] ?? null;
             $query = $conn->prepare("SELECT nome, imagem, preco FROM produtos WHERE id = ?");
             $query->bind_param("i", $produto_id);
             $query->execute();
@@ -38,6 +36,7 @@ if (isset($_SESSION['user_id'])) {
             if ($res->num_rows > 0) {
                 $produto = $res->fetch_assoc();
                 $produto['quantidade'] = $quantidade;
+                $produto['tamanho'] = $tamanho;
                 $produto['id'] = $produto_id;
                 $produtos[] = $produto;
                 $total += $produto['preco'] * $quantidade;
@@ -45,42 +44,6 @@ if (isset($_SESSION['user_id'])) {
         }
     }
 }
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_quantidades'])) {
-    $quantidades = $_POST['quantidades'] ?? [];
-    $produtos_ids = $_POST['produtos_ids'] ?? [];
-
-    // Atualiza carrinho para utilizadores logados (na BD)
-    if (isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
-        foreach ($produtos_ids as $key => $produto_id) {
-            $quantidade = (int)$quantidades[$key];
-            if ($quantidade < 1) $quantidade = 1;
-            if ($quantidade > 10) $quantidade = 10;
-
-            $sql = "UPDATE carrinho SET quantidade = ? WHERE user_id = ? AND produto_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iii", $quantidade, $user_id, $produto_id);
-            $stmt->execute();
-        }
-    } else {
-        // Atualiza carrinho na sessão para utilizadores não logados
-        foreach ($_SESSION['carrinho'] as $key => $item) {
-            foreach ($produtos_ids as $index => $produto_id) {
-                if ($item['produto_id'] == $produto_id) {
-                    $quantidade = (int)$quantidades[$index];
-                    if ($quantidade < 1) $quantidade = 1;
-                    if ($quantidade > 10) $quantidade = 10;
-                    $_SESSION['carrinho'][$key]['quantidade'] = $quantidade;
-                }
-            }
-        }
-    }
-
-    // Depois de atualizar, recarrega a página para refletir as alterações
-    header("Location: cart.php");
-    exit;
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -89,115 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_quantidades
     <meta charset="UTF-8">
     <title>My Cart</title>
     <?php include('head.html'); ?>
-<style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
-
-        .titulo-carrinho {
-            text-align: center;
-            padding: 30px 0 10px;
-            font-size: 2em;
-            color: #222;
-        }
-
-        .carrinho-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .item-carrinho {
-            display: flex;
-            background-color: #fff;
-            width: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .item-carrinho img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-right: 1px solid #ddd;
-        }
-
-        .item-carrinho .info {
-            padding: 15px;
-            flex-grow: 1;
-        }
-
-        .item-carrinho h2 {
-            margin: 0 0 10px;
-            font-size: 1.3em;
-            color: #333;
-        }
-
-        .item-carrinho p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        .remover {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 6px 12px;
-            background-color: #ff4d4d;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .remover:hover {
-            background-color: #e60000;
-        }
-
-        .btn-voltar {
-            display: block;
-            text-align: center;
-            margin: 30px auto;
-            width: fit-content;
-            padding: 10px 20px;
-            background-color: #222;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .btn-voltar:hover {
-            background-color: #444;
-        }
-
-        .vazio {
-            text-align: center;
-            font-size: 1.2em;
-            margin: 40px 0;
-            color: #666;
-        }
-
-        .total-carrinho {
-            text-align: center;
-            font-size: 1.5em;
-            margin-top: 20px;
-            color: #111;
-        }
-    </style>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
-
 <?php include('header.php'); ?>
-
 <h1 class="titulo-carrinho">My Cart</h1>
 
 <div class="carrinho-container">
@@ -207,17 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_quantidades
                 <img src="static/images/<?php echo $row['imagem']; ?>" alt="<?php echo $row['nome']; ?>">
                 <div class="info">
                     <h2><?php echo $row['nome']; ?></h2>
-                    <p>Quantity<strong><?php echo $row['quantidade']; ?></strong></p>
-                    <p>Price<strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
+                    <?php if (!empty($row['tamanho'])): ?>
+                        <p>Tamanho: <strong><?php echo htmlspecialchars($row['tamanho']); ?></strong></p>
+                    <?php endif; ?>
+                    <p>Quantidade: <strong><?php echo $row['quantidade']; ?></strong></p>
+                    <p>Preço: <strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover">Remove</a>
+                        <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover">Remover</a>
                     <?php else: ?>
-                        <a href="removecart.php?pid=<?php echo $row['id']; ?>" class="remover">Remove</a>
+                        <a href="removecart.php?pid=<?php echo $row['id']; ?>" class="remover">Remover</a>
                     <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
-
         <div class="total-carrinho">
             <strong>Total: €<?php echo number_format($total, 2, ',', '.'); ?></strong>
         </div>
@@ -233,11 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_quantidades
             </p>
         <?php endif; ?>
     <?php else: ?>
-        <p class="vazio"><?= $lang['empty_cart'] ?? 'O carrinho está vazio.' ?></p>
+        <p class="vazio">O carrinho está vazio.</p>
     <?php endif; ?>
 </div>
 
-<a href="home.php" class="btn-voltar">← <?= $lang['Back_to_Shopping'] ?? 'Voltar às Compras' ?></a>
-
+<a href="home.php" class="btn-voltar">&larr; Voltar às Compras</a>
 </body>
 </html>

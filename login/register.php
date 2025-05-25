@@ -77,16 +77,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
 
-                    $mail->setFrom('joaopedroantunes1980@gmail.com', 'SK8nation');
+                    $mail->setFrom('joaopedroantunes1980@gmail.com', 'Sk8Nation');
                     $mail->addAddress($email, $username);
 
                     $mail->isHTML(true);
-                    $mail->Subject = 'Bem-vindo à SK8nation!';
+                    $mail->Subject = 'Bem-vindo à Sk8Nation!';
 
                     $logoURL = 'https://i.postimg.cc/VkXV804q/logopap.png';
 
                     $mail->Body = "
-                        <img src='$logoURL' alt='SK8nation' width='275'><br><br>
+                        <img src='$logoURL' alt='Sk8Nation' width='275'><br><br>
                         <h3>Boas, $username!</h3>
                         <p>Bem-vindo à <strong>SK8nation</strong> – a tua nova crew no mundo do skate!</p>
                         <p>A tua conta foi criada com sucesso e estás oficialmente dentro da nossa comunidade.</p>
