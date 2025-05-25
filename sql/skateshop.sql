@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 22-Maio-2025 às 16:48
+-- Tempo de geração: 24-Maio-2025 às 01:20
 -- Versão do servidor: 10.4.32-MariaDB
 -- versão do PHP: 8.2.12
 
@@ -53,7 +53,7 @@ CREATE TABLE `carrinho` (
 --
 
 INSERT INTO `carrinho` (`id`, `user_id`, `produto_id`, `quantidade`, `preco`) VALUES
-(43, 28, 15, 1, 90.00);
+(87, 37, 12, 1, 50.00);
 
 -- --------------------------------------------------------
 
@@ -174,7 +174,10 @@ INSERT INTO `encomendas` (`id`, `user_id`, `morada`, `total`, `codigo_encomenda`
 (17, 9, 'Retirada na loja', 199.89, 'EN682A686D9600B', '2025-05-19 00:08:29', 'Cartão', 'pickup'),
 (18, 9, 'Retirada na loja', 139.90, 'EN682AFFB4E9F02', '2025-05-19 10:53:56', 'Cartão', 'pickup'),
 (19, 9, 'Retirada na loja', 194.89, 'EN682BA1091D453', '2025-05-19 22:22:17', 'Cartão', 'pickup'),
-(20, 16, 'Retirada na loja', 240.00, 'EN682C6C4A554A3', '2025-05-20 12:49:30', 'Cartão', 'pickup');
+(20, 16, 'Retirada na loja', 240.00, 'EN682C6C4A554A3', '2025-05-20 12:49:30', 'Cartão', 'pickup'),
+(21, 16, 'Retirada na loja', 60.00, 'EN68302E908AAAF', '2025-05-23 09:15:12', 'Cartão', 'pickup'),
+(22, 30, 'rua das figueiras n5, 123-111, MAFRA', 924.00, 'EN6830317B2B90F', '2025-05-23 09:27:39', 'Cartão', 'delivery'),
+(23, 36, 'Avenida de Portugal n44,Póvoa da Galega, 123-111, MAFRA', 90.00, 'EN6830FE9F7F80A', '2025-05-24 00:02:55', 'Cartão', 'delivery');
 
 -- --------------------------------------------------------
 
@@ -228,7 +231,11 @@ INSERT INTO `encomenda_produtos` (`id`, `encomenda_id`, `produto_id`, `quantidad
 (31, 19, 28, 1, 19.99),
 (32, 19, 24, 1, 89.90),
 (33, 19, 53, 1, 85.00),
-(34, 20, 103, 12, 20.00);
+(34, 20, 103, 12, 20.00),
+(35, 21, 103, 3, 20.00),
+(36, 22, 103, 1, 20.00),
+(37, 22, 24, 10, 89.90),
+(38, 23, 53, 1, 85.00);
 
 -- --------------------------------------------------------
 
@@ -706,19 +713,23 @@ CREATE TABLE `users` (
   `morada` text DEFAULT NULL,
   `verification_code` varchar(64) DEFAULT NULL,
   `reset_token` varchar(255) DEFAULT NULL,
-  `reset_token_expiry` datetime DEFAULT NULL
+  `reset_token_expiry` datetime DEFAULT NULL,
+  `is_admin` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`, `morada`, `verification_code`, `reset_token`, `reset_token_expiry`) VALUES
-(9, 'admin', '$2y$10$ESqzVZhyFqtwn8yz5yCpqOC2OB1yXjIWaT82ISuO1AKN2fRKGFK5m', 'admin', '2025-03-06 16:23:39', 'admin@gmail.com', NULL, NULL, NULL, NULL),
-(16, 'Joa1', '$2y$10$6GjOF/j9gCaEjimCnSXCPuq2dnFeIEu6UJ3DQoOYnNhioWMSIQR6e', 'user', '2025-04-22 16:38:40', 'joaopedroantunes1980@gmail.com', 'Avenida de Portugal n44,Póvoa da Galega', NULL, NULL, NULL),
-(25, 'Paullo', '$2y$10$z2daoYae3WruJSGO9BKPHulg6fNfvVUJ/E4lFg2.fIh/ky2o2vfnK', 'user', '2025-05-09 21:01:37', 'joaopedroantunesps4@gmail.com', NULL, NULL, NULL, NULL),
-(27, 'miudo', '$2y$10$qQ9PiY5S40YgSW/SAavWc.w6WnhlLnMmyES7RNRC9WzbasN8ZwFAO', 'user', '2025-05-09 21:44:14', 'miudogamer0@gmail.com', NULL, NULL, NULL, NULL),
-(28, 'bizarro', '$2y$10$E3jEx5gSsfjIfe.p7jaJwulpRlHfBThw8nANOLbGBNxVUu2rBq/U2', 'user', '2025-05-12 10:04:10', 'dpzibarro@gmail.com', NULL, NULL, 'f971dccd060fd74af0930670ebfca0fbb5d3649c02d16ab2c3983dd2cf175a4a', '2025-05-18 19:15:44');
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`, `email`, `morada`, `verification_code`, `reset_token`, `reset_token_expiry`, `is_admin`) VALUES
+(9, 'admin', '$2y$10$ESqzVZhyFqtwn8yz5yCpqOC2OB1yXjIWaT82ISuO1AKN2fRKGFK5m', 'admin', '2025-03-06 16:23:39', 'admin@gmail.com', NULL, NULL, NULL, NULL, 0),
+(16, 'Joa1', '$2y$10$6GjOF/j9gCaEjimCnSXCPuq2dnFeIEu6UJ3DQoOYnNhioWMSIQR6e', 'user', '2025-04-22 16:38:40', 'joaopedroantunes1980@gmail.com', 'Avenida de Portugal n44,Póvoa da Galega', NULL, NULL, NULL, 0),
+(25, 'Paullo', '$2y$10$z2daoYae3WruJSGO9BKPHulg6fNfvVUJ/E4lFg2.fIh/ky2o2vfnK', 'user', '2025-05-09 21:01:37', 'joaopedroantunesps4@gmail.com', NULL, NULL, NULL, NULL, 0),
+(27, 'miudo', '$2y$10$qQ9PiY5S40YgSW/SAavWc.w6WnhlLnMmyES7RNRC9WzbasN8ZwFAO', 'user', '2025-05-09 21:44:14', 'miudogamer0@gmail.com', NULL, NULL, NULL, NULL, 0),
+(30, 'ana', '$2y$10$b5A1GSLV8.PT0iNMgWcPsOmxABnD8MW46K9xYVlaWQT3LCfcfrZNa', 'user', '2025-05-23 08:22:56', 'lourenco.anam@gmail.com', 'rua das figueiras n5', NULL, NULL, NULL, 0),
+(35, 'teste', '$2y$10$sVS80masKk.VSBzkGIg0IOAu3goUZvkVsZNFQToTkd5CCtPDhZzA.', '', '2025-05-23 22:44:44', 'teste@gmail.com', NULL, NULL, NULL, NULL, 0),
+(36, 'teste1', '$2y$10$JQxUwwEv6NjJ0rHa./ZDNeNwD920OUUVAnIIbzmCASeFNWE5t31rG', '', '2025-05-23 22:46:03', 'teste1@gmail.com', NULL, NULL, NULL, NULL, 0),
+(37, 'teste123456', '$2y$10$Yzt6R8sQmn55jzSqq7tdI.HTIhwk7GnWgTKAbH5aMg.axwDl9BbsC', '', '2025-05-23 23:10:02', 'teste123@gmail.com', NULL, NULL, NULL, NULL, 0);
 
 --
 -- Índices para tabelas despejadas
@@ -873,7 +884,7 @@ ALTER TABLE `acessorios`
 -- AUTO_INCREMENT de tabela `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT de tabela `categorias`
@@ -897,13 +908,13 @@ ALTER TABLE `decks`
 -- AUTO_INCREMENT de tabela `encomendas`
 --
 ALTER TABLE `encomendas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de tabela `encomenda_produtos`
 --
 ALTER TABLE `encomenda_produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de tabela `gorros`
@@ -975,7 +986,7 @@ ALTER TABLE `tshirts`
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Restrições para despejos de tabelas

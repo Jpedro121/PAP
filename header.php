@@ -3,8 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
-
-
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -97,7 +95,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <li><a href="/PAP/home.php">Home</a></li>
 
         <li>
-          <a href="#">Clothing <i class="fas fa-angle-down icon-caret"></i></a>
+          <a href="/PAP/Roupas.php">Clothing <i class="fas fa-angle-down icon-caret"></i></a>
           <ul class="dropdown">
             <li><a href="/PAP/tshirts.php">T-shirts</a></li>
             <li><a href="/PAP/sweats.php">Sweats</a></li>
@@ -107,7 +105,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </li>
 
         <li>
-          <a href="#">Shoes <i class="fas fa-angle-down icon-caret"></i></a>
+          <a href="/PAP/sapatos.php">Shoes <i class="fas fa-angle-down icon-caret"></i></a>
           <ul class="dropdown">
             <li><a href="/PAP/NikeSB.php">NikeSB</a></li>
             <li><a href="/PAP/converse.php">Converse</a></li>
@@ -125,7 +123,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </li>
 
         <li>
-          <a href="#">Skateboards <i class="fas fa-angle-down icon-caret"></i></a>
+          <a href="/PAP/skateboard.php">Skateboards <i class="fas fa-angle-down icon-caret"></i></a>
           <ul class="dropdown">
             <li><a href="/PAP/decks.php">Decks</a></li>
             <li><a href="/PAP/trucks.php">Trucks</a></li>

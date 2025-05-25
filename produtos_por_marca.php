@@ -1,7 +1,7 @@
 <?php
 require_once 'db.php';
 
-$marca = $conn->real_escape_string($_GET['marca'] ?? ''); // Segurança básica
+$marca = $conn->real_escape_string($_GET['marca'] ?? '');
 
 $sql = "SELECT * FROM produtos WHERE marca = '$marca'";
 $result = $conn->query($sql);
@@ -32,6 +32,8 @@ if ($result->num_rows > 0) {
             width: 200px;
             text-align: center;
             transition: transform 0.3s;
+            border-radius: 8px;
+            background-color: #fff;
         }
         .produto-card:hover {
             transform: translateY(-5px);
@@ -41,6 +43,7 @@ if ($result->num_rows > 0) {
             max-width: 100%; 
             height: 180px;
             object-fit: contain;
+            margin-bottom: 10px;
         }
         .back-link {
             display: inline-block;
@@ -52,6 +55,10 @@ if ($result->num_rows > 0) {
         .back-link:hover {
             color: #0066cc;
         }
+        a.produto-card {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
 </head>
 <body>
@@ -62,21 +69,21 @@ if ($result->num_rows > 0) {
 
         <div class="produto-container">
             <?php if (empty($produtos)): ?>
-                <p>No products Found</p>
+                <p>No products found.</p>
             <?php else: ?>
                 <?php foreach ($produtos as $produto): ?>
-                    <div class="produto-card">
+                    <a href="produto.php?id=<?= urlencode($produto['id']) ?>" class="produto-card">
                         <?php if (!empty($produto['imagem'])): ?>
                             <img src="static/images/<?= htmlspecialchars($produto['imagem']) ?>" 
                                  alt="<?= htmlspecialchars($produto['nome']) ?>" 
                                  class="produto-imagem">
                         <?php endif; ?>
                         <h3><?= htmlspecialchars($produto['nome']) ?></h3>
-                        <p>Price €<?= number_format($produto['preco'], 2) ?></p>
+                        <p>Preço: €<?= number_format($produto['preco'], 2) ?></p>
                         <?php if (!empty($produto['tamanho'])): ?>
-                            <p>Size><?= htmlspecialchars($produto['tamanho']) ?></p>
+                            <p>Tamanho: <?= htmlspecialchars($produto['tamanho']) ?></p>
                         <?php endif; ?>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
