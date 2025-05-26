@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['username']) && $_SERVER["REQUEST_METHOD"] !== "POST") {
+if (isset($_SESSION['username'])) {
     if ($_SESSION['role'] === 'admin') {
         header("Location: /PAP/dashboard_admin.php");
     } else {

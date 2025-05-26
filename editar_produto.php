@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
     $nome = $_POST['nome'];
     $preco = $_POST['preco'];
-    $descricao = $_POST['descricao']; // HTML vindo do TinyMCE
+    $descricao = $_POST['descricao'];
 
-    // Busca imagem atual
+    // Buscar imagem atual do produto
     $sqlSelect = "SELECT imagem FROM produtos WHERE id = ?";
     $stmtSelect = $conn->prepare($sqlSelect);
     $stmtSelect->bind_param("i", $id);
@@ -32,21 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $produto = $result->fetch_assoc();
     $imagemPath = $produto['imagem'];
 
-    // Upload de nova imagem (opcional)
+    // Se nova imagem foi enviada
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'static/images/';
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
         $nomeTemp = $_FILES['imagem']['tmp_name'];
         $nomeImagem = basename($_FILES['imagem']['name']);
-        $imagemUnica = $nomeImagem;
-        $nomeFinal = $uploadDir . $imagemUnica;
+        $destino = 'static/images/' . $nomeImagem;
 
-
-        if (move_uploaded_file($nomeTemp, $nomeFinal)) {
-            $imagemPath = $imagemUnica;
+        if (move_uploaded_file($nomeTemp, $destino)) {
+            $imagemPath = $nomeImagem;
         } else {
             echo "<script>alert('Erro ao fazer upload da imagem.');</script>";
         }
@@ -87,6 +80,7 @@ if (isset($_GET['id'])) {
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt">
