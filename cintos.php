@@ -22,7 +22,7 @@ $result = $conn->query($sql);
 <body>
     <?php include('header.php'); ?>
 
-    <h1>Belts</h1>
+    <h1 class="Novidades">Belts</h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>

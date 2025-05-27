@@ -20,7 +20,7 @@ $result = $conn->query($sql);
 
 </head> 
 <body> <?php include('header.php'); ?>
-<h1>Shorts</h1>
+<h1 class="Novidades">Shorts</h1>
 <div class="deck-container">
     <?php if ($result && $result->num_rows > 0): ?>
         <?php while ($row = $result->fetch_assoc()): ?>

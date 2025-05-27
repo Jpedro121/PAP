@@ -19,7 +19,7 @@ $result = $conn->query($sql);
 <body>
     <?php include('header.php'); ?>
 
-    <h1>Vans - Shoes</h1>
+    <h1 class="Novidades">Vans - Shoes</h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>

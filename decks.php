@@ -23,7 +23,7 @@ $result = $conn->query($sql);
 <body>
 <?php include('header.php'); ?>
 
-    <h1>Decks</h1>
+    <h1 class="Novidades">Decks</h1>
     <div class="deck-container">
             <?php
             if ($result->num_rows > 0) {

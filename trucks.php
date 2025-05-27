@@ -22,7 +22,7 @@ $result = $conn->query($sql);
 <body>
 <?php include('header.php'); ?>
 
-    <h1>Trucks</h1>
+    <h1 class="Novidades">Trucks</h1>
     <div class="deck-container">
         <?php
         if ($result->num_rows > 0) {
