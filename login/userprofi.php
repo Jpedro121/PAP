@@ -7,7 +7,7 @@ if (!isset($_SESSION["username"]) || !isset($_SESSION["user_id"])) {
 require '../db.php';
 $user_id = $_SESSION["user_id"];
 
-$sql = "SELECT username, email, morada FROM users WHERE id = ?";
+$sql = "SELECT username, email, morada, role FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -18,13 +18,12 @@ if ($result->num_rows > 0) {
     $username = $dados['username'];
     $email = $dados['email'];
     $morada = $dados['morada'];
-
+    $role = $dados['role'];
 } else {
     $username = "Desconhecido";
     $email = "Não disponível";
     $morada = "";
-    $is_admin = 0;
-
+    $role = "user";
 }
 ?>
 <!DOCTYPE html>
@@ -111,6 +110,14 @@ if ($result->num_rows > 0) {
             background-color: #0056b3;
         }
 
+        .btn-admin {
+            background-color: #dc3545;
+        }
+
+        .btn-admin:hover {
+            background-color: #c82333;
+        }
+
         .btn-group {
             text-align: center;
             margin-top: 30px;
@@ -122,7 +129,7 @@ if ($result->num_rows > 0) {
             margin-bottom: 8px;
             border-radius: 6px;
         }
-                .encomenda {
+        .encomenda {
             display: flex;
             align-items: flex-start;
             margin-bottom: 20px;
@@ -192,6 +199,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function mostrarDetalhes(id) {
+    const painel = document.getElementById("detalhes_" + id);
+    if (painel.style.display === "none" || painel.style.display === "") {
+        painel.style.display = "block";
+    } else {
+        painel.style.display = "none";
+    }
+}
 </script>
 <body>
 <?php include('../header.php'); ?>
@@ -199,10 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
     <h2>Olá, <?php echo htmlspecialchars($username); ?></h2>
 
     <div class="tabs">
-    <button class="tab active" data-tab="info">Informações</button>
-    <button class="tab" data-tab="seguranca">Segurança</button>
-    <button class="tab" data-tab="encomendas">Encomendas</button>
-</div>
+        <button class="tab active" data-tab="info">Informações</button>
+        <button class="tab" data-tab="seguranca">Segurança</button>
+        <button class="tab" data-tab="encomendas">Encomendas</button>
+    </div>
 
     <div id="info" class="tab-content active">
         <h3>Editar Nome de Utilizador</h3>
@@ -234,97 +250,68 @@ document.addEventListener('DOMContentLoaded', function() {
         </form>
     </div>
 
-<div id="encomendas" class="tab-content">
-    <h3>As suas encomendas</h3>
-    <?php
-    try {
-        $query = "SELECT id, data_encomenda, total FROM encomendas WHERE user_id = ? ORDER BY data_encomenda DESC";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $res = $stmt->get_result();
+    <div id="encomendas" class="tab-content">
+        <h3>As suas encomendas</h3>
+        <?php
+        try {
+            $query = "SELECT id, data_encomenda, total FROM encomendas WHERE user_id = ? ORDER BY data_encomenda DESC";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+            $res = $stmt->get_result();
 
-        if ($res->num_rows > 0) {
-            while ($encomenda = $res->fetch_assoc()) {
-                $id = $encomenda['id'];
-                echo "<div class='encomenda'>";
-                echo "<div class='info-principal'>";
-                echo "<strong>ENC-{$id}</strong><br>";
-                echo "Data: " . htmlspecialchars($encomenda['data_encomenda']) . "<br>";
-                echo "Total: " . htmlspecialchars($encomenda['total']) . "€<br>";
-                echo "<button class='btn-ver' onclick='mostrarDetalhes($id)'>Ver detalhes</button>";
-                echo "</div>";
+            if ($res->num_rows > 0) {
+                while ($encomenda = $res->fetch_assoc()) {
+                    $id = $encomenda['id'];
+                    echo "<div class='encomenda'>";
+                    echo "<div class='info-principal'>";
+                    echo "<strong>ENC-{$id}</strong><br>";
+                    echo "Data: " . htmlspecialchars($encomenda['data_encomenda']) . "<br>";
+                    echo "Total: " . htmlspecialchars($encomenda['total']) . "€<br>";
+                    echo "<button class='btn-ver' onclick='mostrarDetalhes($id)'>Ver detalhes</button>";
+                    echo "</div>";
 
-                // detalhes escondidos inicialmente
-                echo "<div class='detalhes' id='detalhes_$id'>";
+                    echo "<div class='detalhes' id='detalhes_$id'>";
 
-                $query_produtos = "SELECT p.nome, p.imagem, ep.quantidade 
-                                   FROM encomenda_produtos ep 
-                                   JOIN produtos p ON ep.produto_id = p.id 
-                                   WHERE ep.encomenda_id = ?";
-                $stmtProdutos = $conn->prepare($query_produtos);
-                $stmtProdutos->bind_param("i", $id);
-                $stmtProdutos->execute();
-                $produtos = $stmtProdutos->get_result();
+                    $query_produtos = "SELECT p.nome, p.imagem, ep.quantidade 
+                                    FROM encomenda_produtos ep 
+                                    JOIN produtos p ON ep.produto_id = p.id 
+                                    WHERE ep.encomenda_id = ?";
+                    $stmtProdutos = $conn->prepare($query_produtos);
+                    $stmtProdutos->bind_param("i", $id);
+                    $stmtProdutos->execute();
+                    $produtos = $stmtProdutos->get_result();
 
-                if ($produtos->num_rows > 0) {
-                    while ($produto = $produtos->fetch_assoc()) {
-                        echo "<div class='produto'>";
-                        echo "<img src='/PAP/static/images/" . htmlspecialchars($produto['imagem']) . "' alt='Produto'>";
-                        echo "<div><strong>" . htmlspecialchars($produto['nome']) . "</strong><br>Quantidade: " . htmlspecialchars($produto['quantidade']) . "</div>";
-                        echo "</div>";
+                    if ($produtos->num_rows > 0) {
+                        while ($produto = $produtos->fetch_assoc()) {
+                            echo "<div class='produto'>";
+                            echo "<img src='/PAP/static/images/" . htmlspecialchars($produto['imagem']) . "' alt='Produto'>";
+                            echo "<div><strong>" . htmlspecialchars($produto['nome']) . "</strong><br>Quantidade: " . htmlspecialchars($produto['quantidade']) . "</div>";
+                            echo "</div>";
+                        }
+                    } else {
+                        echo "<p>Sem produtos nesta encomenda.</p>";
                     }
-                } else {
-                    echo "<p>Sem produtos nesta encomenda.</p>";
+
+                    echo "</div>";
+                    echo "</div>";
                 }
-
-                echo "</div>"; // .detalhes
-                echo "</div>"; // .encomenda
-            }
-        } else {
-            echo "<p>Não tens encomendas ainda.</p>";
-        }
-    } catch (mysqli_sql_exception $e) {
-        echo "<p>Erro ao carregar encomendas: " . $e->getMessage() . "</p>";
-    }
-    ?>
-
-    <script>
-        function mostrarDetalhes(id) {
-            const painel = document.getElementById("detalhes_" + id);
-            if (painel.style.display === "none" || painel.style.display === "") {
-                painel.style.display = "block";
             } else {
-                painel.style.display = "none";
+                echo "<p>Não tens encomendas ainda.</p>";
             }
+        } catch (mysqli_sql_exception $e) {
+            echo "<p>Erro ao carregar encomendas: " . $e->getMessage() . "</p>";
         }
-    </script>
-</div>
+        ?>
+    </div>
+
     <div class="btn-group">
         <a href="../home.php" class="btn">Home</a>
+        <?php if ($role === 'admin'): ?>
+            <a href="../dashboard_admin.php" class="btn btn-admin">Dashboard Admin</a>
+        <?php endif; ?>
         <a href="logout.php" class="btn">Sair</a>
     </div>
-    
 </div>
-
-<script>
-    function openTab(evt, tabId) {
-        // Esconde todos os conteúdos das tabs
-        const tabContents = document.getElementsByClassName("tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].classList.remove("active");
-        }
-
-        // Remove a classe active de todas as tabs
-        const tabs = document.getElementsByClassName("tab");
-        for (let i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove("active");
-        }
-
-        // Mostra a tab atual e adiciona a classe active ao botão
-        document.getElementById(tabId).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    }
-</script>
 </body>
 </html>

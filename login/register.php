@@ -10,13 +10,6 @@ if (isset($_SESSION['username'])) {
     exit();
 }
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 require __DIR__ . '/vendor/autoload.php';
 
 $conn = new mysqli("localhost", "root", "", "skateshop");
@@ -34,13 +27,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_password = trim($_POST["confirm_password"]);
 
     if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-        $mensagem = "Error: All camps are required.";
+        $mensagem = "Error: All fields are required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $mensagem = "Error: The email address is not valid.";
     } elseif ($password !== $confirm_password) {
         $mensagem = "Error: The passwords do not match.";
     } else {
-        // Verifica se o nome de utilizador ou o email já existe
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
         $stmt->bind_param("ss", $username, $email);
         $stmt->execute();
@@ -49,56 +41,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->num_rows > 0) {
             $mensagem = "Error: The username or email already exists.";
         } else {
-            // Inserir dados na base de dados
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $role = 'utilizador';  // Defina o papel do utilizador como "utilizador"
+            $role = 'user'; // Definido explicitamente como 'user'
 
             $stmt = $conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
-           if ($stmt->execute()) {
-            $new_user_id = $stmt->insert_id; // Obtem o ID do novo utilizador inserido
-
-            $_SESSION["user_id"] = $new_user_id; // <-- esta linha é essencial!
-            $_SESSION["username"] = $username;
-            $_SESSION["email"] = $email;
-            $_SESSION["role"] = $role;
-            $mensagem = "Sucess Login!";
-            $success = true;
-
-
-                // Envio do email
-                $mail = new PHPMailer(true);
-                try {
-                    $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com';
-                    $mail->SMTPAuth = true;
-                    $mail->Username = 'joaopedroantunes1980@gmail.com';
-                    $mail->Password = 'qcbh hpkt uafr ivuj'; // Usar app password
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port = 587;
-
-                    $mail->setFrom('joaopedroantunes1980@gmail.com', 'Sk8Nation');
-                    $mail->addAddress($email, $username);
-
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Bem-vindo à Sk8Nation!';
-
-                    $logoURL = 'https://i.postimg.cc/VkXV804q/logopap.png';
-
-                    $mail->Body = "
-                        <img src='$logoURL' alt='Sk8Nation' width='275'><br><br>
-                        <h3>Boas, $username!</h3>
-                        <p>Bem-vindo à <strong>SK8nation</strong> – a tua nova crew no mundo do skate!</p>
-                        <p>A tua conta foi criada com sucesso e estás oficialmente dentro da nossa comunidade.</p>
-                        <p>Explora as nossas boards, peças e estilos. Prepara-te para elevar o teu nível!</p>
-                        <p>Estamos felizes por te ter connosco. Let's roll 🤙</p>
-                        <hr>";
-
-                    $mail->send();
-                } catch (Exception $e) {
-                    // Opcional: log de erro
-                    error_log("Error to send email " . $mail->ErrorInfo);
-                }
+            
+            if ($stmt->execute()) {
+                $_SESSION["user_id"] = $stmt->insert_id;
+                $_SESSION["username"] = $username;
+                $_SESSION["email"] = $email;
+                $_SESSION["role"] = $role;
+                
+                header("Location: userprofi.php");
+                exit();
             } else {
                 $mensagem = "Error to register your account. Try again Later.";
             }
@@ -150,6 +106,7 @@ $conn->close();
 
         input[type="text"],
         input[type="password"] {
+            width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -226,9 +183,8 @@ $conn->close();
     </form>
 
     <div class="message">
-            <a>Have an account ? <a href="login.php">Login</a>
+        Have an account? <a href="login.php">Login</a>
     </div>
 </main>
 </body>
 </html>
-

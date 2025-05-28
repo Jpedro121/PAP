@@ -7,29 +7,28 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 
 include('../db.php');
 
-$result = $conn->query("SELECT id, username, role, created_at FROM users");
+// Modificado para mostrar apenas utilizadores não-admin
+$result = $conn->query("SELECT id, username, role, created_at FROM users WHERE role = 'user'");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['delete'])) {
         $id = (int) $_POST['user_id'];
 
-        if ($_SESSION['user_id'] != $id) { // Impede que o admin se apague a si próprio
-            // Verifica se o utilizador tem encomendas associadas
-            $check = $conn->prepare("SELECT COUNT(*) FROM encomendas WHERE user_id = ?");
-            $check->bind_param("i", $id);
-            $check->execute();
-            $check->bind_result($count);
-            $check->fetch();
-            $check->close();
+        // Verifica se o utilizador tem encomendas associadas
+        $check = $conn->prepare("SELECT COUNT(*) FROM encomendas WHERE user_id = ?");
+        $check->bind_param("i", $id);
+        $check->execute();
+        $check->bind_result($count);
+        $check->fetch();
+        $check->close();
 
-            if ($count > 0) {
-                $_SESSION['error'] = "Não é possível eliminar utilizadores com encomendas associadas.";
-            } else {
-                $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                $stmt->close();
-            }
+        if ($count > 0) {
+            $_SESSION['error'] = "Não é possível eliminar utilizadores com encomendas associadas.";
+        } else {
+            $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->close();
         }
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
@@ -141,12 +140,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </select>
                         <button type="submit" name="edit" class="edit-btn">Alterar Função</button>
                     </form>
-                    <?php if ($user['id'] != $_SESSION['user_id']) { ?>
-                        <form method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este utilizador?');">
-                            <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                            <button type="submit" name="delete" class="delete-btn">Eliminar</button>
-                        </form>
-                    <?php } ?>
+                    <form method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este utilizador?');">
+                        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                        <button type="submit" name="delete" class="delete-btn">Eliminar</button>
+                    </form>
                 </td>
             </tr>
         <?php } ?>
