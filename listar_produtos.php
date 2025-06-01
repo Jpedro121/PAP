@@ -7,6 +7,12 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 
 include 'db.php';
 
+// Configurações da paginação
+$produtos_por_pagina = 10;
+$pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+if ($pagina_atual < 1) $pagina_atual = 1;
+$offset = ($pagina_atual - 1) * $produtos_por_pagina;
+
 // Obter categorias únicas
 $categorias = [];
 $categoria_query = "SELECT DISTINCT categoria FROM produtos";
@@ -17,15 +23,34 @@ while ($cat = $categoria_result->fetch_assoc()) {
 
 // Filtragem por categoria
 $filtro_categoria = isset($_GET['categoria']) ? $_GET['categoria'] : '';
+
 if ($filtro_categoria) {
-    $stmt = $conn->prepare("SELECT * FROM produtos WHERE categoria = ?");
-    $stmt->bind_param("s", $filtro_categoria);
+    // Contar total para paginação
+    $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM produtos WHERE categoria = ?");
+    $stmt_total->bind_param("s", $filtro_categoria);
+    $stmt_total->execute();
+    $total_result = $stmt_total->get_result();
+    $total_produtos = $total_result->fetch_assoc()['total'];
+
+    // Buscar produtos com limite
+    $stmt = $conn->prepare("SELECT * FROM produtos WHERE categoria = ? LIMIT ?, ?");
+    $stmt->bind_param("sii", $filtro_categoria, $offset, $produtos_por_pagina);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $sql = "SELECT * FROM produtos";
-    $result = $conn->query($sql);
+    // Contar total para paginação
+    $total_sql = "SELECT COUNT(*) as total FROM produtos";
+    $total_result = $conn->query($total_sql);
+    $total_produtos = $total_result->fetch_assoc()['total'];
+
+    // Buscar produtos com limite
+    $stmt = $conn->prepare("SELECT * FROM produtos LIMIT ?, ?");
+    $stmt->bind_param("ii", $offset, $produtos_por_pagina);
+    $stmt->execute();
+    $result = $stmt->get_result();
 }
+
+$total_paginas = ceil($total_produtos / $produtos_por_pagina);
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -102,6 +127,33 @@ if ($filtro_categoria) {
       </tbody>
     </table>
 
+    <!-- Paginação -->
+    <?php if ($total_paginas > 1): ?>
+    <nav class="pagination is-centered mt-5" role="navigation" aria-label="pagination">
+      <?php if ($pagina_atual > 1): ?>
+        <a class="pagination-previous" href="?<?= $filtro_categoria ? 'categoria=' . urlencode($filtro_categoria) . '&' : '' ?>pagina=<?= $pagina_atual - 1 ?>">Anterior</a>
+      <?php else: ?>
+        <a class="pagination-previous" disabled>Anterior</a>
+      <?php endif; ?>
+
+      <?php if ($pagina_atual < $total_paginas): ?>
+        <a class="pagination-next" href="?<?= $filtro_categoria ? 'categoria=' . urlencode($filtro_categoria) . '&' : '' ?>pagina=<?= $pagina_atual + 1 ?>">Seguinte</a>
+      <?php else: ?>
+        <a class="pagination-next" disabled>Seguinte</a>
+      <?php endif; ?>
+
+      <ul class="pagination-list">
+        <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+          <li>
+            <a class="pagination-link <?= $i == $pagina_atual ? 'is-current' : '' ?>" href="?<?= $filtro_categoria ? 'categoria=' . urlencode($filtro_categoria) . '&' : '' ?>pagina=<?= $i ?>">
+              <?= $i ?>
+            </a>
+          </li>
+        <?php endfor; ?>
+      </ul>
+    </nav>
+    <?php endif; ?>
+
     <a href="dashboard_admin.php" class="button is-light mt-4">Voltar ao Painel</a>
   </div>
 </section>
@@ -113,7 +165,6 @@ if ($filtro_categoria) {
     dropdown.classList.toggle("is-active");
   }
 
-  // Fecha dropdown se clicares fora
   document.addEventListener('click', function(event) {
     const dropdown = document.getElementById("categoriaDropdown");
     if (!dropdown.contains(event.target)) {

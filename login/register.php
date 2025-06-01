@@ -10,7 +10,9 @@ if (isset($_SESSION['username'])) {
     exit();
 }
 
-require __DIR__ . '/vendor/autoload.php';
+require 'C:/xampp/htdocs/PAP/vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 $conn = new mysqli("localhost", "root", "", "skateshop");
 
@@ -27,11 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_password = trim($_POST["confirm_password"]);
 
     if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-        $mensagem = "Error: All fields are required.";
+        $mensagem = "Erro: Todos os campos são obrigatórios.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $mensagem = "Error: The email address is not valid.";
+        $mensagem = "Erro: O email não é válido.";
     } elseif ($password !== $confirm_password) {
-        $mensagem = "Error: The passwords do not match.";
+        $mensagem = "Erro: As senhas não coincidem.";
     } else {
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
         $stmt->bind_param("ss", $username, $email);
@@ -39,24 +41,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $mensagem = "Error: The username or email already exists.";
+            $mensagem = "Erro: Nome de usuário ou email já existe.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $role = 'user'; // Definido explicitamente como 'user'
+            $role = 'user';
 
             $stmt = $conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
-            
+
             if ($stmt->execute()) {
                 $_SESSION["user_id"] = $stmt->insert_id;
                 $_SESSION["username"] = $username;
                 $_SESSION["email"] = $email;
                 $_SESSION["role"] = $role;
-                
+
+                // Enviar email de boas-vindas
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'joaopedroantunes1980@gmail.com';
+                    $mail->Password = 'qcbh hpkt uafr ivuj'; // Use App Password do Gmail
+                    $mail->SMTPSecure = 'tls';
+                    $mail->Port = 587;
+                    $mail->CharSet = 'UTF-8';
+
+                    $mail->setFrom('joaopedroantunes1980@gmail.com', 'Sk8Nation');
+                    $mail->addAddress($email, $username);
+
+                    $mail->Subject = "🎉 Bem-vindo à Sk8Nation!";
+                    $mail->isHTML(true);
+
+                    $mail->Body = "
+                    <html>
+                    <body style='font-family: Arial, sans-serif;'>
+                        <h2>Olá, ".htmlspecialchars($username)."!</h2>
+                        <p>Obrigado por se registrar na <strong>SkateShop</strong>! Estamos felizes por ter você conosco. 🛹</p>
+                        <p>Explore nossa loja e aproveite os melhores produtos de skate.</p>
+                        <p><a href='http://localhost/PAP'>Clique aqui para visitar nossa loja</a></p>
+                        <p>Se tiver dúvidas, entre em contato pelo email: suporte@skateshop.com</p>
+                        <br>
+                        <p>Equipe SkateShop</p>
+                    </body>
+                    </html>
+                    ";
+
+                    $mail->AltBody = "Olá, $username!\n\nObrigado por se registrar na SkateShop! Visite nossa loja em: http://localhost/PAP\n\nEquipe SkateShop.";
+
+                    $mail->send();
+                } catch (Exception $e) {
+                    error_log("Erro ao enviar email de boas-vindas: " . $mail->ErrorInfo);
+                }
+
                 header("Location: userprofi.php");
                 exit();
             } else {
-                $mensagem = "Error to register your account. Try again Later.";
+                $mensagem = "Erro ao registrar. Tente novamente mais tarde.";
             }
             $stmt->close();
         }
@@ -162,7 +203,7 @@ $conn->close();
 <main>
     <h2>Create Account</h2>
 
-    <?php if (isset($mensagem) && !empty($mensagem)): ?>
+    <?php if (!empty($mensagem)): ?>
         <div class="error"><?php echo $mensagem; ?></div>
     <?php endif; ?>
 
@@ -183,7 +224,7 @@ $conn->close();
     </form>
 
     <div class="message">
-        Have an account? <a href="login.php">Login</a>
+        Have an Account? <a href="login.php">Login</a>
     </div>
 </main>
 </body>

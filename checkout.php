@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("db.php");
-require 'C:/xampp/htdocs/PAP/login/vendor/autoload.php';
+require 'C:/xampp/htdocs/PAP/vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
