@@ -52,7 +52,6 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <title>My Cart</title>
     <?php include('head.html'); ?>
-    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
 <?php include('header.php'); ?>
@@ -84,19 +83,19 @@ if (isset($_SESSION['user_id'])) {
 
         <?php if (isset($_SESSION['user_id'])): ?>
             <form action="checkout.php" method="POST">
-                <button type="submit" class="button is-success">Finalizar Compra</button>
+                <button type="submit" class="btn-voltar">Finish Purchase</button>
             </form>
         <?php else: ?>
             <p style="text-align:center; margin-top:20px; color:#555;">
-                <strong>Faça login para finalizar a compra.</strong><br>
+                <strong>Log in to complete your purchase.</strong><br>
                 <a href="login/login.php" class="btn-voltar">Login</a>
             </p>
         <?php endif; ?>
     <?php else: ?>
-        <p class="vazio">O carrinho está vazio.</p>
+        <p class="vazio">The cart is empty</p>
     <?php endif; ?>
 </div>
 
-<a href="home.php" class="btn-voltar">&larr; Voltar às Compras</a>
+<a href="home.php" class="btn-voltar">&larr;GO back to shopping</a>
 </body>
 </html>

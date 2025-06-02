@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["username"]) || !isset($_SESSION["user_id"])) {
-    header("Location: login.php"); 
+    header("Location: login.php");
     exit();
 }
 require '../db.php';
@@ -14,22 +14,22 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    $dados = $result->fetch_assoc();
-    $username = $dados['username'];
-    $email = $dados['email'];
-    $morada = $dados['morada'];
-    $role = $dados['role'];
+    $data = $result->fetch_assoc();
+    $username = $data['username'];
+    $email = $data['email'];
+    $address = $data['morada'];
+    $role = $data['role'];
 } else {
-    $username = "Desconhecido";
-    $email = "Não disponível";
-    $morada = "";
+    $username = "Unknown";
+    $email = "Not available";
+    $address = "";
     $role = "user";
 }
 ?>
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
-    <title>Perfil</title>
+    <title>Profile</title>
     <?php include('../head.html'); ?>
     <style>
         body {
@@ -183,75 +183,69 @@ if ($result->num_rows > 0) {
     </style>
 </head>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function(){
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
-    
+
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
             tabs.forEach(t => t.classList.remove('active'));
             tabContents.forEach(c => c.classList.remove('active'));
-            
             this.classList.add('active');
-            
             const tabId = this.getAttribute('data-tab');
             document.getElementById(tabId).classList.add('active');
         });
     });
 });
 
-function mostrarDetalhes(id) {
-    const painel = document.getElementById("detalhes_" + id);
-    if (painel.style.display === "none" || painel.style.display === "") {
-        painel.style.display = "block";
-    } else {
-        painel.style.display = "none";
-    }
+function toggleDetails(id) {
+    const panel = document.getElementById("details_" + id);
+    panel.style.display = (panel.style.display === "none" || panel.style.display === "") ? "block" : "none";
 }
 </script>
 <body>
 <?php include('../header.php'); ?>
 <div class="perfil-container">
-    <h2>Olá, <?php echo htmlspecialchars($username); ?></h2>
+    <h2>Hello, <?php echo htmlspecialchars($username); ?></h2>
 
     <div class="tabs">
-        <button class="tab active" data-tab="info">Informações</button>
-        <button class="tab" data-tab="seguranca">Segurança</button>
-        <button class="tab" data-tab="encomendas">Encomendas</button>
+        <button class="tab active" data-tab="info">Information</button>
+        <button class="tab" data-tab="security">Security</button>
+        <button class="tab" data-tab="orders">Orders</button>
     </div>
 
     <div id="info" class="tab-content active">
-        <h3>Editar Nome de Utilizador</h3>
+        <h3>Edit Username</h3>
         <form action="update_profile.php" method="post">
-            <label for="novo_username">Novo Nome:</label>
+            <label for="novo_username">New Name:</label>
             <input type="text" name="novo_username" id="novo_username" value="<?php echo htmlspecialchars($username); ?>" required>
-            <button type="submit" class="btn">Atualizar Nome</button>
+            <button type="submit" class="btn">Update Name</button>
         </form>
 
         <h3>Email</h3>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
 
-        <h3>Morada</h3>
+        <h3>Address</h3>
         <form action="update_address.php" method="post">
-            <label for="morada">Morada Atual:</label>
-            <textarea name="morada" id="morada" rows="3" required><?php echo htmlspecialchars($morada); ?></textarea>
-            <button type="submit" class="btn">Atualizar Morada</button>
+            <label for="morada">Current Address:</label>
+            <textarea name="morada" id="morada" rows="3" required><?php echo htmlspecialchars($address); ?></textarea>
+            <button type="submit" class="btn">Update Address</button>
         </form>
     </div>
 
-    <div id="seguranca" class="tab-content">
-        <h3>Alterar Palavra-passe</h3>
+    <div id="security" class="tab-content">
+        <h3>Change Password</h3>
         <form action="update_password.php" method="post">
-            <label for="password_atual">Palavra-passe Atual:</label>
+            <label for="password_atual">Current Password:</label>
             <input type="password" name="password_atual" id="password_atual" required>
-            <label for="nova_password">Nova Palavra-passe:</label>
+            <label for="nova_password">New Password:</label>
             <input type="password" name="nova_password" id="nova_password" required>
-            <button type="submit" class="btn">Alterar Palavra-passe</button>
+            <button type="submit" class="btn">Change Password</button>
         </form>
     </div>
 
-    <div id="encomendas" class="tab-content">
-        <h3>As suas encomendas</h3>
+    <div id="orders" class="tab-content">
+        <h3>Your Orders</h3>
         <?php
         try {
             $query = "SELECT id, data_encomenda, total FROM encomendas WHERE user_id = ? ORDER BY data_encomenda DESC";
@@ -261,46 +255,46 @@ function mostrarDetalhes(id) {
             $res = $stmt->get_result();
 
             if ($res->num_rows > 0) {
-                while ($encomenda = $res->fetch_assoc()) {
-                    $id = $encomenda['id'];
+                while ($order = $res->fetch_assoc()) {
+                    $id = $order['id'];
                     echo "<div class='encomenda'>";
                     echo "<div class='info-principal'>";
-                    echo "<strong>ENC-{$id}</strong><br>";
-                    echo "Data: " . htmlspecialchars($encomenda['data_encomenda']) . "<br>";
-                    echo "Total: " . htmlspecialchars($encomenda['total']) . "€<br>";
-                    echo "<button class='btn-ver' onclick='mostrarDetalhes($id)'>Ver detalhes</button>";
+                    echo "<strong>ORD-{$id}</strong><br>";
+                    echo "Date: " . htmlspecialchars($order['data_encomenda']) . "<br>";
+                    echo "Total: " . htmlspecialchars($order['total']) . "€<br>";
+                    echo "<button class='btn-ver' onclick='toggleDetails($id)'>View details</button>";
                     echo "</div>";
 
-                    echo "<div class='detalhes' id='detalhes_$id'>";
+                    echo "<div class='detalhes' id='details_$id'>";
 
-                    $query_produtos = "SELECT p.nome, p.imagem, ep.quantidade 
+                    $query_products = "SELECT p.nome, p.imagem, ep.quantidade 
                                     FROM encomenda_produtos ep 
                                     JOIN produtos p ON ep.produto_id = p.id 
                                     WHERE ep.encomenda_id = ?";
-                    $stmtProdutos = $conn->prepare($query_produtos);
-                    $stmtProdutos->bind_param("i", $id);
-                    $stmtProdutos->execute();
-                    $produtos = $stmtProdutos->get_result();
+                    $stmtProducts = $conn->prepare($query_products);
+                    $stmtProducts->bind_param("i", $id);
+                    $stmtProducts->execute();
+                    $products = $stmtProducts->get_result();
 
-                    if ($produtos->num_rows > 0) {
-                        while ($produto = $produtos->fetch_assoc()) {
+                    if ($products->num_rows > 0) {
+                        while ($product = $products->fetch_assoc()) {
                             echo "<div class='produto'>";
-                            echo "<img src='/PAP/static/images/" . htmlspecialchars($produto['imagem']) . "' alt='Produto'>";
-                            echo "<div><strong>" . htmlspecialchars($produto['nome']) . "</strong><br>Quantidade: " . htmlspecialchars($produto['quantidade']) . "</div>";
+                            echo "<img src='/PAP/static/images/" . htmlspecialchars($product['imagem']) . "' alt='Product'>";
+                            echo "<div><strong>" . htmlspecialchars($product['nome']) . "</strong><br>Quantity: " . htmlspecialchars($product['quantidade']) . "</div>";
                             echo "</div>";
                         }
                     } else {
-                        echo "<p>Sem produtos nesta encomenda.</p>";
+                        echo "<p>No products in this order.</p>";
                     }
 
                     echo "</div>";
                     echo "</div>";
                 }
             } else {
-                echo "<p>Não tens encomendas ainda.</p>";
+                echo "<p>You have no orders yet.</p>";
             }
         } catch (mysqli_sql_exception $e) {
-            echo "<p>Erro ao carregar encomendas: " . $e->getMessage() . "</p>";
+            echo "<p>Error loading orders: " . $e->getMessage() . "</p>";
         }
         ?>
     </div>
@@ -308,9 +302,9 @@ function mostrarDetalhes(id) {
     <div class="btn-group">
         <a href="../home.php" class="btn">Home</a>
         <?php if ($role === 'admin'): ?>
-            <a href="../dashboard_admin.php" class="btn btn-admin">Dashboard Admin</a>
+            <a href="../dashboard_admin.php" class="btn btn-admin">Admin Dashboard</a>
         <?php endif; ?>
-        <a href="logout.php" class="btn">Sair</a>
+        <a href="logout.php" class="btn">Log Out</a>
     </div>
 </div>
 </body>

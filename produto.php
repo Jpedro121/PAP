@@ -55,7 +55,7 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="pt">
 <?php include('head.html'); ?>
-<link rel="stylesheet" href="static/styles.css">
+<link rel="stylesheet" href="/static/styles.css">
 <style>
 .tamanhos-wrapper {
     display: flex;

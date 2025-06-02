@@ -30,14 +30,14 @@ if (
             header("Location: userprofi.php?sucesso=1");
             exit();
         } else {
-            echo "Erro ao atualizar a password.";
+            echo "Error to update password.";
         }
         $stmt->close();
     } else {
-        echo "Palavra-passe atual incorreta.";
+        echo "The current password is incorrect.";
     }
 } else {
-    echo "Preenche todos os campos.";
+    echo "Fill all the camps.";
 }
 
 $conn->close();

@@ -2,7 +2,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require __DIR__ . '/vendor/autoload.php';
+require 'C:/xampp/htdocs/PAP/vendor/autoload.php';
 require '../db.php';
 
 // Configurações de internacionalização
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $mail->CharSet = 'UTF-8';
 
                     // Destinatários
-                    $mail->setFrom('joaopedroantunes1980@gmail.com', 'SK8nation');
+                    $mail->setFrom('joaopedroantunes1980@gmail.com', 'SK8Nation');
                     $mail->addAddress($email, $user['username']);
                     
                     // Conteúdo
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <pWe received a request to Recover Password.</p>
                             <p style='margin: 20px 0;'>
                                 <a href='$resetLink' style='background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>
-                                    Redefinir Palavra-passe
+                                    Redefine your password
                                 </a>
                             </p>
                             <p>If you didn't make a request ,please ignore this email.</p>

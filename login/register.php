@@ -72,22 +72,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $mail->Subject = "🎉 Bem-vindo à Sk8Nation!";
                     $mail->isHTML(true);
-
+                    
                     $mail->Body = "
                     <html>
                     <body style='font-family: Arial, sans-serif;'>
-                        <h2>Olá, ".htmlspecialchars($username)."!</h2>
-                        <p>Obrigado por se registrar na <strong>SkateShop</strong>! Estamos felizes por ter você conosco. 🛹</p>
-                        <p>Explore nossa loja e aproveite os melhores produtos de skate.</p>
-                        <p><a href='http://localhost/PAP'>Clique aqui para visitar nossa loja</a></p>
-                        <p>Se tiver dúvidas, entre em contato pelo email: suporte@skateshop.com</p>
+                        <h2>What's up, " . htmlspecialchars($username) . "!</h2>
+                        <p>Thank you for registering at <strong>SkateShop</strong>! We're happy to have you with us. 🛹</p>
+                        <p>Explore our store and enjoy the best skateboarding products.</p>
+                        <p><a href='http://localhost/PAP'>Click here to visit our store</a></p>
+                        <p>If you have any questions, feel free to reach us at: suporte@skateshop.com</p>
                         <br>
-                        <p>Equipe SkateShop</p>
+                        <p>The SkateShop Team</p>
                     </body>
                     </html>
                     ";
 
-                    $mail->AltBody = "Olá, $username!\n\nObrigado por se registrar na SkateShop! Visite nossa loja em: http://localhost/PAP\n\nEquipe SkateShop.";
+                    $mail->AltBody = "Hey $username!\n\nThank you for registering at SkateShop! Visit our store at: http://localhost/PAP\n\nThe SkateShop Team.";
+
 
                     $mail->send();
                 } catch (Exception $e) {

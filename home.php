@@ -50,7 +50,7 @@ session_start();
 
 
     <section>
-    <h1 class="Novidades">Novidades</h1>
+    <h1 class="Novidades">New Arrivals</h1>
     <div class="produto-grid">
         <?php
         $conn = new mysqli("localhost", "root", "", "skateshop");
@@ -87,7 +87,7 @@ session_start();
                 echo '</div>';
             }
         } else {
-            echo "Nenhum produto encontrado.";
+            echo "No new products available.";
         }
         
         $conn->close();

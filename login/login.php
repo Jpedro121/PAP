@@ -73,7 +73,6 @@ $conn->close();
 
         h2 {
             text-align: center;
-            color: #007bff;
         }
 
         .error-message {

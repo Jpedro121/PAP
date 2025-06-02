@@ -18,12 +18,12 @@ if (isset($_POST['morada']) && !empty(trim($_POST['morada']))) {
         header("Location: userprofi.php?sucesso=1");
         exit();
     } else {
-        echo "Erro ao atualizar morada.";
+        echo "Error to update address: ";
     }
 
     $stmt->close();
 } else {
-    echo "A morada não pode estar vazia.";
+    echo "The address field cannot be empty.";
 }
 
 $conn->close();
