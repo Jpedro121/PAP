@@ -101,11 +101,11 @@ input[name="tamanho"] {
 
                     <?php if ($tamanhoUnico): ?>
                         <input type="hidden" name="tamanho" value="<?= htmlspecialchars($tamanhoUnicoValor) ?>">
-                        <p><strong>Tamanho:</strong> Único</p>
-                        <label for="quantidade">Quantidade:</label>
+                        <p><strong>Size:</strong> Único</p>
+                        <label for="quantidade">Quantity:</label>
                         <input type="number" name="quantidade" value="1" min="1" max="<?= $stockUnico ?>" required>
                     <?php else: ?>
-                        <label for="tamanho">Tamanho:</label>
+                        <label for="tamanho">Size:</label>
                         <div class="tamanhos-wrapper">
                             <?php foreach ($tamanhos as $t): ?>
                                 <label class="tamanho-btn" data-stock="<?= $t['stock'] ?>">
@@ -115,7 +115,7 @@ input[name="tamanho"] {
                             <?php endforeach; ?>
                         </div>
 
-                    <label for="quantidade">Quantidade:</label>
+                    <label for="quantidade">Quantity:</label>
                     <select name="quantidade" required>
                         <?php for ($i = 1; $i <= 10; $i++): ?>
                             <option value="<?= $i ?>"><?= $i ?></option>
@@ -124,10 +124,10 @@ input[name="tamanho"] {
 
                     <?php endif; ?>
 
-                    <button type="submit" class="btn">Adicionar ao carrinho</button>
+                    <button type="submit" class="btn">Add to cart</button>
                 </form>
                 <?php else: ?>
-                    <p class="out-of-stock">Sem stock disponível de momento</p>
+                    <p class="out-of-stock">No stock available at the moment</p>
                 <?php endif; ?>
             </div>
         </div>

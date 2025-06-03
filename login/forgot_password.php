@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     // Template de email melhorado
                     $mail->Body = "
                         <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
-                            <h2 style='color: #3498db;'>Olá, {$user['username']}!</h2>
+                            <h2 style='color: #3498db;'>Hey, {$user['username']}!</h2>
                             <pWe received a request to Recover Password.</p>
                             <p style='margin: 20px 0;'>
                                 <a href='$resetLink' style='background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>

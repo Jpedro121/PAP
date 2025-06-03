@@ -16,12 +16,12 @@ $result = $conn->query($sql);
 <html lang="pt">
 <head>
     <?php include('head.html'); ?>
-    <title>Sapatos</title>
+    <title>Shoes</title>
 </head>
 <body>
     <?php include('header.php'); ?>
 
-    <h1 class="Novidades">Sapatos</h1>
+    <h1 class="Novidades">Shoes</h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
@@ -34,7 +34,7 @@ $result = $conn->query($sql);
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
-            <p>Nenhum produto encontrado.</p>
+            <p>No product found</p>
         <?php endif; ?>
     </div>
 </body>

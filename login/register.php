@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->setFrom('joaopedroantunes1980@gmail.com', 'Sk8Nation');
                     $mail->addAddress($email, $username);
 
-                    $mail->Subject = "🎉 Bem-vindo à Sk8Nation!";
+                    $mail->Subject = "🎉Welcome to Sk8Nation!";
                     $mail->isHTML(true);
                     
                     $mail->Body = "

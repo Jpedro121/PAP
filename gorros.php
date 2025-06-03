@@ -22,12 +22,12 @@ if ($result === false) {
 <html lang="pt">
 <head>
     <?php include('head.html'); ?>
-    <title>Gorros</title>
+    <title>Beanies</title>
 </head>
 <body>
     <?php include('header.php'); ?>
 
-    <h1 class="Novidades">Gorros</h1>
+    <h1 class="Novidades">Beanies</h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>

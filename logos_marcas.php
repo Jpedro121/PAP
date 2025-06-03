@@ -10,7 +10,7 @@ $result = $conn->query($sql);
 <html lang="pt-br">
 <head>
     <?php include('head.html'); ?>
-    <title>Our Brands-Sk8Nation</title>
+    <title>Our Brands</title>
     <style>
         .marca-container {
             display: flex;
@@ -58,7 +58,7 @@ $result = $conn->query($sql);
 <body>
     <?php include('header.php'); ?>
     
-    <h1>Nossas Marcas</h1>
+    <h1>Our Brands</h1>
     
     <div class="marca-container">
         <?php while($row = $result->fetch_assoc()): 

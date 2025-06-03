@@ -16,26 +16,26 @@ $result = $conn->query($sql);
 <html lang="pt">
 <head>
     <?php include('head.html'); ?>
-    <title>Rolamentos</title>
+    <title>Bearinfd</title>
 </head>
 <body>
     <?php include('header.php'); ?>
 
-    <h1 class="Novidades">Rolamentos</h1>
+    <h1 class="Novidades">Bearings</h1>
     <div class="deck-container">
         <?php if ($result && $result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="produto-card">
                     <a href="produto.php?id=<?= $row["id"] ?>">
                         <img src="static/images/<?= $row["imagem"] ?>" alt="<?= htmlspecialchars($row["nome"]) ?>">
-                        <h3><?= htmlspecialchars($row["nome"]) ?> - Marca: <?= htmlspecialchars($row["marca"]) ?></h3>
+                        <h3><?= htmlspecialchars($row["nome"]) ?> - Brand: <?= htmlspecialchars($row["marca"]) ?></h3>
                         <p>€<?= number_format($row["preco"], 2, ',', '.') ?></p>
-                        <p>Estoque: <?= (int)$row["estoque"] ?></p>
+                        <p>Stock: <?= (int)$row["estoque"] ?></p>
                     </a>
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
-            <p>Nenhum produto encontrado.</p>
+            <p>No product found.</p>
         <?php endif; ?>
     </div>
 </body>

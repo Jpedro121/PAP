@@ -17,7 +17,7 @@ if ($result->num_rows > 0) {
 <html lang="pt-br">
 <head>
     <?php include('head.html'); ?>
-    <title><?= htmlspecialchars($marca) ?> - SkateShop</title>
+    <title><?= htmlspecialchars($marca) ?> - Sk8Nation</title>
     <style>
         .produto-container { 
             display: flex; 
