@@ -65,14 +65,14 @@ if (isset($_SESSION['user_id'])) {
                 <div class="info">
                     <h2><?php echo $row['nome']; ?></h2>
                     <?php if (!empty($row['tamanho'])): ?>
-                        <p>Tamanho: <strong><?php echo htmlspecialchars($row['tamanho']); ?></strong></p>
+                        <p>Size: <strong><?php echo htmlspecialchars($row['tamanho']); ?></strong></p>
                     <?php endif; ?>
-                    <p>Quantidade: <strong><?php echo $row['quantidade']; ?></strong></p>
-                    <p>Preço: <strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
+                    <p>Quantity: <strong><?php echo $row['quantidade']; ?></strong></p>
+                    <p>Prize: <strong>€<?php echo number_format($row['preco'], 2, ',', '.'); ?></strong></p>
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover">Remover</a>
+                        <a href="removecart.php?id=<?php echo $row['id']; ?>" class="remover">Remove</a>
                     <?php else: ?>
-                        <a href="removecart.php?pid=<?php echo $row['id']; ?>" class="remover">Remover</a>
+                        <a href="removecart.php?pid=<?php echo $row['id']; ?>" class="remover">Remove</a>
                     <?php endif; ?>
                 </div>
             </div>

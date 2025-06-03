@@ -167,7 +167,7 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
         <div class="container">
             <a class="navbar-brand" href="#">Admin - SkateShop</a>
             <div class="d-flex">
-                <a href="/PAP/home.php" class="btn btn-outline-light">Sair</a>
+                <a href="/PAP/dashboard_admin.php" class="btn btn-outline-light">Sair</a>
             </div>
         </div>
     </nav>

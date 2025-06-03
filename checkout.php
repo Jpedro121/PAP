@@ -48,16 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
             $cidade = trim($_POST['cidade'] ?? '');
 
             if (empty($morada) || empty($codigo_postal) || empty($cidade)) {
-                throw new Exception("Por favor, preencha todos os campos de entrega.");
+                throw new Exception("Please fill in all delivery fields.");
             }
 
             $morada_completa = "$morada, $codigo_postal, $cidade";
         } else {
-            $morada_completa = "Retirada na loja";
+            $morada_completa = "Pickup in store";
         }
 
         if (empty($metodo_pagamento)) {
-            throw new Exception("Escolha um método de pagamento.");
+            throw new Exception("Choose a payment method.");
         }
 
         if ($metodo_pagamento === 'Cartão') {
@@ -67,26 +67,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
             $nome_cartao = trim($_POST['nome_cartao'] ?? '');
 
             if (strlen($numero_cartao) !== 16 || !ctype_digit($numero_cartao)) {
-                throw new Exception("Número do cartão inválido. Deve conter 16 dígitos.");
+                throw new Exception("Number of the card must be 16 digits.");
             }
 
             if (!preg_match('/^(0[1-9]|1[0-2])\/\d{2}$/', $validade)) {
-                throw new Exception("Data de validade inválida. Use o formato MM/AA.");
+                throw new Exception("Invalid expiration date. Use MM/AA format.");
             }
 
             if (!preg_match('/^\d{3,4}$/', $cvv)) {
-                throw new Exception("CVV inválido. Deve conter 3 ou 4 dígitos.");
+                throw new Exception("Invalid CVV. It must be 3 or 4 digits.");
             }
 
             if (empty($nome_cartao)) {
                 throw new Exception("Por favor, insira o nome no cartão.");
+            }
+        } elseif ($metodo_pagamento === 'MB WAY') {
+            $mbway_number = trim($_POST['mbway_number'] ?? '');
+            if (empty($mbway_number) || !preg_match('/^9\d{8}$/', $mbway_number)) {
+                throw new Exception("Por favor, insira um número de telemóvel válido (9 dígitos, começando com 9).");
+            }
+        } elseif ($metodo_pagamento === 'PayPal') {
+            $paypal_email = trim($_POST['paypal_email'] ?? '');
+            if (empty($paypal_email) || !filter_var($paypal_email, FILTER_VALIDATE_EMAIL)) {
+                throw new Exception("Por favor, insira um email PayPal válido.");
             }
         }
 
         buscarProdutosCarrinho($conn, $user_id, $produtos, $total);
 
         if (empty($produtos)) {
-            throw new Exception("O seu carrinho está vazio.");
+            throw new Exception("The cart is empty. Please add products before proceeding.");
         }
 
         $portes = ($tipo_entrega === 'delivery') ? 5.00 : 0.00;
@@ -114,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                 $stmt->execute();
                 
                 if ($stmt->affected_rows === 0) {
-                    throw new Exception("Sem stock suficiente para {$produto['nome']} (Tamanho: {$produto['tamanho']})");
+                    throw new Exception("Not enough stock{$produto['nome']} (Tamanho: {$produto['tamanho']})");
                 }
             }
         }
@@ -159,22 +169,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>Obrigado pela sua compra, '.htmlspecialchars($user_info['username']).'!</h1>
+                        <h1>Thank you for your purchase, '.htmlspecialchars($user_info['username']).'!</h1>
                     </div>
                     
                     <div class="order-details">
-                        <h2>📋 Resumo da Encomenda #'.$codigo_encomenda.'</h2>
-                        <p><strong>Data:</strong> '.date('d/m/Y H:i').'</p>
-                        <p><strong>Método de Pagamento:</strong> '.htmlspecialchars($metodo_pagamento).'</p>
-                        <p><strong>Endereço de Entrega:</strong><br>'.nl2br(htmlspecialchars($morada_completa)).'</p>
+                        <h2>📋 Order Summary #'.$codigo_encomenda.'</h2>
+                        <p><strong>Date:</strong> '.date('d/m/Y H:i').'</p>
+                        <p><strong>Payment Method:</strong> '.htmlspecialchars($metodo_pagamento).'</p>
+                        <p><strong>Delivery Address:</strong><br>'.nl2br(htmlspecialchars($morada_completa)).'</p>
                         
                         <h3>🛍️ Produtos</h3>
                         <table>
                             <tr>
-                                <th>Produto</th>
-                                <th>Tamanho</th>
-                                <th>Qtd</th>
-                                <th>Preço</th>
+                                <th>Produt</th>
+                                <th>Size</th>
+                                <th>Qty</th>
+                                <th>Prize</th>
                             </tr>';
             
             foreach ($produtos as $produto) {
@@ -200,8 +210,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                     </div>
                     
                     <div class="footer">
-                        <p>📞 Dúvidas? Contacte-nos: suporte@skateshop.com</p>
-                        <p>🛒 <a href="http://localhost/PAP">Visite nossa loja novamente</a></p>
+                        <p>📞 Doubts? Contact-us: suporte@skateshop.com</p>
+                        <p>🛒 <a href="http://localhost/PAP">Visit our Shop again</a></p>
                     </div>
                 </div>
             </body>
@@ -210,34 +220,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
             $mail->isHTML(true);
             $mail->Body = $email_content;
             
-            $mail->AltBody = "Obrigado pela sua compra!\n\n"
-                           . "Encomenda #$codigo_encomenda\n"
+            $mail->AltBody = "Thank you for your purchase!\n\n"
+                           . "Order #$codigo_encomenda\n"
                            . "Total: €".number_format($total_com_portes, 2, ',', '.')."\n"
-                           . "Método de Pagamento: $metodo_pagamento\n"
-                           . "Entrega: $morada_completa\n\n"
-                           . "Produtos:\n";
+                           . "Payment Method: $metodo_pagamento\n"
+                           . "Delivery: $morada_completa\n\n"
+                           . "Produts:\n";
             
             foreach ($produtos as $produto) {
                 $mail->AltBody .= "- {$produto['nome']} ({$produto['tamanho']}) x {$produto['quantidade']}: €".number_format($produto['preco'] * $produto['quantidade'], 2, ',', '.')."\n";
             }
             
-            $mail->AltBody .= "\nPortes: €".number_format($portes, 2, ',', '.')."\n";
+            $mail->AltBody .= "\nShipping: €".number_format($portes, 2, ',', '.')."\n";
             $mail->AltBody .= "Total: €".number_format($total_com_portes, 2, ',', '.')."\n\n";
-            $mail->AltBody .= "Agradecemos a sua preferência!";
+            $mail->AltBody .= "Thank you for shopping with us!\n";
 
             $mail->send();
             
         } catch (Exception $e) {
-            error_log("Erro ao enviar email: " . $e->getMessage());
+            error_log("Error sendind email: " . $e->getMessage());
         }
 
-        $mensagem_sucesso = "Compra realizada com sucesso! Código da encomenda: $codigo_encomenda";
+        $mensagem_sucesso = "Purchase completed successfully, order Code: $codigo_encomenda";
         $produtos = [];
         $total = 0;
 
     } catch (Exception $e) {
         $conn->rollback();
-        $mensagem_erro = "Erro ao processar pedido: " . $e->getMessage();
+        $mensagem_erro = "Erro processing request: " . $e->getMessage();
     }
 } else {
     buscarProdutosCarrinho($conn, $user_id, $produtos, $total);
@@ -249,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
 <html lang="pt">
 <head>
     <?php include('head.html'); ?>
-    <title>Finalizar Compra - SkateShop</title>
+    <title>Checkout</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         .payment-method img {
@@ -307,16 +317,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
         .product-column::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+        
+        /* Animação para campos de pagamento */
+        .payment-fields {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 15px;
+        }
+        
+        .payment-fields.show {
+            max-height: 200px;
+            padding: 15px;
+        }
+        
+        .mbway-fields, .paypal-fields {
+            margin-top: 15px;
+        }
+        .payment-methods-container {
+            position: relative;
+        }
+
+        .payment-fields {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 15px;
+            margin-bottom: 0;
+        }
+
+        .payment-fields.show {
+            max-height: 500px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            background-color: #f8f9fa;
+        }
+
+        .payment-method {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin-bottom: 10px;
+            background-color: white;
+        }
+
+        .payment-method .form-check-label {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 <?php include('header.php'); ?>
 <div class="container py-5">
-    <h1 class="mb-4">Finalizar Compra</h1>
+    <h1 class="mb-4">Checkout</h1>
 
     <?php if ($mensagem_sucesso): ?>
         <div class="alert alert-success"><?= htmlspecialchars($mensagem_sucesso) ?></div>
-        <a href="home.php" class="btn btn-primary">Voltar às Compras</a>
+        <a href="home.php" class="btn btn-primary">Back to Shopping</a>
     <?php else: ?>
         <?php if ($mensagem_erro): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($mensagem_erro) ?></div>
@@ -327,36 +386,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                 <form method="POST" action="checkout.php" novalidate class="needs-validation">
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Informações de Entrega</h5>
+                            <h5 class="mb-0">Delivery Information</h5>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="tipo_entrega" id="delivery" value="delivery" checked>
-                                    <label class="form-check-label" for="delivery">Entrega em Casa</label>
+                                    <label class="form-check-label" for="delivery">Home Delivery </label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="tipo_entrega" id="pickup" value="pickup">
-                                    <label class="form-check-label" for="pickup">Retirar na Loja</label>
+                                    <label class="form-check-label" for="pickup">Pick up at store</label>
                                 </div>
                             </div>
 
                             <div id="delivery-fields">
                                 <div class="mb-3">
-                                    <label for="morada" class="form-label">Morada</label>
+                                    <label for="morada" class="form-label">Address</label>
                                     <input type="text" class="form-control" id="morada" name="morada" value="<?= htmlspecialchars($user_info['morada'] ?? '') ?>" required />
-                                    <div class="invalid-feedback">Por favor, insira sua morada.</div>
+                                    <div class="invalid-feedback">Please Fill up with your address.</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="codigo_postal" class="form-label">Código Postal</label>
+                                        <label for="codigo_postal" class="form-label">Zip Code</label>
                                         <input type="text" class="form-control" id="codigo_postal" name="codigo_postal" required />
-                                        <div class="invalid-feedback">Por favor, insira o código postal.</div>
+                                        <div class="invalid-feedback">Please, Fill the zip code.</div>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="cidade" class="form-label">Cidade</label>
+                                        <label for="cidade" class="form-label">City</label>
                                         <input type="text" class="form-control" id="cidade" name="cidade" required />
-                                        <div class="invalid-feedback">Por favor, insira sua cidade.</div>
+                                        <div class="invalid-feedback">Please fill the city</div>
                                     </div>
                                 </div>
                             </div>
@@ -365,80 +424,108 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
 
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Método de Pagamento</h5>
+                            <h5 class="mb-0">Payment Method</h5>
                         </div>
                         <div class="card-body">
-                            <div class="payment-method mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao" value="Cartão" checked>
-                                    <label class="form-check-label d-flex align-items-center" for="cartao">
-                                        <img src="/PAP/static/images/payments/credit-card.png" alt="Cartão" /> Cartão de Crédito/Débito
-                                    </label>
-                                </div>
-                            </div>
-                            <div id="cartao-fields">
-                                <div class="mb-3">
-                                    <label for="numero_cartao" class="form-label">Número do Cartão</label>
-                                    <input type="text" class="form-control" id="numero_cartao" name="numero_cartao" 
-                                           placeholder="0000 0000 0000 0000" maxlength="19"
-                                           pattern="\d{4}\s\d{4}\s\d{4}\s\d{4}" 
-                                           title="Digite os 16 dígitos do cartão" required />
-                                    <div class="invalid-feedback">Por favor, insira um número de cartão válido (16 dígitos).</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="validade" class="form-label">Validade (MM/AA)</label>
-                                        <input type="text" class="form-control" id="validade" name="validade" 
-                                               placeholder="MM/AA" maxlength="5"
-                                               pattern="(0[1-9]|1[0-2])\/\d{2}" 
-                                               title="Digite no formato MM/AA" required />
-                                        <div class="invalid-feedback">Por favor, insira uma data válida (MM/AA).</div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="cvv" class="form-label">CVV</label>
-                                        <input type="text" class="form-control" id="cvv" name="cvv" 
-                                               placeholder="000" maxlength="4"
-                                               pattern="\d{3,4}" 
-                                               title="Digite os 3 ou 4 dígitos do CVV" required />
-                                        <div class="invalid-feedback">Por favor, insira um CVV válido (3 ou 4 dígitos).</div>
+                            <div class="payment-methods-container">
+                                <!-- Credit Card Option -->
+                                <div class="payment-method mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="metodo_pagamento" id="cartao" value="Cartão" checked>
+                                        <label class="form-check-label d-flex align-items-center" for="cartao">
+                                            <img src="/PAP/static/images/payments/credit-card.png" alt="Cartão" />Credit Card/Debit Card
+                                        </label>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="nome_cartao" class="form-label">Nome no Cartão</label>
-                                    <input type="text" class="form-control" id="nome_cartao" name="nome_cartao" required />
-                                    <div class="invalid-feedback">Por favor, insira o nome como aparece no cartão.</div>
+                                
+                                <!-- Credit Card Fields -->
+                                <div id="cartao-fields" class="payment-fields show">
+                                    <div class="mb-3">
+                                        <label for="numero_cartao" class="form-label">Card Number</label>
+                                        <input type="text" class="form-control" id="numero_cartao" name="numero_cartao" 
+                                            placeholder="0000 0000 0000 0000" maxlength="19"
+                                            pattern="\d{4}\s\d{4}\s\d{4}\s\d{4}" 
+                                            title="Digite os 16 dígitos do cartão" required />
+                                        <div class="invalid-feedback">Please enter a valid card number (16 digits).</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="validade" class="form-label">Validity (MM/AA)</label>
+                                            <input type="text" class="form-control" id="validade" name="validade" 
+                                                placeholder="MM/AA" maxlength="5"
+                                                pattern="(0[1-9]|1[0-2])\/\d{2}" 
+                                                title="Digite no formato MM/AA" required />
+                                            <div class="invalid-feedback">Please enter a valid date (MM/AA)</div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cvv" class="form-label">CVV</label>
+                                            <input type="text" class="form-control" id="cvv" name="cvv" 
+                                                placeholder="000" maxlength="4"
+                                                pattern="\d{3,4}" 
+                                                title="Digite os 3 ou 4 dígitos do CVV" required />
+                                            <div class="invalid-feedback">Please enter a valid CVV (3 or 4 digits).</div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nome_cartao" class="form-label">Card Name</label>
+                                        <input type="text" class="form-control" id="nome_cartao" name="nome_cartao" required />
+                                        <div class="invalid-feedback">Please enter the name as it appears on the card.</div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="payment-method mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="metodo_pagamento" id="mbway" value="MB WAY" />
-                                    <label class="form-check-label" for="mbway">
-                                        <img src="/PAP/static/images/payments/mbway.png" alt="MB WAY" /> MB WAY
-                                    </label>
+                                <!-- MB WAY Option -->
+                                <div class="payment-method mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="metodo_pagamento" id="mbway" value="MB WAY" />
+                                        <label class="form-check-label" for="mbway">
+                                            <img src="/PAP/static/images/payments/mbway.png" alt="MB WAY" /> MB WAY
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
+                                
+                                <!-- MB WAY Fields -->
+                                <div id="mbway-fields" class="payment-fields mbway-fields">
+                                    <div class="mb-3">
+                                        <label for="mbway_number" class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" id="mbway_number" name="mbway_number" 
+                                            placeholder="912345678" maxlength="9"
+                                            pattern="9\d{8}" 
+                                            title="Digite um número de telemóvel válido (9 dígitos, começando com 9)" />
+                                        <div class="invalid-feedback">Please enter a valid phone number (9 digits, starting with 9).</div>
+                                    </div>
+                                </div>
 
-                            <div class="payment-method">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="metodo_pagamento" id="paypal" value="PayPal" />
-                                    <label class="form-check-label" for="paypal">
-                                        <img src="/PAP/static/images/payments/paypal.png" alt="PayPal" /> PayPal
-                                    </label>
+                                <!-- PayPal Option -->
+                                <div class="payment-method">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="metodo_pagamento" id="paypal" value="PayPal" />
+                                        <label class="form-check-label" for="paypal">
+                                            <img src="/PAP/static/images/payments/paypal.png" alt="PayPal" /> PayPal
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- PayPal Fields -->
+                                <div id="paypal-fields" class="payment-fields paypal-fields">
+                                    <div class="mb-3">
+                                        <label for="paypal_email" class="form-label">PayPal Email</label>
+                                        <input type="email" class="form-control" id="paypal_email" name="paypal_email" 
+                                            placeholder="example@example.com" />
+                                        <div class="invalid-feedback">Please enter a valid PayPal email.</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <input type="hidden" name="finalizar_compra" value="1" />
-                    <button type="submit" class="btn btn-primary btn-lg w-100">Finalizar Compra</button>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Finish Shopping</button>
                 </form>
             </div>
 
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header bg-light">
-                        <h5 class="mb-0">Resumo do Pedido</h5>
+                        <h5 class="mb-0">Order Summary</h5>
                     </div>
                     <div class="card-body">
                         <?php if (!empty($produtos)): ?>
@@ -446,7 +533,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                 <?php if (count($produtos) > 1): ?>
                                     <div class="row">
                                         <div class="col-12">
-                                            <h6>Produtos:</h6>
+                                            <h6>Produts:</h6>
                                             <div class="product-column">
                                                 <?php foreach ($produtos as $produto): ?>
                                                     <div class="d-flex justify-content-between mb-2">
@@ -476,7 +563,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                                         <td class="text-end" id="subtotal">€<?= number_format($total, 2, ',', '.') ?></td>
                                     </tr>
                                     <tr>
-                                        <td>Portes</td>
+                                        <td>Shipping</td>
                                         <td class="text-end" id="portes">€5,00</td>
                                     </tr>
                                     <tr class="fw-bold">
@@ -487,8 +574,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
                             </div>
                         <?php else: ?>
                             <div class="text-center py-4">
-                                <p>Seu carrinho está vazio</p>
-                                <a href="produtos.php" class="btn btn-outline-primary">Continuar Comprando</a>
+                                <p>The cart is empty</p>
+                                <a href="produtos.php" class="btn btn-outline-primary">Continue Shopping</a>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -575,6 +662,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
         });
     })();
 
+    // Mostrar/ocultar campos de pagamento com animação
+    document.querySelectorAll('input[name="metodo_pagamento"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Esconder todos os campos de pagamento
+            document.querySelectorAll('.payment-fields').forEach(field => {
+                field.classList.remove('show');
+                field.querySelectorAll('input').forEach(input => input.required = false);
+            });
+            
+            // Mostrar apenas os campos do método selecionado
+            if (this.value === 'Cartão') {
+                const fields = document.getElementById('cartao-fields');
+                fields.classList.add('show');
+                fields.querySelectorAll('input').forEach(input => input.required = true);
+            } else if (this.value === 'MB WAY') {
+                const fields = document.getElementById('mbway-fields');
+                fields.classList.add('show');
+                fields.querySelectorAll('input').forEach(input => input.required = true);
+            } else if (this.value === 'PayPal') {
+                const fields = document.getElementById('paypal-fields');
+                fields.classList.add('show');
+                fields.querySelectorAll('input').forEach(input => input.required = true);
+            }
+        });
+    });
+
+    // Validar número MB WAY (9 dígitos, começando com 9)
+    document.getElementById('mbway_number').addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0,9);
+    });
+
+    // Inicializar campos visíveis
+    document.getElementById('cartao-fields').classList.add('show');
     atualizarTotais();
 </script>
 </body>
