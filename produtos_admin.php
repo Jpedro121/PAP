@@ -11,6 +11,14 @@ if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
+// Obter categorias
+$categorias_result = $conn->query("SELECT * FROM categorias");
+$categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
+
+// Obter marcas distintas
+$marcas_result = $conn->query("SELECT DISTINCT marca FROM produtos WHERE marca IS NOT NULL AND marca != ''");
+$marcas = $marcas_result->fetch_all(MYSQLI_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome = $_POST['nome'];
     $descricao = $_POST['descricao'];
@@ -19,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $preco = $_POST['preco'];
     $tamanho = $_POST['tamanho'];
     $marca = $_POST['marca'];
+    $estoque = intval($_POST['estoque']);
 
     // Upload da imagem
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
@@ -31,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             die("Erro: Tipo de arquivo não permitido. Só JPG, PNG, GIF.");
         }
 
-        // Gerar nome único para evitar conflitos
         $novoNome = uniqid('img_') . '.' . $extensao;
         $destino = __DIR__ . '/static/images/' . $novoNome;
 
@@ -44,14 +52,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $imagem_nome = $novoNome;
 
+    // Inserir produto
     $stmt = $conn->prepare("INSERT INTO produtos (nome, descricao, preco, imagem, categoria_id, tamanho, categoria, marca) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssdssiss", $nome, $descricao, $preco, $imagem_nome, $categoria_id, $tamanho, $categoria_nome, $marca);
     $stmt->execute();
-    $produto_id = $conn->insert_id;
+    $produto_id = $stmt->insert_id;
     $stmt->close();
 
+    // Inserir tamanho e stock
+    $stmt_tamanho = $conn->prepare("INSERT INTO tamanhos_produto (produto_id, tamanho, stock, disponivel) VALUES (?, ?, ?, 1)");
+    $stmt_tamanho->bind_param("isi", $produto_id, $tamanho, $estoque);
+    if (!$stmt_tamanho->execute()) {
+        die("Erro ao inserir na tabela tamanhos_produto: " . $stmt_tamanho->error);
+    }
+    $stmt_tamanho->close();
+
+    // Inserir em tabela específica da categoria
     $categoria_lower = strtolower($categoria_nome);
-    $estoque = 10;
 
     switch ($categoria_lower) {
         case 'decks':
@@ -117,9 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo "<script>alert('Produto adicionado com sucesso!');</script>";
     echo "<script>window.location.href = 'produtos_admin.php';</script>";
 }
-
-$categorias_result = $conn->query("SELECT * FROM categorias");
-$categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -203,20 +217,38 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Marca*</label>
-                    <input type="text" name="marca" class="form-control" required>
+                    <select name="marca" class="form-select" required>
+                    <option value="">Selecione uma marca</option>
+                    <?php foreach ($marcas as $m): ?>
+                        <option value="<?= htmlspecialchars($m['marca']) ?>">
+                            <?= htmlspecialchars($m['marca']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
                 </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Stock Inicial*</label>
+                <select name="estoque" class="form-select" required>
+                    <?php for ($i = 0; $i <= 20; $i++): ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+
+
+
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Categoria (nome)*</label>
                     <input type="text" name="categoria" class="form-control" required>
                 </div>
             </div>
 
-            <div class="mb-3">
+            <div class="col-md-4 mb-3">
                 <label class="form-label">Imagem do Produto*</label>
                 <input type="file" name="imagem" class="form-control" accept=".jpg,.jpeg,.png,.gif" required>
             </div>
 
-            <div class="mb-3" id="tamanho-container">
+            <div class="col-md-4 mb-3" id="tamanho-container">
                 <label class="form-label">Tamanho*</label>
                 <input type="text" name="tamanho" class="form-control" required>
             </div>
@@ -226,11 +258,6 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
             <button type="submit" class="btn btn-primary">Adicionar Produto</button>
         </form>
 
-        <div class="row g-4">
-            <div class="col-md-4"><a href="login/admin_users.php" class="btn btn-primary w-100">Gerir Utilizadores</a></div>
-            <div class="col-md-4"><a href="produtos_admin.php" class="btn btn-success w-100">Gerir Produtos</a></div>
-            <div class="col-md-4"><a href="encomendas_admin.php" class="btn btn-warning w-100">Ver Encomendas</a></div>
-        </div>
     </div>
 
     <script>
@@ -241,7 +268,7 @@ $categorias = $categorias_result->fetch_all(MYSQLI_ASSOC);
             const tamanhoContainer = document.getElementById("tamanho-container");
             const categoriaNomeInput = document.querySelector("input[name='categoria']");
 
-            categoriaNomeInput.value = categoriaSelect.options[categoriaSelect.selectedIndex].text;
+            categoriaNomeInput.value = categoriaTexto;
             extraFields.innerHTML = '';
 
             const roupas = ['t-shirts', 'sweats', 'pants', 'shorts'];

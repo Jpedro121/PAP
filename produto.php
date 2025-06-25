@@ -92,7 +92,7 @@ input[name="tamanho"] {
             <h1 class="produto-nome"><?php echo $produto['nome']; ?></h1>
             <div class="informacoes">
                 <p class="produto-descricao"><?php echo $produto['descricao']; ?></p>
-                <p class="produto-preco"><strong>Preço</strong>: €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+                <p class="produto-preco"><strong>Price</strong>: €<?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
 
                 <?php if (!empty($tamanhos)): ?>
                 <form action="adicionar_cart.php" method="POST">
